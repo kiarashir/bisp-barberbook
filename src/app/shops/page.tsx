@@ -1,0 +1,171 @@
+'use client'
+import { useEffect, useState } from 'react'
+import ShopCard from '@/components/ShopCard'
+import { createClient } from '@/lib/supabase/client'
+
+type Shop = {
+  id: string
+  name: string
+  address: string
+  description: string | null
+  photo_url: string | null
+  created_at: string
+  avg_rating: number | null
+}
+
+type SortOption = 'newest' | 'rating' | 'name'
+
+export default function ShopsPage() {
+  const supabase = createClient()
+  const [shops, setShops] = useState<Shop[]>([])
+  const [fetching, setFetching] = useState(true)
+  const [query, setQuery] = useState('')
+  const [sort, setSort] = useState<SortOption>('newest')
+
+  // Load shops and their average ratings.
+  useEffect(() => {
+    async function load() {
+      const { data: shopsData } = await supabase
+        .from('shops')
+        .select('id,name,address,description,photo_url,created_at')
+        .eq('is_hidden', false)
+        .order('created_at', { ascending: false })
+      const allShops = shopsData ?? []
+      const allIds = allShops.map(s => s.id)
+
+      // Only show shops that can actually be booked: at least one active barber and one service.
+      let raw = allShops
+      if (allIds.length > 0) {
+        const { data: staffRows } = await supabase
+          .from('staff')
+          .select('shop_id')
+          .eq('is_active', true)
+          .in('shop_id', allIds)
+        const { data: serviceRows } = await supabase
+          .from('services')
+          .select('shop_id')
+          .in('shop_id', allIds)
+        const withStaff = new Set((staffRows ?? []).map(r => r.shop_id))
+        const withServices = new Set((serviceRows ?? []).map(r => r.shop_id))
+        raw = allShops.filter(s => withStaff.has(s.id) && withServices.has(s.id))
+      }
+
+      const shopIds = raw.map(s => s.id)
+      let reviews: { shop_id: string; rating: number }[] = []
+      if (shopIds.length > 0) {
+        const { data } = await supabase
+          .from('reviews')
+          .select('shop_id,rating')
+          .in('shop_id', shopIds)
+        reviews = data ?? []
+      }
+
+      // Attach average rating to each shop.
+      const enriched: Shop[] = []
+      for (const s of raw) {
+        let total = 0
+        let count = 0
+        for (const r of reviews) {
+          if (r.shop_id === s.id) {
+            total = total + r.rating
+            count = count + 1
+          }
+        }
+        enriched.push({ ...s, avg_rating: count > 0 ? total / count : null })
+      }
+
+      setShops(enriched)
+      setFetching(false)
+    }
+    load()
+  }, [])
+
+  // Filter by search query (name or address).
+  const filtered: Shop[] = []
+  const lowerQuery = query.trim().toLowerCase()
+  for (const s of shops) {
+    if (!lowerQuery) {
+      filtered.push(s)
+      continue
+    }
+    const nameMatch = s.name.toLowerCase().includes(lowerQuery)
+    const addressMatch = s.address.toLowerCase().includes(lowerQuery)
+    if (nameMatch || addressMatch) filtered.push(s)
+  }
+
+  // Sort the filtered list.
+  if (sort === 'rating') {
+    filtered.sort((a, b) => (b.avg_rating ?? 0) - (a.avg_rating ?? 0))
+  } else if (sort === 'name') {
+    filtered.sort((a, b) => a.name.localeCompare(b.name))
+  }
+  // 'newest' is already the order from Supabase.
+
+  return (
+    <div className="bg-white min-h-screen">
+      <section className="max-w-5xl mx-auto px-4 pt-10 pb-6">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-stone-900 mb-2">
+          Barbershops
+        </h1>
+        <p className="text-stone-500">Browse local shops and book your next haircut.</p>
+      </section>
+
+      <div className="border-t border-stone-200" />
+
+      <section className="max-w-5xl mx-auto px-4 py-10 pb-20">
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+          <input
+            type="text"
+            placeholder="Search by name or address"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="flex-1 border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400"
+          />
+          <select
+            value={sort}
+            onChange={e => setSort(e.target.value as SortOption)}
+            className="border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400 bg-white"
+          >
+            <option value="newest">Newest first</option>
+            <option value="rating">Highest rated</option>
+            <option value="name">Name (A–Z)</option>
+          </select>
+        </div>
+
+        {fetching && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        )}
+
+        {!fetching && filtered.length === 0 && (
+          <p className="text-stone-500">
+            {query ? `No shops match "${query}".` : 'No shops listed yet.'}
+          </p>
+        )}
+
+        {!fetching && filtered.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map(s => (
+              <ShopCard key={s.id} shop={s} />
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  )
+}
+
+function SkeletonCard() {
+  return (
+    <div className="rounded-xl border border-stone-200 bg-white overflow-hidden">
+      <div className="aspect-[4/3] bg-stone-100" />
+      <div className="p-4 space-y-2">
+        <div className="h-4 w-32 bg-stone-100 rounded" />
+        <div className="h-3 w-48 bg-stone-100 rounded" />
+      </div>
+    </div>
+  )
+}
