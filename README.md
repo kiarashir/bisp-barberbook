@@ -19,6 +19,8 @@ Tashkent.
 - Save favourite shops
 - AI hairstyle try-on — upload a photo and see how a haircut would look
 - Shop owner dashboard to manage the shop, staff, services, hours, and bookings
+- Monthly stats — page visits and bookings shown on each shop page, the owner
+  dashboard, and the owner stats page
 - Admin can hide or un-hide any shop from the public listing
 
 ## Technologies used
