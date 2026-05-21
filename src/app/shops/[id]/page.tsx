@@ -111,112 +111,133 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
         </div>
       </section>
 
-      {shop.lat != null && shop.lng != null && (
-        <section className="max-w-5xl mx-auto px-4 py-12">
-          <h2 className="text-xl font-semibold text-stone-900 mb-6">Location</h2>
-          {(shop.district || shop.region) && (
-            <p className="text-stone-500 mb-4">
-              {[shop.district, shop.region, shop.country].filter(Boolean).join(', ')}
-            </p>
-          )}
-          <ShopMapView lat={shop.lat} lng={shop.lng} name={shop.name} />
-        </section>
-      )}
+      <div className="max-w-5xl mx-auto px-4 py-10 pb-20 grid lg:grid-cols-3 gap-10">
+        {/* Main column */}
+        <div className="lg:col-span-2 space-y-12">
+          <section>
+            <h2 className="text-xl font-semibold text-stone-900 mb-5">Services</h2>
+            {services.length === 0 ? (
+              <p className="text-stone-500">No services yet.</p>
+            ) : (
+              <ul className="divide-y divide-stone-200 rounded-xl border border-stone-200 bg-white overflow-hidden">
+                {services.map(sv => (
+                  <li key={sv.id} className="px-5 py-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="font-medium text-stone-900">{sv.name}</p>
+                      <p className="text-sm text-stone-500">{sv.duration_min} min</p>
+                    </div>
+                    <span className="font-medium text-stone-900 shrink-0">
+                      {sv.price_uzs.toLocaleString()} UZS
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
-      <div className="border-t border-stone-200" />
-
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-semibold text-stone-900 mb-6">Opening hours</h2>
-        <ul className="rounded-xl border border-stone-200 bg-white overflow-hidden max-w-sm">
-          {openingHours.map((d, i) => (
-            <li
-              key={DAYS[i]}
-              className={`px-5 py-2.5 flex items-center justify-between text-sm border-b border-stone-100 last:border-b-0 ${
-                i === today ? 'bg-stone-50 font-medium' : ''
-              }`}
-            >
-              <span className="text-stone-700">{DAYS[i]}</span>
-              <span className={d.closed ? 'text-stone-400' : 'text-stone-900'}>
-                {d.closed ? 'Closed' : `${d.open} – ${d.close}`}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <div className="border-t border-stone-200" />
-
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-semibold text-stone-900 mb-6">Staff</h2>
-        {staff.length === 0 && <p className="text-stone-500">No staff yet.</p>}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {staff.map(s => (
-            <div key={s.id} className="rounded-xl border border-stone-200 p-4 bg-white flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full bg-stone-100 overflow-hidden shrink-0 flex items-center justify-center text-stone-500 font-medium">
-                {s.photo_url ? (
-                  <img src={s.photo_url} alt={s.full_name} className="w-full h-full object-cover" />
-                ) : (
-                  <span>{s.full_name.charAt(0).toUpperCase()}</span>
-                )}
+          <section>
+            <h2 className="text-xl font-semibold text-stone-900 mb-5">Staff</h2>
+            {staff.length === 0 ? (
+              <p className="text-stone-500">No staff yet.</p>
+            ) : (
+              <div className="grid sm:grid-cols-2 gap-4">
+                {staff.map(s => (
+                  <div key={s.id} className="rounded-xl border border-stone-200 p-4 bg-white flex items-center gap-3">
+                    <div className="w-14 h-14 rounded-full bg-stone-100 overflow-hidden shrink-0 flex items-center justify-center text-stone-500 font-medium">
+                      {s.photo_url ? (
+                        <img src={s.photo_url} alt={s.full_name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span>{s.full_name.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-stone-900">{s.full_name}</p>
+                      {s.bio && <p className="text-sm text-stone-500 mt-1 leading-relaxed">{s.bio}</p>}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="min-w-0">
-                <p className="font-medium text-stone-900">{s.full_name}</p>
-                {s.bio && <p className="text-sm text-stone-500 mt-1 leading-relaxed">{s.bio}</p>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            )}
+          </section>
 
-      <div className="border-t border-stone-200" />
-
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-semibold text-stone-900 mb-6">Services</h2>
-        {services.length === 0 && <p className="text-stone-500">No services yet.</p>}
-        {services.length > 0 && (
-          <ul className="divide-y divide-stone-200 rounded-xl border border-stone-200 bg-white overflow-hidden">
-            {services.map(sv => (
-              <li key={sv.id} className="px-5 py-4 flex items-center justify-between gap-4">
-                <div>
-                  <p className="font-medium text-stone-900">{sv.name}</p>
-                  <p className="text-sm text-stone-500">{sv.duration_min} min</p>
-                </div>
-                <span className="font-medium text-stone-900 shrink-0">
-                  {sv.price_uzs.toLocaleString()} UZS
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <div className="border-t border-stone-200" />
-
-      <section className="max-w-5xl mx-auto px-4 py-12 pb-20">
-        <h2 className="text-xl font-semibold text-stone-900 mb-6">Reviews</h2>
-        {reviews.length === 0 && <p className="text-stone-500">No reviews yet.</p>}
-        <ul className="space-y-4">
-          {reviews.map(r => (
-            <li key={r.id} className="rounded-xl border border-stone-200 p-5 bg-white">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span aria-label={`${r.rating} out of 5`}>
-                  <span className="text-orange-600">{'★'.repeat(r.rating)}</span>
-                  <span className="text-stone-300">{'★'.repeat(5 - r.rating)}</span>
-                </span>
-                <span className="text-sm font-medium text-stone-900">
-                  {r.profiles?.full_name ?? 'Customer'}
-                </span>
-                <span className="text-sm text-stone-500">
-                  · {format(new Date(r.created_at), 'MMM d, yyyy')}
-                </span>
-              </div>
-              {r.comment && (
-                <p className="mt-2 text-stone-700 leading-relaxed">{r.comment}</p>
+          {shop.lat != null && shop.lng != null && (
+            <section>
+              <h2 className="text-xl font-semibold text-stone-900 mb-2">Location</h2>
+              {(shop.district || shop.region) && (
+                <p className="text-stone-500 mb-4">
+                  {[shop.district, shop.region, shop.country].filter(Boolean).join(', ')}
+                </p>
               )}
-            </li>
-          ))}
-        </ul>
-      </section>
+              <ShopMapView lat={shop.lat} lng={shop.lng} name={shop.name} />
+            </section>
+          )}
+
+          <section>
+            <h2 className="text-xl font-semibold text-stone-900 mb-5">
+              Reviews {reviews.length > 0 && <span className="text-stone-400 font-normal">({reviews.length})</span>}
+            </h2>
+            {reviews.length === 0 ? (
+              <p className="text-stone-500">No reviews yet.</p>
+            ) : (
+              <ul className="space-y-4">
+                {reviews.map(r => (
+                  <li key={r.id} className="rounded-xl border border-stone-200 p-5 bg-white">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span aria-label={`${r.rating} out of 5`}>
+                        <span className="text-orange-600">{'★'.repeat(r.rating)}</span>
+                        <span className="text-stone-300">{'★'.repeat(5 - r.rating)}</span>
+                      </span>
+                      <span className="text-sm font-medium text-stone-900">
+                        {r.profiles?.full_name ?? 'Customer'}
+                      </span>
+                      <span className="text-sm text-stone-500">
+                        · {format(new Date(r.created_at), 'MMM d, yyyy')}
+                      </span>
+                    </div>
+                    {r.comment && (
+                      <p className="mt-2 text-stone-700 leading-relaxed">{r.comment}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
+
+        {/* Sidebar */}
+        <aside className="lg:sticky lg:top-6 self-start space-y-6">
+          <div className="rounded-xl border border-stone-200 bg-white overflow-hidden">
+            <div className="px-5 py-3 border-b border-stone-200">
+              <h2 className="font-semibold text-stone-900">Opening hours</h2>
+            </div>
+            <ul>
+              {openingHours.map((d, i) => (
+                <li
+                  key={DAYS[i]}
+                  className={`px-5 py-2.5 flex items-center justify-between text-sm border-b border-stone-100 last:border-b-0 ${
+                    i === today ? 'bg-stone-50 font-medium' : ''
+                  }`}
+                >
+                  <span className="text-stone-700">{DAYS[i]}</span>
+                  <span className={d.closed ? 'text-stone-400' : 'text-stone-900'}>
+                    {d.closed ? 'Closed' : `${d.open} – ${d.close}`}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-xl border border-stone-200 bg-white p-5">
+            <p className="text-sm text-stone-500">{shop.address}</p>
+            <Link
+              href={`/book/${shop.id}`}
+              className="mt-4 block text-center text-sm font-medium rounded-full px-6 py-2.5 bg-stone-900 text-white hover:bg-stone-800 transition"
+            >
+              Book an appointment
+            </Link>
+          </div>
+        </aside>
+      </div>
     </div>
   )
 }
