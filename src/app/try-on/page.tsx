@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
@@ -33,6 +33,15 @@ export default function TryOnPage() {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) router.push('/login')
     })
+  }, [])
+
+  // Free the photo preview object URLs when leaving the page.
+  const photosRef = useRef<Photo[]>([])
+  photosRef.current = photos
+  useEffect(() => {
+    return () => {
+      for (const p of photosRef.current) URL.revokeObjectURL(p.preview)
+    }
   }, [])
 
   function pickFile(e: React.ChangeEvent<HTMLInputElement>) {

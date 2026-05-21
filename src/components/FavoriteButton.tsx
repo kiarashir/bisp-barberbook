@@ -23,7 +23,7 @@ export default function FavoriteButton({ shopId }: { shopId: string }) {
       setFav(!!data)
     }
     load()
-  }, [])
+  }, [shopId])
 
   async function toggle() {
     const { data: { user } } = await supabase.auth.getUser()
