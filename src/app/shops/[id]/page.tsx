@@ -85,7 +85,6 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
               <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">
                 {shop.name}
               </h1>
-              <p className="text-stone-500 mt-1">{shop.address}</p>
               {avg && (
                 <p className="mt-2 text-sm text-stone-700">
                   <span className="text-orange-600">★</span> {avg}
