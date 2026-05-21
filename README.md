@@ -101,3 +101,15 @@ node scripts/run-sql.mjs supabase/seed.sql
    ```
    PG_CONNECTION_STRING=postgresql://postgres.xxxx:your-password@aws-1-region.pooler.supabase.com:5432/postgres
    ```
+
+## Making an admin
+
+Admins can hide or un-hide shops. To turn an account into an admin, sign it
+up normally first, then run:
+
+```
+node scripts/make-admin.mjs the-email@example.com
+```
+
+Log out and back in for the change to take effect — an "Admin" link will
+appear in the top menu.

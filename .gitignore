@@ -10,4 +10,5 @@ build
 *.pdf
 scripts/*
 !scripts/run-sql.mjs
+!scripts/make-admin.mjs
 docs/
