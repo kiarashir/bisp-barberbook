@@ -22,6 +22,12 @@ export default function ShopsPage() {
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOption>('newest')
 
+  // Pre-fill the search box if the landing page passed a ?q= query.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('q')
+    if (q) setQuery(q)
+  }, [])
+
   // Load shops and their average ratings.
   useEffect(() => {
     async function load() {

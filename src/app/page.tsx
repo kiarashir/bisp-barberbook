@@ -1,9 +1,27 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ShopIcon, StaffIcon, CalendarIcon, ScissorsIcon } from '@/components/icons'
+import ShopCard from '@/components/ShopCard'
+import { ScissorsIcon } from '@/components/icons'
 
 const display = 'font-[family-name:var(--font-display)]'
+
+const AREAS = ['Chilanzar', 'Yunusabad', 'Mirzo Ulugbek', 'Yakkasaray']
+
+const SERVICES = [
+  { name: 'Classic haircut', desc: 'A clean, timeless cut tailored to you.', price: 'from 40,000 so’m' },
+  { name: 'Skin fade', desc: 'Sharp, gradual fade with crisp edges.', price: 'from 55,000 so’m' },
+  { name: 'Beard trim & shape', desc: 'Shaped, lined up and conditioned.', price: 'from 30,000 so’m' },
+  { name: 'Hot towel shave', desc: 'A close, traditional straight-razor shave.', price: 'from 50,000 so’m' },
+  { name: 'Kids haircut', desc: 'Patient, friendly cuts for younger clients.', price: 'from 35,000 so’m' },
+  { name: 'Hair & beard combo', desc: 'The full reset — cut, beard and finish.', price: 'from 75,000 so’m' },
+]
+
+const REVIEWS = [
+  { name: 'Jamshid A.', area: 'Old City Cuts', rating: 5, text: 'I book my barber on the way to work and the chair is ready when I arrive. No more calling around.' },
+  { name: 'Otabek R.', area: 'Fade Theory', rating: 5, text: 'The reviews are honest, so I knew exactly what to expect. Found a barber I now go to every month.' },
+  { name: 'Sardor K.', area: 'The Grooming Co.', rating: 4, text: 'Booking took under a minute and the confirmation came through instantly. Really simple to use.' },
+]
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -19,6 +37,31 @@ export default async function HomePage() {
     if (profile?.role === 'shop_owner') redirect('/owner')
     if (profile?.role === 'admin') redirect('/admin/shops')
   }
+
+  // Fetch a few real shops to feature on the landing page.
+  const { data: shopRows } = await supabase
+    .from('shops')
+    .select('id,name,address,description,photo_url')
+    .eq('is_hidden', false)
+    .order('created_at', { ascending: false })
+    .limit(6)
+  const shops = shopRows ?? []
+
+  const shopIds = shops.map(s => s.id)
+  let reviews: { shop_id: string; rating: number }[] = []
+  if (shopIds.length > 0) {
+    const { data } = await supabase
+      .from('reviews')
+      .select('shop_id,rating')
+      .in('shop_id', shopIds)
+    reviews = data ?? []
+  }
+
+  const featured = shops.map(s => {
+    const rs = reviews.filter(r => r.shop_id === s.id)
+    const avg = rs.length > 0 ? rs.reduce((t, r) => t + r.rating, 0) / rs.length : null
+    return { ...s, avg_rating: avg }
+  })
 
   return (
     <div className="bg-[#f4f1ea] text-stone-900">
@@ -107,7 +150,140 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 2 — How it works */}
+      {/* 2 — Search */}
+      <section className="relative">
+        <div className="max-w-5xl mx-auto px-6 pb-16">
+          <div className="rounded-3xl border border-stone-900/10 bg-white p-7 sm:p-9 shadow-xl shadow-stone-900/5">
+            <h2 className={`${display} text-2xl sm:text-3xl tracking-tight`}>
+              Search barbershops across Tashkent
+            </h2>
+            <p className="mt-1.5 text-sm text-stone-500">
+              Find a shop by name or by the area you&rsquo;re in.
+            </p>
+
+            <form action="/shops" method="get" className="mt-5 flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m21 21-4.3-4.3" strokeLinecap="round" />
+                </svg>
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="Try “fade”, “Chilanzar”, or a shop name"
+                  className="w-full rounded-full border border-stone-200 bg-stone-50 py-3.5 pl-12 pr-4 text-sm focus:border-stone-400 focus:outline-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center rounded-full bg-orange-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+              >
+                Search shops
+              </button>
+            </form>
+
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium uppercase tracking-wider text-stone-400">
+                Popular areas
+              </span>
+              {AREAS.map((area) => (
+                <Link
+                  key={area}
+                  href={`/shops?q=${encodeURIComponent(area)}`}
+                  className="rounded-full border border-stone-200 px-3 py-1 text-sm text-stone-600 transition hover:border-stone-900 hover:text-stone-900"
+                >
+                  {area}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3 — Shops */}
+      <section className="bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
+                Featured
+              </p>
+              <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
+                Barbershops people are booking
+              </h2>
+            </div>
+            <Link
+              href="/shops"
+              className="text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+            >
+              View all shops →
+            </Link>
+          </div>
+
+          {featured.length > 0 ? (
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((s) => (
+                <ShopCard key={s.id} shop={s} />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-12 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-6 py-16 text-center">
+              <p className="text-stone-500">
+                New barbershops are joining BarberBook every week.
+              </p>
+              <Link
+                href="/shops"
+                className="mt-4 inline-flex items-center rounded-full bg-stone-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+              >
+                Browse shops
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 4 — Services */}
+      <section className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
+        <div className="max-w-xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
+            Services
+          </p>
+          <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
+            Whatever look you&rsquo;re after
+          </h2>
+          <p className="mt-4 text-stone-600 leading-relaxed">
+            From a quick tidy-up to the full treatment — here&rsquo;s what
+            barbershops on BarberBook typically offer.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((svc) => (
+            <div
+              key={svc.name}
+              className="group rounded-2xl border border-stone-900/10 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-stone-900/5"
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
+                <ScissorsIcon />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-stone-900">
+                {svc.name}
+              </h3>
+              <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">
+                {svc.desc}
+              </p>
+              <p className="mt-4 text-sm font-semibold text-orange-700">
+                {svc.price}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 text-xs text-stone-400">
+          Prices are indicative — each barbershop sets its own.
+        </p>
+      </section>
+
+      {/* 5 — How it works */}
       <section className="bg-white">
         <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
           <div className="max-w-xl">
@@ -127,82 +303,49 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3 — Why BarberBook */}
-      <section className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
-        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 lg:gap-16">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-              Why BarberBook
+      {/* 6 — Reviews */}
+      <section className="bg-[#211b16] text-stone-100">
+        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+          <div className="max-w-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-400">
+              Reviews
             </p>
             <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
-              Built around a better barbershop visit
+              Loved by people across the city
             </h2>
-            <p className="mt-5 text-stone-600 leading-relaxed">
-              Everything you need to choose well and book with confidence —
-              for customers and shop owners alike.
-            </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Feature icon={<ShopIcon />} title="Verified barbershops" body="Every shop on BarberBook is checked before it goes live." />
-            <Feature icon={<StaffIcon />} title="Choose your barber" body="See the team, pick the person you trust with your hair." />
-            <Feature icon={<CalendarIcon />} title="Instant confirmation" body="No phone tag. Your slot is reserved the moment you book." />
-            <Feature icon={<ScissorsIcon />} title="Honest reviews" body="Real ratings from real visits, so there are no surprises." />
-          </div>
-        </div>
-      </section>
-
-      {/* 4 — Testimonial */}
-      <section className="bg-[#211b16] text-stone-100">
-        <div className="max-w-4xl mx-auto px-6 py-20 lg:py-28 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-400">
-            From our customers
-          </p>
-          <blockquote className={`${display} mt-6 text-2xl sm:text-[2rem] leading-snug`}>
-            &ldquo;I used to spend ten minutes calling around to find a free
-            slot. Now I book my barber on the way to work and the chair is
-            ready when I arrive.&rdquo;
-          </blockquote>
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80"
-              alt=""
-              className="h-11 w-11 rounded-full object-cover"
-            />
-            <div className="text-left">
-              <p className="text-sm font-semibold">Jamshid A.</p>
-              <p className="text-sm text-stone-400">Regular at Old City Cuts</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5 — Final CTA */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
-          <div className="relative overflow-hidden rounded-3xl bg-orange-600 px-8 py-16 sm:px-16 text-center">
-            <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-orange-500/60 blur-2xl" />
-            <div className="relative">
-              <h2 className={`${display} text-3xl sm:text-5xl tracking-tight text-white`}>
-                Ready for a fresh cut?
-              </h2>
-              <p className="mx-auto mt-4 max-w-md text-orange-50">
-                Find a barbershop you like and book your chair in the next
-                minute.
-              </p>
-              <Link
-                href="/shops"
-                className="mt-8 inline-flex items-center rounded-full bg-stone-900 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {REVIEWS.map((r) => (
+              <div
+                key={r.name}
+                className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-7"
               >
-                Browse barbershops
-              </Link>
-            </div>
+                <Stars rating={r.rating} />
+                <p className={`${display} mt-4 flex-1 text-lg leading-snug text-stone-100`}>
+                  &ldquo;{r.text}&rdquo;
+                </p>
+                <div className="mt-6 border-t border-white/10 pt-4">
+                  <p className="text-sm font-semibold text-white">{r.name}</p>
+                  <p className="text-sm text-stone-400">Booked at {r.area}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12">
+            <Link
+              href="/shops"
+              className="inline-flex items-center rounded-full bg-orange-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+            >
+              Book your barbershop
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 6 — Footer */}
-      <footer className="bg-[#211b16] text-stone-300">
+      {/* 7 — Footer */}
+      <footer className="bg-[#1a1511] text-stone-300">
         <div className="max-w-6xl mx-auto px-6 py-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <span className={`${display} text-xl text-white`}>BarberBook</span>
@@ -260,14 +403,14 @@ function Step({ n, title, body }: { n: string; title: string; body: string }) {
   )
 }
 
-function Feature({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+function Stars({ rating }: { rating: number }) {
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-6">
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
-        {icon}
-      </div>
-      <h3 className="mt-4 font-semibold text-stone-900">{title}</h3>
-      <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">{body}</p>
+    <div className="flex gap-0.5 text-orange-400">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span key={i} className={i <= rating ? '' : 'text-white/20'}>
+          ★
+        </span>
+      ))}
     </div>
   )
 }
