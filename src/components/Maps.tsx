@@ -27,10 +27,14 @@ function ClickHandler({ onPick }: { onPick: (lat: number, lng: number) => void }
 }
 
 // Map for picking a shop location while creating/editing a shop.
-export function MapPicker({ value, onPick }: { value: Point | null; onPick: (lat: number, lng: number) => void }) {
+export function MapPicker({ value, onPick, className }: {
+  value: Point | null
+  onPick: (lat: number, lng: number) => void
+  className?: string
+}) {
   const center: [number, number] = value ? [value.lat, value.lng] : TASHKENT
   return (
-    <MapContainer center={center} zoom={12} className="h-72 w-full rounded-lg border border-stone-200">
+    <MapContainer center={center} zoom={12} className={className ?? 'h-72 w-full rounded-lg border border-stone-200'}>
       <TileLayer attribution={ATTRIBUTION} url={TILE_URL} />
       <ClickHandler onPick={onPick} />
       {value && <Marker position={[value.lat, value.lng]} />}
