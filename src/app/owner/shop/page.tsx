@@ -223,38 +223,6 @@ export default function EditShop() {
                 </p>
               )}
             </Field>
-            <div>
-              <div className="grid grid-cols-3 gap-3">
-                <Field label="Country">
-                  <input
-                    disabled
-                    placeholder="—"
-                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                    value={country}
-                  />
-                </Field>
-                <Field label="Region">
-                  <input
-                    disabled
-                    placeholder="—"
-                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                    value={region}
-                  />
-                </Field>
-                <Field label="District">
-                  <input
-                    disabled
-                    placeholder="—"
-                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                    value={district}
-                  />
-                </Field>
-              </div>
-              <p className="text-xs text-stone-500 mt-1.5">
-                Filled automatically from the map location.
-              </p>
-            </div>
-
             <button
               disabled={loading}
               className="rounded-full bg-stone-900 text-white px-6 py-2.5 text-sm font-medium hover:bg-stone-800 transition disabled:opacity-40"

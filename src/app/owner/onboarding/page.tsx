@@ -116,41 +116,6 @@ export default function Onboarding() {
               </p>
             )}
           </div>
-          <div>
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="block text-sm text-stone-700 mb-1.5">Country</label>
-                <input
-                  disabled
-                  placeholder="—"
-                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                  value={country}
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-stone-700 mb-1.5">Region</label>
-                <input
-                  disabled
-                  placeholder="—"
-                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                  value={region}
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-stone-700 mb-1.5">District</label>
-                <input
-                  disabled
-                  placeholder="—"
-                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
-                  value={district}
-                />
-              </div>
-            </div>
-            <p className="text-xs text-stone-500 mt-1.5">
-              Filled automatically from the map location.
-            </p>
-          </div>
-
           <button
             disabled={loading}
             className="rounded-full bg-stone-900 text-white px-6 py-2.5 text-sm font-medium hover:bg-stone-800 transition disabled:opacity-40"
