@@ -67,11 +67,15 @@ export default function ShopDetail() {
     queryFn: () => fetchShopDetail(supabase, id),
   })
 
-  // Record one page visit per shop opened, then refresh so the count includes it.
+  // Record one page visit per shop per day (reloads on the same day don't count again).
   const recordedFor = useRef<string | null>(null)
   useEffect(() => {
     if (recordedFor.current === id) return
     recordedFor.current = id
+    const today = new Date().toISOString().slice(0, 10)
+    const key = `visited:${id}`
+    if (localStorage.getItem(key) === today) return
+    localStorage.setItem(key, today)
     supabase.from('shop_visits').insert({ shop_id: id }).then(() => refetch())
   }, [id, refetch])
 
