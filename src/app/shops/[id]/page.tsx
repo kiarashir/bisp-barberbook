@@ -1,4 +1,5 @@
 'use client'
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useParams, notFound } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
@@ -43,11 +44,18 @@ async function fetchShopDetail(supabase: ReturnType<typeof createClient>, id: st
     .eq('shop_id', id)
     .order('created_at', { ascending: false })
 
+  const { data: statsRows } = await supabase.rpc('shop_stats', { s_id: id })
+  const stats = (statsRows?.[0] ?? { visits: 0, bookings: 0 }) as {
+    visits: number
+    bookings: number
+  }
+
   return {
     shop,
     staff: staffData ?? [],
     services: serviceData ?? [],
     reviews: (reviewData ?? []) as unknown as Review[],
+    stats,
   }
 }
 
@@ -59,6 +67,14 @@ export default function ShopDetail() {
     queryFn: () => fetchShopDetail(supabase, id),
   })
 
+  // Record one page visit per shop opened.
+  const recordedFor = useRef<string | null>(null)
+  useEffect(() => {
+    if (recordedFor.current === id) return
+    recordedFor.current = id
+    supabase.from('shop_visits').insert({ shop_id: id })
+  }, [id])
+
   if (isLoading) {
     return (
       <div className="bg-white min-h-screen">
@@ -68,7 +84,7 @@ export default function ShopDetail() {
   }
   if (!data) notFound()
 
-  const { shop, staff, services, reviews } = data
+  const { shop, staff, services, reviews, stats } = data
   const openingHours = parseHours(shop.opening_hours)
   const today = (new Date().getDay() + 6) % 7
 
@@ -245,6 +261,20 @@ export default function ShopDetail() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="rounded-xl border border-stone-200 bg-white p-5">
+            <h2 className="font-semibold text-stone-900 mb-3">This month</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-2xl font-semibold text-stone-900">{stats.visits}</p>
+                <p className="text-sm text-stone-500">page visits</p>
+              </div>
+              <div>
+                <p className="text-2xl font-semibold text-stone-900">{stats.bookings}</p>
+                <p className="text-sm text-stone-500">bookings</p>
+              </div>
+            </div>
           </div>
 
           <div className="rounded-xl border border-stone-200 bg-white p-5">

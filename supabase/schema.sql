@@ -105,6 +105,13 @@ create table favorites (
 );
 create index favorites_user_id_idx on favorites(user_id);
 
+create table shop_visits (
+  id uuid primary key default gen_random_uuid(),
+  shop_id uuid not null references shops(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+create index shop_visits_shop_id_idx on shop_visits(shop_id);
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -124,3 +131,14 @@ $$;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
+
+-- Monthly visit and booking counts for a shop's detail page.
+create or replace function shop_stats(s_id uuid)
+returns table(visits bigint, bookings bigint)
+language sql security definer as $$
+  select
+    (select count(*) from shop_visits
+       where shop_id = s_id and created_at >= date_trunc('month', now())),
+    (select count(*) from bookings
+       where shop_id = s_id and created_at >= date_trunc('month', now()));
+$$;
