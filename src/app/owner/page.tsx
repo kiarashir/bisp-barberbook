@@ -70,6 +70,10 @@ export default async function OwnerDashboard() {
   const noStaff = (staffCount ?? 0) === 0
   const noServices = (serviceCount ?? 0) === 0
 
+  // Page visits this month.
+  const { data: statsRows } = await supabase.rpc('shop_stats', { s_id: shop.id })
+  const monthVisits = Number(statsRows?.[0]?.visits ?? 0)
+
   return (
     <div className="bg-white min-h-screen">
       <section className="bg-stone-50 border-b border-stone-200">
@@ -116,10 +120,11 @@ export default async function OwnerDashboard() {
       )}
 
       <section className="max-w-5xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Today" value={todayList.length.toString()} hint="confirmed bookings" />
           <StatCard label="This week" value={(weekCount ?? 0).toString()} hint="bookings" />
           <StatCard label="This week" value={weekRevenue.toLocaleString()} suffix="UZS" hint="revenue" />
+          <StatCard label="This month" value={monthVisits.toString()} hint="page visits" />
         </div>
       </section>
 

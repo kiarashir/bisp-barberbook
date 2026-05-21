@@ -49,6 +49,10 @@ export default async function OwnerStats() {
     monthRevenue = monthRevenue + b.price_uzs
   }
 
+  // Page visits this month.
+  const { data: statsRows } = await supabase.rpc('shop_stats', { s_id: shop.id })
+  const monthVisits = Number(statsRows?.[0]?.visits ?? 0)
+
   // Average rating.
   let avgRating = '—'
   if (reviews.length > 0) {
@@ -120,7 +124,11 @@ export default async function OwnerStats() {
       </section>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <StatCard
+            label="Page visits this month"
+            value={monthVisits.toString()}
+          />
           <StatCard
             label="Bookings this month"
             value={monthBookings.toString()}
