@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { ShopIcon, StaffIcon, CalendarIcon, ScissorsIcon } from '@/components/icons'
+
+const display = 'font-[family-name:var(--font-display)]'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -18,132 +21,225 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="bg-white">
-      {/* Hero */}
+    <div className="bg-[#f4f1ea] text-stone-900">
+      {/* 1 — Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-orange-50 to-white" />
-        <div className="absolute -top-24 -right-24 -z-10 h-72 w-72 rounded-full bg-orange-100 blur-3xl opacity-70" />
+        <div className="absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-orange-200/50 blur-3xl" />
+        <div className="absolute -bottom-48 -left-32 h-[26rem] w-[26rem] rounded-full bg-amber-100/60 blur-3xl" />
 
-        <div className="max-w-5xl mx-auto px-4 pt-16 pb-20 sm:pt-24 sm:pb-28 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-20 lg:pt-24 lg:pb-28 grid lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-3 py-1 text-xs font-medium text-stone-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-              Now booking across Tashkent
-            </span>
-
-            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[3.25rem] font-semibold leading-[1.1] tracking-tight text-stone-900">
-              Find your next haircut in Tashkent
-            </h1>
-
-            <p className="mt-4 text-base sm:text-lg text-stone-500 max-w-md">
-              Browse local barbershops, compare real reviews, and book your
-              appointment in seconds — no calls, no waiting.
+            <p className="fade-up text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
+              Barbershop booking · Tashkent
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            <h1 className={`${display} fade-up mt-5 text-[2.8rem] sm:text-6xl leading-[1.02] tracking-tight`} style={{ animationDelay: '80ms' }}>
+              Find your next{' '}
+              <span className="italic text-orange-700">haircut</span> in
+              Tashkent
+            </h1>
+
+            <p className="fade-up mt-6 text-lg text-stone-600 max-w-md leading-relaxed" style={{ animationDelay: '160ms' }}>
+              Browse the city&rsquo;s best barbershops, compare real reviews,
+              and lock in your chair in under a minute. No calls, no waiting.
+            </p>
+
+            <div className="fade-up mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: '240ms' }}>
               <Link
                 href="/shops"
-                className="inline-flex items-center bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-full px-6 py-3 transition"
+                className="inline-flex items-center rounded-full bg-stone-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-stone-800"
               >
-                Browse shops
+                Browse barbershops
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center border border-stone-300 hover:border-stone-400 text-stone-900 text-sm font-medium rounded-full px-6 py-3 transition"
+                className="inline-flex items-center rounded-full border border-stone-300 px-7 py-3.5 text-sm font-semibold text-stone-900 transition hover:border-stone-900"
               >
-                Create account
+                Create an account
               </Link>
             </div>
 
-            <div className="mt-8 flex items-center gap-3">
-              <div className="flex -space-x-2">
+            <div className="fade-up mt-10 flex items-center gap-4" style={{ animationDelay: '320ms' }}>
+              <div className="flex -space-x-2.5">
                 {AVATARS.map((src) => (
                   <img
                     key={src}
                     src={src}
                     alt=""
-                    className="h-8 w-8 rounded-full border-2 border-white object-cover"
+                    className="h-9 w-9 rounded-full border-2 border-[#f4f1ea] object-cover"
                   />
                 ))}
               </div>
-              <p className="text-sm text-stone-500">
-                <span className="font-medium text-stone-900">4.8 ★</span> from
-                1,200+ bookings
+              <p className="text-sm text-stone-600">
+                <span className="font-semibold text-stone-900">4.8 ★</span>{' '}
+                rated · 1,200+ bookings made
               </p>
             </div>
           </div>
 
-          {/* Hero image with floating booking card */}
-          <div className="relative">
-            <div className="aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden rounded-2xl border border-stone-200 shadow-sm">
+          {/* Hero image + floating card */}
+          <div className="fade-up relative" style={{ animationDelay: '200ms' }}>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-stone-900/10 shadow-2xl shadow-stone-900/15">
               <img
-                src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=900&q=80"
-                alt="Barber giving a haircut"
+                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=80"
+                alt="Barber at work"
                 className="h-full w-full object-cover"
               />
             </div>
 
-            <div className="absolute -bottom-5 -left-4 sm:left-6 w-56 rounded-xl border border-stone-200 bg-white p-4 shadow-lg">
+            <div className="absolute -bottom-6 -left-5 sm:-left-8 w-60 rounded-2xl border border-stone-900/10 bg-white p-4 shadow-xl">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-stone-500">
-                  Next slot
+                <span className="text-xs font-medium uppercase tracking-wider text-stone-400">
+                  Next available
                 </span>
-                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
+                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-700">
                   Today
                 </span>
               </div>
-              <p className="mt-1 font-semibold text-stone-900">Fade & Beard</p>
+              <p className={`${display} mt-2 text-lg`}>Fade &amp; Beard Trim</p>
               <p className="text-sm text-stone-500">14:30 · Old City Cuts</p>
+            </div>
+
+            <div className="absolute -top-4 -right-3 rounded-full border border-stone-900/10 bg-white px-4 py-2 text-sm font-semibold shadow-lg">
+              ★ 4.9 <span className="font-normal text-stone-500">· 86 reviews</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="max-w-5xl mx-auto px-4 py-16 sm:py-20">
-        <div className="text-center max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">
-            Book in three steps
-          </h2>
-          <p className="mt-2 text-stone-500">
-            From scrolling to sitting in the chair, the whole thing takes a
-            minute.
+      {/* 2 — How it works */}
+      <section className="bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
+          <div className="max-w-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
+              How it works
+            </p>
+            <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
+              Three steps to a sharper look
+            </h2>
+          </div>
+
+          <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-stone-200 bg-stone-200 sm:grid-cols-3">
+            <Step n="01" title="Find a shop" body="Browse barbershops near you with photos, prices, and honest reviews from real customers." />
+            <Step n="02" title="Pick a time" body="Choose your barber and a slot that fits your day. Your booking is confirmed instantly." />
+            <Step n="03" title="Get your cut" body="Turn up, get groomed, and leave a review afterwards to help the next person decide." />
+          </div>
+        </div>
+      </section>
+
+      {/* 3 — Why BarberBook */}
+      <section className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
+        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 lg:gap-16">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
+              Why BarberBook
+            </p>
+            <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
+              Built around a better barbershop visit
+            </h2>
+            <p className="mt-5 text-stone-600 leading-relaxed">
+              Everything you need to choose well and book with confidence —
+              for customers and shop owners alike.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <Feature icon={<ShopIcon />} title="Verified barbershops" body="Every shop on BarberBook is checked before it goes live." />
+            <Feature icon={<StaffIcon />} title="Choose your barber" body="See the team, pick the person you trust with your hair." />
+            <Feature icon={<CalendarIcon />} title="Instant confirmation" body="No phone tag. Your slot is reserved the moment you book." />
+            <Feature icon={<ScissorsIcon />} title="Honest reviews" body="Real ratings from real visits, so there are no surprises." />
+          </div>
+        </div>
+      </section>
+
+      {/* 4 — Testimonial */}
+      <section className="bg-[#211b16] text-stone-100">
+        <div className="max-w-4xl mx-auto px-6 py-20 lg:py-28 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-400">
+            From our customers
           </p>
+          <blockquote className={`${display} mt-6 text-2xl sm:text-[2rem] leading-snug`}>
+            &ldquo;I used to spend ten minutes calling around to find a free
+            slot. Now I book my barber on the way to work and the chair is
+            ready when I arrive.&rdquo;
+          </blockquote>
+          <div className="mt-8 flex items-center justify-center gap-3">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80"
+              alt=""
+              className="h-11 w-11 rounded-full object-cover"
+            />
+            <div className="text-left">
+              <p className="text-sm font-semibold">Jamshid A.</p>
+              <p className="text-sm text-stone-400">Regular at Old City Cuts</p>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <Step n="1" title="Find a shop" body="Browse barbershops near you with photos, prices, and reviews." />
-          <Step n="2" title="Pick a time" body="Choose your barber and a slot that fits your day. Instant confirmation." />
-          <Step n="3" title="Get your cut" body="Show up, get groomed, and leave a review to help others." />
+      {/* 5 — Final CTA */}
+      <section className="bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
+          <div className="relative overflow-hidden rounded-3xl bg-orange-600 px-8 py-16 sm:px-16 text-center">
+            <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-orange-500/60 blur-2xl" />
+            <div className="relative">
+              <h2 className={`${display} text-3xl sm:text-5xl tracking-tight text-white`}>
+                Ready for a fresh cut?
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-orange-50">
+                Find a barbershop you like and book your chair in the next
+                minute.
+              </p>
+              <Link
+                href="/shops"
+                className="mt-8 inline-flex items-center rounded-full bg-stone-900 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+              >
+                Browse barbershops
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="border-y border-stone-200 bg-stone-50">
-        <div className="max-w-5xl mx-auto px-4 py-12 grid grid-cols-3 gap-6 text-center">
-          <Stat value="40+" label="Barbershops" />
-          <Stat value="1,200+" label="Bookings made" />
-          <Stat value="4.8 ★" label="Average rating" />
+      {/* 6 — Footer */}
+      <footer className="bg-[#211b16] text-stone-300">
+        <div className="max-w-6xl mx-auto px-6 py-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div>
+            <span className={`${display} text-xl text-white`}>BarberBook</span>
+            <p className="mt-3 max-w-xs text-sm text-stone-400 leading-relaxed">
+              The simple way to discover and book barbershops across Tashkent.
+            </p>
+          </div>
+          <FooterCol
+            title="For customers"
+            links={[
+              ['Browse shops', '/shops'],
+              ['Create account', '/signup'],
+              ['Log in', '/login'],
+            ]}
+          />
+          <FooterCol
+            title="For barbershops"
+            links={[
+              ['List your shop', '/owner/signup'],
+              ['Owner login', '/login'],
+            ]}
+          />
+          <FooterCol
+            title="Company"
+            links={[
+              ['About', '/'],
+              ['Contact', '/'],
+            ]}
+          />
         </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="max-w-5xl mx-auto px-4 py-20">
-        <div className="rounded-2xl bg-stone-900 px-6 py-14 sm:px-12 text-center">
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-            Ready for a fresh cut?
-          </h2>
-          <p className="mt-3 text-stone-300 max-w-md mx-auto">
-            Find a barbershop you like and lock in a time right now.
-          </p>
-          <Link
-            href="/shops"
-            className="mt-7 inline-flex items-center bg-white hover:bg-stone-100 text-stone-900 text-sm font-medium rounded-full px-6 py-3 transition"
-          >
-            Browse shops
-          </Link>
+        <div className="border-t border-white/10">
+          <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-stone-500">
+            <p>© {new Date().getFullYear()} BarberBook. All rights reserved.</p>
+            <p>Final year project · WIUT</p>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   )
 }
@@ -156,21 +252,41 @@ const AVATARS = [
 
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div className="rounded-xl border border-stone-200 p-6">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 text-sm font-semibold text-orange-700">
-        {n}
-      </div>
-      <h3 className="mt-4 font-semibold text-stone-900">{title}</h3>
-      <p className="mt-1 text-sm text-stone-500 leading-relaxed">{body}</p>
+    <div className="bg-white p-8">
+      <span className={`${display} text-4xl text-orange-600`}>{n}</span>
+      <h3 className="mt-4 text-lg font-semibold text-stone-900">{title}</h3>
+      <p className="mt-2 text-sm text-stone-500 leading-relaxed">{body}</p>
     </div>
   )
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Feature({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+  return (
+    <div className="rounded-2xl border border-stone-200 bg-white p-6">
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
+        {icon}
+      </div>
+      <h3 className="mt-4 font-semibold text-stone-900">{title}</h3>
+      <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">{body}</p>
+    </div>
+  )
+}
+
+function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <div className="text-2xl sm:text-3xl font-semibold text-stone-900">{value}</div>
-      <div className="mt-1 text-sm text-stone-500">{label}</div>
+      <h4 className="text-xs font-semibold uppercase tracking-[0.15em] text-stone-500">
+        {title}
+      </h4>
+      <ul className="mt-4 space-y-2.5">
+        {links.map(([label, href]) => (
+          <li key={label}>
+            <Link href={href} className="text-sm text-stone-300 transition hover:text-white">
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
