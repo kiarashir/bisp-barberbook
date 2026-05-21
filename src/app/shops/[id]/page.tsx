@@ -62,18 +62,18 @@ async function fetchShopDetail(supabase: ReturnType<typeof createClient>, id: st
 export default function ShopDetail() {
   const supabase = createClient()
   const { id } = useParams<{ id: string }>()
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['shop', id],
     queryFn: () => fetchShopDetail(supabase, id),
   })
 
-  // Record one page visit per shop opened.
+  // Record one page visit per shop opened, then refresh so the count includes it.
   const recordedFor = useRef<string | null>(null)
   useEffect(() => {
     if (recordedFor.current === id) return
     recordedFor.current = id
-    supabase.from('shop_visits').insert({ shop_id: id })
-  }, [id])
+    supabase.from('shop_visits').insert({ shop_id: id }).then(() => refetch())
+  }, [id, refetch])
 
   if (isLoading) {
     return (
