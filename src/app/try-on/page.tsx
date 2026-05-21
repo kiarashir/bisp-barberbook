@@ -5,16 +5,16 @@ import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
 import PhotoCropper from '@/components/PhotoCropper'
 
+// Example photos are from Wikimedia Commons.
 const STYLES = [
-  { name: 'Fade', photo: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Buzz cut', photo: 'https://images.unsplash.com/photo-1517423568366-8b83523034fd?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Crew cut', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Pompadour', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Undercut', photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Quiff', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Slick back', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Textured crop', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Side part', photo: 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Fade', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Fade_Hair_Cut.jpg/500px-Fade_Hair_Cut.jpg' },
+  { name: 'High top fade', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/High_top_fade.jpg/500px-High_top_fade.jpg' },
+  { name: 'Buzz cut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/SDCC_2015_-_James_McAvoy_%2819573358149%29_%28cropped%29.jpg/330px-SDCC_2015_-_James_McAvoy_%2819573358149%29_%28cropped%29.jpg' },
+  { name: 'Crew cut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Crew_Cut%2C_Semi_Short_Taper.jpg/500px-Crew_Cut%2C_Semi_Short_Taper.jpg' },
+  { name: 'High and tight', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Highandtight.jpg/500px-Highandtight.jpg' },
+  { name: 'Undercut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Undercut_%2820048891914%29.jpg/500px-Undercut_%2820048891914%29.jpg' },
+  { name: 'Quiff', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Man_with_glasses_and_a_quiff_hairstyle_%281490854%29.jpg/500px-Man_with_glasses_and_a_quiff_hairstyle_%281490854%29.jpg' },
+  { name: 'Pompadour', photo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Pompadour_hairstyle.jpg' },
 ]
 
 type Photo = { file: File; preview: string }
@@ -154,7 +154,7 @@ export default function TryOnPage() {
             </button>
 
             <h2 className="text-lg font-semibold text-stone-900 mb-4">Choose a hairstyle</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {STYLES.map(s => (
                 <button
                   key={s.name}
