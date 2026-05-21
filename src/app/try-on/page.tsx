@@ -3,24 +3,28 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
+import PhotoCropper from '@/components/PhotoCropper'
 
 const STYLES = [
-  'Fade',
-  'Buzz cut',
-  'Crew cut',
-  'Pompadour',
-  'Undercut',
-  'Quiff',
-  'Slick back',
-  'Textured crop',
-  'Side part',
-  'Long layered',
+  { name: 'Fade', photo: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Buzz cut', photo: 'https://images.unsplash.com/photo-1517423568366-8b83523034fd?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Crew cut', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Pompadour', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Undercut', photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Quiff', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Slick back', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Textured crop', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Side part', photo: 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=300&q=80' },
 ]
+
+type Photo = { file: File; preview: string }
 
 export default function TryOnPage() {
   const supabase = createClient()
   const router = useRouter()
-  const [files, setFiles] = useState<File[]>([])
+  const [step, setStep] = useState<1 | 2>(1)
+  const [photos, setPhotos] = useState<Photo[]>([])
+  const [cropSrc, setCropSrc] = useState<string | null>(null)
   const [style, setStyle] = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<string[]>([])
@@ -31,19 +35,37 @@ export default function TryOnPage() {
     })
   }, [])
 
-  function pickFiles(e: React.ChangeEvent<HTMLInputElement>) {
-    setFiles(Array.from(e.target.files ?? []).slice(0, 3))
+  function pickFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0]
+    if (f) setCropSrc(URL.createObjectURL(f))
+    e.target.value = ''
+  }
+
+  function onCropped(file: File) {
+    setPhotos(prev => [...prev, { file, preview: URL.createObjectURL(file) }])
+    if (cropSrc) URL.revokeObjectURL(cropSrc)
+    setCropSrc(null)
+  }
+
+  function cancelCrop() {
+    if (cropSrc) URL.revokeObjectURL(cropSrc)
+    setCropSrc(null)
+  }
+
+  function removePhoto(i: number) {
+    setPhotos(prev => {
+      URL.revokeObjectURL(prev[i].preview)
+      return prev.filter((_, idx) => idx !== i)
+    })
   }
 
   async function generate() {
-    if (files.length === 0) { toast.error('Upload at least one photo'); return }
     if (!style) { toast.error('Pick a hairstyle'); return }
-
     setLoading(true)
     setResults([])
     const fd = new FormData()
     fd.append('style', style)
-    for (const f of files) fd.append('photos', f)
+    for (const p of photos) fd.append('photos', p.file)
 
     try {
       const res = await fetch('/api/try-on', { method: 'POST', body: fd })
@@ -59,105 +81,156 @@ export default function TryOnPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <section className="max-w-5xl mx-auto px-4 pt-10 pb-6">
+      <section className="max-w-3xl mx-auto px-4 pt-10 pb-6">
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-stone-900 mb-2">
           AI hairstyle try-on
         </h1>
         <p className="text-stone-500">
-          Upload a photo of yourself, pick a hairstyle, and see how it could look.
+          Upload a photo, pick a hairstyle, and see how it could look.
         </p>
+        <p className="text-sm font-medium text-orange-600 mt-4">Step {step} of 2</p>
       </section>
 
       <div className="border-t border-stone-200" />
 
-      <section className="max-w-5xl mx-auto px-4 py-10 pb-20 space-y-10">
+      <section className="max-w-3xl mx-auto px-4 py-10 pb-20">
         {/* Step 1 — photos */}
-        <div>
-          <h2 className="text-lg font-semibold text-stone-900 mb-1">1. Upload your photos</h2>
-          <p className="text-sm text-stone-500 mb-4">
-            1 to 3 clear, front-facing photos work best.
-          </p>
-          <label className="inline-block cursor-pointer rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-400">
-            Choose photos
-            <input type="file" accept="image/*" multiple onChange={pickFiles} className="hidden" />
-          </label>
+        {step === 1 && (
+          <div>
+            <h2 className="text-lg font-semibold text-stone-900 mb-1">Your photos</h2>
+            <p className="text-sm text-stone-500 mb-5">
+              Add 1 to 3 clear, front-facing photos. You can zoom and crop each one.
+            </p>
 
-          {files.length > 0 && (
-            <div className="flex flex-wrap gap-3 mt-4">
-              {files.map((f, i) => (
-                <img
-                  key={i}
-                  src={URL.createObjectURL(f)}
-                  alt=""
-                  className="w-24 h-24 rounded-lg object-cover border border-stone-200"
-                />
+            <div className="flex flex-wrap gap-3">
+              {photos.map((p, i) => (
+                <div key={i} className="relative w-28 h-28">
+                  <img
+                    src={p.preview}
+                    alt=""
+                    className="w-full h-full rounded-lg object-cover border border-stone-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(i)}
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-stone-900 text-white text-sm flex items-center justify-center hover:bg-stone-700"
+                    aria-label="Remove photo"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+
+              {photos.length < 3 && (
+                <label className="w-28 h-28 cursor-pointer rounded-lg border-2 border-dashed border-stone-300 flex flex-col items-center justify-center text-stone-400 hover:border-stone-400 hover:text-stone-500">
+                  <span className="text-2xl leading-none">+</span>
+                  <span className="text-xs mt-1">Add photo</span>
+                  <input type="file" accept="image/*" onChange={pickFile} className="hidden" />
+                </label>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              disabled={photos.length === 0}
+              className="mt-8 rounded-full bg-stone-900 text-white px-6 py-3 text-sm font-medium hover:bg-stone-800 transition disabled:opacity-40"
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
+        {/* Step 2 — hairstyle */}
+        {step === 2 && (
+          <div>
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              disabled={loading}
+              className="text-sm text-stone-600 hover:text-stone-900 disabled:opacity-40 mb-5"
+            >
+              ← Back to photos
+            </button>
+
+            <h2 className="text-lg font-semibold text-stone-900 mb-4">Choose a hairstyle</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {STYLES.map(s => (
+                <button
+                  key={s.name}
+                  type="button"
+                  onClick={() => setStyle(s.name)}
+                  disabled={loading}
+                  className={`rounded-xl overflow-hidden border text-left transition disabled:opacity-60 ${
+                    style === s.name
+                      ? 'border-orange-500 ring-2 ring-orange-200'
+                      : 'border-stone-200 hover:border-stone-300'
+                  }`}
+                >
+                  <div className="aspect-square bg-stone-100">
+                    <img
+                      src={s.photo}
+                      alt=""
+                      onError={e => { e.currentTarget.style.display = 'none' }}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="px-3 py-2 text-sm font-medium text-stone-900">{s.name}</p>
+                </button>
               ))}
             </div>
-          )}
-        </div>
 
-        {/* Step 2 — style */}
-        <div>
-          <h2 className="text-lg font-semibold text-stone-900 mb-4">2. Pick a hairstyle</h2>
-          <div className="flex flex-wrap gap-2">
-            {STYLES.map(s => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setStyle(s)}
-                className={`rounded-full px-4 py-2 text-sm border transition ${
-                  style === s
-                    ? 'bg-stone-900 text-white border-stone-900'
-                    : 'border-stone-300 text-stone-700 hover:border-stone-400'
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
+            <button
+              type="button"
+              onClick={generate}
+              disabled={loading || !style}
+              className="mt-8 rounded-full bg-orange-600 text-white px-6 py-3 text-sm font-medium hover:bg-orange-700 transition disabled:opacity-50"
+            >
+              {loading ? 'Generating…' : 'Generate hairstyles'}
+            </button>
 
-        {/* Step 3 — generate */}
-        <div>
-          <button
-            type="button"
-            onClick={generate}
-            disabled={loading}
-            className="rounded-full bg-orange-600 text-white px-6 py-3 text-sm font-medium hover:bg-orange-700 transition disabled:opacity-50"
-          >
-            {loading ? 'Generating…' : 'Generate hairstyles'}
-          </button>
-          {loading && (
-            <p className="text-sm text-stone-500 mt-3">
-              This can take up to a minute. Please wait.
-            </p>
-          )}
-        </div>
-
-        {/* Results */}
-        {results.length > 0 && (
-          <div>
-            <h2 className="text-lg font-semibold text-stone-900 mb-4">Results</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {results.map((b64, i) => {
-                const url = `data:image/png;base64,${b64}`
-                return (
-                  <div key={i} className="rounded-xl border border-stone-200 overflow-hidden">
-                    <img src={url} alt={`Result ${i + 1}`} className="w-full aspect-square object-cover" />
-                    <a
-                      href={url}
-                      download={`hairstyle-${i + 1}.png`}
-                      className="block text-center text-sm font-medium text-stone-700 py-2.5 border-t border-stone-200 hover:bg-stone-50"
-                    >
-                      Download
-                    </a>
-                  </div>
-                )
-              })}
-            </div>
+            {/* Results / skeletons */}
+            {(loading || results.length > 0) && (
+              <div className="mt-10">
+                <h2 className="text-lg font-semibold text-stone-900 mb-4">Results</h2>
+                {loading && (
+                  <p className="text-sm text-stone-500 mb-4">
+                    This can take up to a minute. Please wait.
+                  </p>
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {loading
+                    ? [0, 1, 2].map(i => (
+                        <div
+                          key={i}
+                          className="aspect-square rounded-xl bg-stone-100 animate-pulse"
+                        />
+                      ))
+                    : results.map((b64, i) => {
+                        const url = `data:image/png;base64,${b64}`
+                        return (
+                          <div key={i} className="rounded-xl border border-stone-200 overflow-hidden">
+                            <img src={url} alt={`Result ${i + 1}`} className="w-full aspect-square object-cover" />
+                            <a
+                              href={url}
+                              download={`hairstyle-${i + 1}.png`}
+                              className="block text-center text-sm font-medium text-stone-700 py-2.5 border-t border-stone-200 hover:bg-stone-50"
+                            >
+                              Download
+                            </a>
+                          </div>
+                        )
+                      })}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </section>
+
+      {cropSrc && (
+        <PhotoCropper src={cropSrc} onDone={onCropped} onCancel={cancelCrop} />
+      )}
     </div>
   )
 }
