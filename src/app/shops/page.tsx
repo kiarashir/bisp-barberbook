@@ -140,7 +140,7 @@ export default function ShopsPage() {
       <div className="border-t border-stone-200" />
 
       <section className="max-w-5xl mx-auto px-4 py-10 pb-20">
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
           <input
             type="text"
             placeholder="Search by name, address or district"
@@ -167,22 +167,22 @@ export default function ShopsPage() {
             <option value="rating">Highest rated</option>
             <option value="name">Name (A–Z)</option>
           </select>
-        </div>
 
-        {/* List / Map toggle */}
-        <div className="inline-flex rounded-lg border border-stone-200 p-0.5 mb-8">
-          <button
-            onClick={() => setView('list')}
-            className={`px-4 py-1.5 text-sm rounded-md ${view === 'list' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
-          >
-            List
-          </button>
-          <button
-            onClick={() => setView('map')}
-            className={`px-4 py-1.5 text-sm rounded-md ${view === 'map' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
-          >
-            Map
-          </button>
+          {/* List / Map toggle */}
+          <div className="inline-flex rounded-lg border border-stone-200 p-0.5 shrink-0">
+            <button
+              onClick={() => setView('list')}
+              className={`px-4 py-1.5 text-sm rounded-md ${view === 'list' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+            >
+              List
+            </button>
+            <button
+              onClick={() => setView('map')}
+              className={`px-4 py-1.5 text-sm rounded-md ${view === 'map' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+            >
+              Map
+            </button>
+          </div>
         </div>
 
         {fetching && (
