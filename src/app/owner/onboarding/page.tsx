@@ -116,31 +116,39 @@ export default function Onboarding() {
               </p>
             )}
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="block text-sm text-stone-700 mb-1.5">Country</label>
-              <input
-                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
-                value={country}
-                onChange={e => setCountry(e.target.value)}
-              />
+          <div>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-sm text-stone-700 mb-1.5">Country</label>
+                <input
+                  disabled
+                  placeholder="—"
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
+                  value={country}
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-stone-700 mb-1.5">Region</label>
+                <input
+                  disabled
+                  placeholder="—"
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
+                  value={region}
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-stone-700 mb-1.5">District</label>
+                <input
+                  disabled
+                  placeholder="—"
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm bg-stone-100 text-stone-600"
+                  value={district}
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm text-stone-700 mb-1.5">Region</label>
-              <input
-                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
-                value={region}
-                onChange={e => setRegion(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-stone-700 mb-1.5">District</label>
-              <input
-                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
-                value={district}
-                onChange={e => setDistrict(e.target.value)}
-              />
-            </div>
+            <p className="text-xs text-stone-500 mt-1.5">
+              Filled automatically from the map location.
+            </p>
           </div>
 
           <button
