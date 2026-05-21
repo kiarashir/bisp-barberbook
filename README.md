@@ -10,6 +10,17 @@ This project was built as a final year project for the BSc Business
 Information Systems course at Westminster International University in
 Tashkent.
 
+## Features
+
+- Browse and search barbershops, and see them on a map
+- Find shops near you, sorted by distance
+- View a shop's services, staff, opening hours, and reviews
+- Book an appointment with a chosen barber and time slot
+- Save favourite shops
+- AI hairstyle try-on — upload a photo and see how a haircut would look
+- Shop owner dashboard to manage the shop, staff, services, hours, and bookings
+- Admin can manage all shops
+
 ## Technologies used
 
 - **Next.js 15** (React 19) — the web framework
@@ -18,6 +29,8 @@ Tashkent.
 - **Supabase** — database, authentication, and storage
 - **React Query** (TanStack Query) — caching data on the client
 - **Leaflet** — interactive maps for shop locations
+- **OpenAI** — the AI hairstyle try-on
+- **react-easy-crop** — cropping uploaded photos
 
 ## How to run
 
@@ -37,10 +50,12 @@ You need [Node.js](https://nodejs.org) installed.
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
    PG_CONNECTION_STRING=your-database-connection-string
+   OPENAI_API_KEY=your-openai-api-key
    ```
 
-   `PG_CONNECTION_STRING` is only needed for running database migrations —
-   see the "Database migrations" section below for how to get it.
+   `PG_CONNECTION_STRING` is only needed for database migrations (see the
+   "Database setup" section below). `OPENAI_API_KEY` is only needed for the
+   AI hairstyle try-on.
 
 3. Start the development server:
 
