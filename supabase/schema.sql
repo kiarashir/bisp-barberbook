@@ -2,7 +2,8 @@ create table profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null,
   phone text,
-  role text not null check (role in ('customer','shop_owner','admin')),
+  role text not null check (role in ('customer','shop_owner')),
+  is_admin boolean not null default false,
   created_at timestamptz not null default now()
 );
 

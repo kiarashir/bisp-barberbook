@@ -5,15 +5,17 @@ export default async function Nav() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Get role for logged-in users so we can show the right links.
+  // Get role and admin flag for logged-in users so we can show the right links.
   let role: string | null = null
+  let isAdmin = false
   if (user) {
     const { data } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role,is_admin')
       .eq('id', user.id)
       .maybeSingle()
     role = data?.role ?? null
+    isAdmin = data?.is_admin ?? false
   }
 
   const linkClass = 'text-sm text-stone-600 hover:text-stone-900 transition'
@@ -42,9 +44,6 @@ export default async function Nav() {
               <Link href="/favorites" className={linkClass}>Saved</Link>
               <Link href="/bookings" className={linkClass}>My bookings</Link>
               <Link href="/account" className={linkClass}>Account</Link>
-              <form action="/auth/signout" method="post">
-                <button className={linkClass}>Log out</button>
-              </form>
             </>
           )}
 
@@ -52,19 +51,17 @@ export default async function Nav() {
             <>
               <Link href="/owner" className={linkClass}>Dashboard</Link>
               <Link href="/account" className={linkClass}>Account</Link>
-              <form action="/auth/signout" method="post">
-                <button className={linkClass}>Log out</button>
-              </form>
             </>
           )}
 
-          {role === 'admin' && (
-            <>
-              <Link href="/admin/shops" className={linkClass}>Admin</Link>
-              <form action="/auth/signout" method="post">
-                <button className={linkClass}>Log out</button>
-              </form>
-            </>
+          {isAdmin && (
+            <Link href="/admin/shops" className={linkClass}>Admin</Link>
+          )}
+
+          {user && (
+            <form action="/auth/signout" method="post">
+              <button className={linkClass}>Log out</button>
+            </form>
           )}
         </div>
       </div>

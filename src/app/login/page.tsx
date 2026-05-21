@@ -36,7 +36,6 @@ export default function Login() {
 
     let destination = '/'
     if (profile?.role === 'shop_owner') destination = '/owner'
-    if (profile?.role === 'admin') destination = '/admin/shops'
 
     router.push(destination)
     router.refresh()

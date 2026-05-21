@@ -17,7 +17,7 @@ create policy "profiles_self_update" on profiles
 
 create or replace function is_admin()
 returns boolean language sql security definer as $$
-  select exists (select 1 from profiles where id = auth.uid() and role = 'admin');
+  select exists (select 1 from profiles where id = auth.uid() and is_admin = true);
 $$;
 
 create or replace function is_shop_owner(s_id uuid)

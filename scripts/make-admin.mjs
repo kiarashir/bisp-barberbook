@@ -26,7 +26,7 @@ const client = new Client({ connectionString, ssl: { rejectUnauthorized: false }
 await client.connect()
 try {
   const res = await client.query(
-    `update profiles set role = 'admin'
+    `update profiles set is_admin = true
      where id = (select id from auth.users where email = $1)`,
     [email],
   )

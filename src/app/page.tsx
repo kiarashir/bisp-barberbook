@@ -33,7 +33,6 @@ export default async function HomePage() {
       .eq('id', user.id)
       .maybeSingle()
     if (profile?.role === 'shop_owner') redirect('/owner')
-    if (profile?.role === 'admin') redirect('/admin/shops')
   }
 
   // Get a few shops to show on the landing page.
