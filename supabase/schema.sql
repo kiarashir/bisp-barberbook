@@ -14,6 +14,11 @@ create table shops (
   description text,
   photo_url text,
   opening_hours jsonb,
+  lat double precision,
+  lng double precision,
+  country text,
+  region text,
+  district text,
   is_hidden boolean not null default false,
   created_at timestamptz not null default now()
 );
@@ -90,6 +95,15 @@ create table reviews (
   unique (customer_id, shop_id)
 );
 create index reviews_shop_id_idx on reviews(shop_id);
+
+create table favorites (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id) on delete cascade,
+  shop_id uuid not null references shops(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (user_id, shop_id)
+);
+create index favorites_user_id_idx on favorites(user_id);
 
 create or replace function public.handle_new_user()
 returns trigger

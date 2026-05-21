@@ -7,6 +7,7 @@ alter table services enable row level security;
 alter table service_staff enable row level security;
 alter table bookings enable row level security;
 alter table reviews enable row level security;
+alter table favorites enable row level security;
 
 create policy "profiles_self_read" on profiles
   for select using (id = auth.uid());
@@ -78,3 +79,10 @@ create policy "reviews_insert_customer" on reviews
         and status = 'completed'
     )
   );
+
+create policy "favorites_own_read" on favorites
+  for select using (user_id = auth.uid());
+create policy "favorites_own_insert" on favorites
+  for insert with check (user_id = auth.uid());
+create policy "favorites_own_delete" on favorites
+  for delete using (user_id = auth.uid());

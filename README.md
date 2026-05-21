@@ -50,16 +50,21 @@ You need [Node.js](https://nodejs.org) installed.
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Database migrations
+## Database setup
 
-The SQL files in the `supabase/` folder define the database. To apply one,
-use the migration script:
+The `supabase/` folder has the SQL that builds the database. Run the files
+in this order with the migration script:
 
 ```
-node scripts/run-sql.mjs supabase/your-file.sql
+node scripts/run-sql.mjs supabase/schema.sql
+node scripts/run-sql.mjs supabase/policies.sql
+node scripts/run-sql.mjs supabase/storage.sql
+node scripts/run-sql.mjs supabase/seed.sql
 ```
 
-This needs a database connection string in `.env.local`.
+`schema.sql` creates the tables, `policies.sql` adds the security rules,
+`storage.sql` sets up photo uploads, and `seed.sql` adds example data
+(optional). This needs a database connection string in `.env.local`.
 
 ### Getting the connection string
 
