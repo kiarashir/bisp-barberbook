@@ -4,17 +4,15 @@ import { redirect } from 'next/navigation'
 import ShopCard from '@/components/ShopCard'
 import { ScissorsIcon } from '@/components/icons'
 
-const display = 'font-[family-name:var(--font-display)]'
-
 const AREAS = ['Chilanzar', 'Yunusabad', 'Mirzo Ulugbek', 'Yakkasaray']
 
 const SERVICES = [
-  { name: 'Classic haircut', desc: 'A clean, timeless cut tailored to you.', price: 'from 40,000 so’m' },
-  { name: 'Skin fade', desc: 'Sharp, gradual fade with crisp edges.', price: 'from 55,000 so’m' },
-  { name: 'Beard trim & shape', desc: 'Shaped, lined up and conditioned.', price: 'from 30,000 so’m' },
-  { name: 'Hot towel shave', desc: 'A close, traditional straight-razor shave.', price: 'from 50,000 so’m' },
-  { name: 'Kids haircut', desc: 'Patient, friendly cuts for younger clients.', price: 'from 35,000 so’m' },
-  { name: 'Hair & beard combo', desc: 'The full reset — cut, beard and finish.', price: 'from 75,000 so’m' },
+  { name: 'Classic haircut', desc: 'A clean, timeless cut tailored to you.', price: 'from 40,000 soʼm' },
+  { name: 'Skin fade', desc: 'Sharp, gradual fade with crisp edges.', price: 'from 55,000 soʼm' },
+  { name: 'Beard trim & shape', desc: 'Shaped, lined up and conditioned.', price: 'from 30,000 soʼm' },
+  { name: 'Hot towel shave', desc: 'A close, traditional straight-razor shave.', price: 'from 50,000 soʼm' },
+  { name: 'Kids haircut', desc: 'Patient, friendly cuts for younger clients.', price: 'from 35,000 soʼm' },
+  { name: 'Hair & beard combo', desc: 'The full reset - cut, beard and finish.', price: 'from 75,000 soʼm' },
 ]
 
 const REVIEWS = [
@@ -38,7 +36,7 @@ export default async function HomePage() {
     if (profile?.role === 'admin') redirect('/admin/shops')
   }
 
-  // Fetch a few real shops to feature on the landing page.
+  // Get a few shops to show on the landing page.
   const { data: shopRows } = await supabase
     .from('shops')
     .select('id,name,address,description,photo_url')
@@ -64,292 +62,218 @@ export default async function HomePage() {
   })
 
   return (
-    <div className="bg-[#f4f1ea] text-stone-900">
-      {/* 1 — Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-orange-200/50 blur-3xl" />
-        <div className="absolute -bottom-48 -left-32 h-[26rem] w-[26rem] rounded-full bg-amber-100/60 blur-3xl" />
-
-        <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-20 lg:pt-24 lg:pb-28 grid lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center">
+    <div className="bg-white text-gray-900">
+      {/* hero */}
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <p className="fade-up text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-              Barbershop booking · Tashkent
+            <p className="text-sm font-medium text-orange-600 mb-3">
+              Barbershop booking in Tashkent
             </p>
-
-            <h1 className={`${display} fade-up mt-5 text-[2.8rem] sm:text-6xl leading-[1.02] tracking-tight`} style={{ animationDelay: '80ms' }}>
-              Find your next{' '}
-              <span className="italic text-orange-700">haircut</span> in
-              Tashkent
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight">
+              Find your next haircut in Tashkent
             </h1>
-
-            <p className="fade-up mt-6 text-lg text-stone-600 max-w-md leading-relaxed" style={{ animationDelay: '160ms' }}>
-              Browse the city&rsquo;s best barbershops, compare real reviews,
-              and lock in your chair in under a minute. No calls, no waiting.
+            <p className="mt-5 text-lg text-gray-600 max-w-md">
+              Browse local barbershops, compare real reviews, and book your
+              appointment in seconds. No calls, no waiting.
             </p>
-
-            <div className="fade-up mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: '240ms' }}>
+            <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/shops"
-                className="inline-flex items-center rounded-full bg-stone-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+                className="inline-block bg-gray-900 text-white text-sm font-medium rounded-lg px-6 py-3 hover:bg-gray-800"
               >
                 Browse barbershops
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center rounded-full border border-stone-300 px-7 py-3.5 text-sm font-semibold text-stone-900 transition hover:border-stone-900"
+                className="inline-block border border-gray-300 text-gray-900 text-sm font-medium rounded-lg px-6 py-3 hover:bg-gray-50"
               >
                 Create an account
               </Link>
             </div>
-
-            <div className="fade-up mt-10 flex items-center gap-4" style={{ animationDelay: '320ms' }}>
-              <div className="flex -space-x-2.5">
+            <div className="mt-9 flex items-center gap-3">
+              <div className="flex -space-x-2">
                 {AVATARS.map((src) => (
                   <img
                     key={src}
                     src={src}
                     alt=""
-                    className="h-9 w-9 rounded-full border-2 border-[#f4f1ea] object-cover"
+                    className="h-8 w-8 rounded-full border-2 border-white object-cover"
                   />
                 ))}
               </div>
-              <p className="text-sm text-stone-600">
-                <span className="font-semibold text-stone-900">4.8 ★</span>{' '}
-                rated · 1,200+ bookings made
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold text-gray-900">4.8 ★</span> from
+                1,200+ bookings
               </p>
             </div>
           </div>
 
-          {/* Hero image + floating card */}
-          <div className="fade-up relative" style={{ animationDelay: '200ms' }}>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-stone-900/10 shadow-2xl shadow-stone-900/15">
-              <img
-                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=80"
-                alt="Barber at work"
-                className="h-full w-full object-cover"
-              />
-            </div>
-
-            <div className="absolute -bottom-6 -left-5 sm:-left-8 w-60 rounded-2xl border border-stone-900/10 bg-white p-4 shadow-xl">
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=80"
+              alt="Barber giving a haircut"
+              className="rounded-xl w-full aspect-[4/5] object-cover shadow-md"
+            />
+            <div className="absolute -bottom-5 -left-4 w-56 rounded-lg bg-white border border-gray-200 p-4 shadow-lg">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium uppercase tracking-wider text-stone-400">
-                  Next available
-                </span>
-                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-700">
+                <span className="text-xs text-gray-500">Next available</span>
+                <span className="text-xs font-medium text-orange-600 bg-orange-50 rounded px-2 py-0.5">
                   Today
                 </span>
               </div>
-              <p className={`${display} mt-2 text-lg`}>Fade &amp; Beard Trim</p>
-              <p className="text-sm text-stone-500">14:30 · Old City Cuts</p>
-            </div>
-
-            <div className="absolute -top-4 -right-3 rounded-full border border-stone-900/10 bg-white px-4 py-2 text-sm font-semibold shadow-lg">
-              ★ 4.9 <span className="font-normal text-stone-500">· 86 reviews</span>
+              <p className="font-semibold mt-1">Fade & Beard Trim</p>
+              <p className="text-sm text-gray-500">14:30 · Old City Cuts</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2 — Search */}
-      <section className="relative">
-        <div className="max-w-5xl mx-auto px-6 pb-16">
-          <div className="rounded-3xl border border-stone-900/10 bg-white p-7 sm:p-9 shadow-xl shadow-stone-900/5">
-            <h2 className={`${display} text-2xl sm:text-3xl tracking-tight`}>
-              Search barbershops across Tashkent
-            </h2>
-            <p className="mt-1.5 text-sm text-stone-500">
-              Find a shop by name or by the area you&rsquo;re in.
-            </p>
-
-            <form action="/shops" method="get" className="mt-5 flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m21 21-4.3-4.3" strokeLinecap="round" />
-                </svg>
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Try “fade”, “Chilanzar”, or a shop name"
-                  className="w-full rounded-full border border-stone-200 bg-stone-50 py-3.5 pl-12 pr-4 text-sm focus:border-stone-400 focus:outline-none"
-                />
-              </div>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded-full bg-orange-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+      {/* search */}
+      <section className="max-w-5xl mx-auto px-6 pb-16">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8">
+          <h2 className="text-2xl font-bold">Search barbershops in Tashkent</h2>
+          <p className="text-sm text-gray-500 mt-1 mb-5">
+            Find a shop by name or by the area you are in.
+          </p>
+          <form action="/shops" method="get" className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search by name or address"
+              className="flex-1 border border-gray-300 rounded-md px-4 py-3 text-sm focus:outline-none focus:border-gray-500"
+            />
+            <button
+              type="submit"
+              className="bg-orange-600 text-white text-sm font-medium rounded-md px-6 py-3 hover:bg-orange-700"
+            >
+              Search
+            </button>
+          </form>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <span className="text-sm text-gray-400 mr-1">Popular areas:</span>
+            {AREAS.map((area) => (
+              <Link
+                key={area}
+                href={`/shops?q=${encodeURIComponent(area)}`}
+                className="text-sm text-gray-600 border border-gray-300 rounded-full px-3 py-1 hover:bg-white"
               >
-                Search shops
-              </button>
-            </form>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-medium uppercase tracking-wider text-stone-400">
-                Popular areas
-              </span>
-              {AREAS.map((area) => (
-                <Link
-                  key={area}
-                  href={`/shops?q=${encodeURIComponent(area)}`}
-                  className="rounded-full border border-stone-200 px-3 py-1 text-sm text-stone-600 transition hover:border-stone-900 hover:text-stone-900"
-                >
-                  {area}
-                </Link>
-              ))}
-            </div>
+                {area}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 3 — Shops */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-                Featured
-              </p>
-              <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
-                Barbershops people are booking
-              </h2>
-            </div>
+      {/* featured shops */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="flex items-end justify-between mb-8">
+          <h2 className="text-3xl font-bold tracking-tight">
+            Barbershops people are booking
+          </h2>
+          <Link href="/shops" className="text-sm font-medium text-orange-600 hover:underline">
+            View all shops
+          </Link>
+        </div>
+
+        {featured.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featured.map((s) => (
+              <ShopCard key={s.id} shop={s} />
+            ))}
+          </div>
+        ) : (
+          <div className="border border-dashed border-gray-300 rounded-xl py-16 text-center">
+            <p className="text-gray-500">
+              New barbershops are joining BarberBook every week.
+            </p>
             <Link
               href="/shops"
-              className="text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+              className="inline-block mt-4 bg-gray-900 text-white text-sm font-medium rounded-lg px-6 py-2.5 hover:bg-gray-800"
             >
-              View all shops →
+              Browse shops
             </Link>
           </div>
-
-          {featured.length > 0 ? (
-            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.map((s) => (
-                <ShopCard key={s.id} shop={s} />
-              ))}
-            </div>
-          ) : (
-            <div className="mt-12 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-6 py-16 text-center">
-              <p className="text-stone-500">
-                New barbershops are joining BarberBook every week.
-              </p>
-              <Link
-                href="/shops"
-                className="mt-4 inline-flex items-center rounded-full bg-stone-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800"
-              >
-                Browse shops
-              </Link>
-            </div>
-          )}
-        </div>
+        )}
       </section>
 
-      {/* 4 — Services */}
-      <section className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
-        <div className="max-w-xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-            Services
-          </p>
-          <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
-            Whatever look you&rsquo;re after
+      {/* services */}
+      <section className="bg-gray-50 border-y border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            Whatever look you are after
           </h2>
-          <p className="mt-4 text-stone-600 leading-relaxed">
-            From a quick tidy-up to the full treatment — here&rsquo;s what
-            barbershops on BarberBook typically offer.
+          <p className="text-gray-600 mt-3 max-w-lg">
+            From a quick tidy-up to the full treatment, here is what
+            barbershops on BarberBook usually offer.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            {SERVICES.map((svc) => (
+              <div key={svc.name} className="bg-white border border-gray-200 rounded-xl p-6">
+                <div className="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+                  <ScissorsIcon />
+                </div>
+                <h3 className="font-semibold text-lg mt-4">{svc.name}</h3>
+                <p className="text-sm text-gray-500 mt-1">{svc.desc}</p>
+                <p className="text-sm font-semibold text-orange-600 mt-4">{svc.price}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400 mt-5">
+            Prices are indicative - each barbershop sets its own.
           </p>
         </div>
-
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((svc) => (
-            <div
-              key={svc.name}
-              className="group rounded-2xl border border-stone-900/10 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-stone-900/5"
-            >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
-                <ScissorsIcon />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-stone-900">
-                {svc.name}
-              </h3>
-              <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">
-                {svc.desc}
-              </p>
-              <p className="mt-4 text-sm font-semibold text-orange-700">
-                {svc.price}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 text-xs text-stone-400">
-          Prices are indicative — each barbershop sets its own.
-        </p>
       </section>
 
-      {/* 5 — How it works */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-24">
-          <div className="max-w-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-              How it works
-            </p>
-            <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
-              Three steps to a sharper look
-            </h2>
-          </div>
-
-          <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-stone-200 bg-stone-200 sm:grid-cols-3">
-            <Step n="01" title="Find a shop" body="Browse barbershops near you with photos, prices, and honest reviews from real customers." />
-            <Step n="02" title="Pick a time" body="Choose your barber and a slot that fits your day. Your booking is confirmed instantly." />
-            <Step n="03" title="Get your cut" body="Turn up, get groomed, and leave a review afterwards to help the next person decide." />
-          </div>
+      {/* how it works */}
+      <section className="max-w-5xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold tracking-tight text-center mb-12">
+          How it works
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+          <Step n="1" title="Find a shop" body="Browse barbershops near you with photos, prices, and reviews." />
+          <Step n="2" title="Pick a time" body="Choose your barber and a slot that fits your day. Instant confirmation." />
+          <Step n="3" title="Get your cut" body="Show up, get groomed, and leave a review to help others." />
         </div>
       </section>
 
-      {/* 6 — Reviews */}
-      <section className="bg-[#211b16] text-stone-100">
-        <div className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
-          <div className="max-w-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-400">
-              Reviews
-            </p>
-            <h2 className={`${display} mt-3 text-3xl sm:text-4xl tracking-tight`}>
-              Loved by people across the city
-            </h2>
-          </div>
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+      {/* reviews */}
+      <section className="bg-gray-900 text-gray-100">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <h2 className="text-3xl font-bold tracking-tight mb-10">
+            What customers say
+          </h2>
+          <div className="grid gap-6 lg:grid-cols-3">
             {REVIEWS.map((r) => (
-              <div
-                key={r.name}
-                className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-7"
-              >
-                <Stars rating={r.rating} />
-                <p className={`${display} mt-4 flex-1 text-lg leading-snug text-stone-100`}>
-                  &ldquo;{r.text}&rdquo;
-                </p>
-                <div className="mt-6 border-t border-white/10 pt-4">
-                  <p className="text-sm font-semibold text-white">{r.name}</p>
-                  <p className="text-sm text-stone-400">Booked at {r.area}</p>
+              <div key={r.name} className="bg-gray-800 rounded-xl p-6">
+                <div className="text-orange-400 mb-3">
+                  {'★'.repeat(r.rating)}
+                  <span className="text-gray-600">{'★'.repeat(5 - r.rating)}</span>
+                </div>
+                <p className="text-gray-200">"{r.text}"</p>
+                <div className="mt-5 pt-4 border-t border-gray-700">
+                  <p className="text-sm font-semibold">{r.name}</p>
+                  <p className="text-sm text-gray-400">Booked at {r.area}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="mt-12">
-            <Link
-              href="/shops"
-              className="inline-flex items-center rounded-full bg-orange-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
-            >
-              Book your barbershop
-            </Link>
-          </div>
+          <Link
+            href="/shops"
+            className="inline-block mt-10 bg-orange-600 text-white text-sm font-medium rounded-lg px-6 py-3 hover:bg-orange-700"
+          >
+            Book your barbershop
+          </Link>
         </div>
       </section>
 
-      {/* 7 — Footer */}
-      <footer className="bg-[#1a1511] text-stone-300">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      {/* footer */}
+      <footer className="bg-gray-900 border-t border-gray-800 text-gray-300">
+        <div className="max-w-6xl mx-auto px-6 py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <span className={`${display} text-xl text-white`}>BarberBook</span>
-            <p className="mt-3 max-w-xs text-sm text-stone-400 leading-relaxed">
+            <p className="font-bold text-white text-lg">BarberBook</p>
+            <p className="text-sm text-gray-400 mt-3 max-w-xs">
               The simple way to discover and book barbershops across Tashkent.
             </p>
           </div>
@@ -376,8 +300,8 @@ export default async function HomePage() {
             ]}
           />
         </div>
-        <div className="border-t border-white/10">
-          <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-stone-500">
+        <div className="border-t border-gray-800 py-6">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between gap-2 text-sm text-gray-500">
             <p>© {new Date().getFullYear()} BarberBook. All rights reserved.</p>
             <p>Final year project · WIUT</p>
           </div>
@@ -395,22 +319,12 @@ const AVATARS = [
 
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div className="bg-white p-8">
-      <span className={`${display} text-4xl text-orange-600`}>{n}</span>
-      <h3 className="mt-4 text-lg font-semibold text-stone-900">{title}</h3>
-      <p className="mt-2 text-sm text-stone-500 leading-relaxed">{body}</p>
-    </div>
-  )
-}
-
-function Stars({ rating }: { rating: number }) {
-  return (
-    <div className="flex gap-0.5 text-orange-400">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} className={i <= rating ? '' : 'text-white/20'}>
-          ★
-        </span>
-      ))}
+    <div className="text-center">
+      <div className="w-10 h-10 rounded-full bg-orange-100 text-orange-600 font-semibold flex items-center justify-center mx-auto">
+        {n}
+      </div>
+      <h3 className="font-semibold mt-4">{title}</h3>
+      <p className="text-sm text-gray-500 mt-1">{body}</p>
     </div>
   )
 }
@@ -418,13 +332,11 @@ function Stars({ rating }: { rating: number }) {
 function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <h4 className="text-xs font-semibold uppercase tracking-[0.15em] text-stone-500">
-        {title}
-      </h4>
-      <ul className="mt-4 space-y-2.5">
+      <p className="text-sm font-semibold text-white mb-3">{title}</p>
+      <ul className="space-y-2">
         {links.map(([label, href]) => (
           <li key={label}>
-            <Link href={href} className="text-sm text-stone-300 transition hover:text-white">
+            <Link href={href} className="text-sm text-gray-400 hover:text-white">
               {label}
             </Link>
           </li>
