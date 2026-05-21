@@ -96,6 +96,25 @@ export default async function OwnerDashboard() {
         </div>
       </section>
 
+      {shop.lat == null && (
+        <div className="max-w-5xl mx-auto px-4 pt-8">
+          <div className="rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <p className="font-medium text-amber-900">Set your shop location</p>
+              <p className="text-sm text-amber-700">
+                Pick your spot on the map so customers can find you on the shops map.
+              </p>
+            </div>
+            <Link
+              href="/owner/shop"
+              className="shrink-0 text-sm font-medium rounded-full bg-amber-600 text-white px-4 py-2 hover:bg-amber-700 transition"
+            >
+              Set location
+            </Link>
+          </div>
+        </div>
+      )}
+
       <section className="max-w-5xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard label="Today" value={todayList.length.toString()} hint="confirmed bookings" />
