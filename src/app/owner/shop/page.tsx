@@ -1,10 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
+import { reverseGeocode } from '@/lib/geocode'
 import { ShopIcon } from '@/components/icons'
+
+const MapPicker = dynamic(() => import('@/components/Maps').then(m => m.MapPicker), { ssr: false })
 
 export default function EditShop() {
   const supabase = createClient()
@@ -14,6 +18,10 @@ export default function EditShop() {
   const [address, setAddress] = useState('')
   const [description, setDescription] = useState('')
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
+  const [point, setPoint] = useState<{ lat: number; lng: number } | null>(null)
+  const [country, setCountry] = useState('')
+  const [region, setRegion] = useState('')
+  const [district, setDistrict] = useState('')
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [fetching, setFetching] = useState(true)
@@ -24,7 +32,7 @@ export default function EditShop() {
       if (!user) { router.push('/login'); return }
       const { data: shop } = await supabase
         .from('shops')
-        .select('id,name,address,description,photo_url')
+        .select('id,name,address,description,photo_url,lat,lng,country,region,district')
         .eq('owner_id', user.id)
         .limit(1)
         .maybeSingle()
@@ -34,10 +42,25 @@ export default function EditShop() {
       setAddress(shop.address)
       setDescription(shop.description ?? '')
       setPhotoUrl(shop.photo_url ?? null)
+      if (shop.lat != null && shop.lng != null) setPoint({ lat: shop.lat, lng: shop.lng })
+      setCountry(shop.country ?? '')
+      setRegion(shop.region ?? '')
+      setDistrict(shop.district ?? '')
       setFetching(false)
     }
     load()
   }, [])
+
+  // When the owner picks a point, fill in the place names from it.
+  async function pickLocation(lat: number, lng: number) {
+    setPoint({ lat, lng })
+    const place = await reverseGeocode(lat, lng)
+    if (place) {
+      setCountry(place.country ?? '')
+      setRegion(place.region ?? '')
+      setDistrict(place.district ?? '')
+    }
+  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault()
@@ -45,7 +68,16 @@ export default function EditShop() {
     setLoading(true)
     const { error } = await supabase
       .from('shops')
-      .update({ name, address, description: description || null })
+      .update({
+        name,
+        address,
+        description: description || null,
+        lat: point?.lat ?? null,
+        lng: point?.lng ?? null,
+        country: country || null,
+        region: region || null,
+        district: district || null,
+      })
       .eq('id', shopId)
     setLoading(false)
     if (error) { toast.error(error.message); return }
@@ -182,6 +214,39 @@ export default function EditShop() {
                 onChange={e => setDescription(e.target.value)}
               />
             </Field>
+
+            <Field label="Location — click on the map">
+              <MapPicker value={point} onPick={pickLocation} />
+              {point && (
+                <p className="text-xs text-stone-500 mt-1.5">
+                  Selected: {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
+                </p>
+              )}
+            </Field>
+            <div className="grid grid-cols-3 gap-3">
+              <Field label="Country">
+                <input
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                  value={country}
+                  onChange={e => setCountry(e.target.value)}
+                />
+              </Field>
+              <Field label="Region">
+                <input
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                  value={region}
+                  onChange={e => setRegion(e.target.value)}
+                />
+              </Field>
+              <Field label="District">
+                <input
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                  value={district}
+                  onChange={e => setDistrict(e.target.value)}
+                />
+              </Field>
+            </div>
+
             <button
               disabled={loading}
               className="rounded-full bg-stone-900 text-white px-6 py-2.5 text-sm font-medium hover:bg-stone-800 transition disabled:opacity-40"

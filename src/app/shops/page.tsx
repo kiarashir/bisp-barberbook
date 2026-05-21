@@ -1,7 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import ShopCard from '@/components/ShopCard'
 import { createClient } from '@/lib/supabase/client'
+
+const ShopsMap = dynamic(() => import('@/components/Maps').then(m => m.ShopsMap), { ssr: false })
 
 type Shop = {
   id: string
@@ -10,6 +13,9 @@ type Shop = {
   description: string | null
   photo_url: string | null
   created_at: string
+  lat: number | null
+  lng: number | null
+  district: string | null
   avg_rating: number | null
 }
 
@@ -21,6 +27,8 @@ export default function ShopsPage() {
   const [fetching, setFetching] = useState(true)
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOption>('newest')
+  const [districtFilter, setDistrictFilter] = useState('')
+  const [view, setView] = useState<'list' | 'map'>('list')
 
   // Pre-fill the search box if the landing page passed a ?q= query.
   useEffect(() => {
@@ -33,7 +41,7 @@ export default function ShopsPage() {
     async function load() {
       const { data: shopsData } = await supabase
         .from('shops')
-        .select('id,name,address,description,photo_url,created_at')
+        .select('id,name,address,description,photo_url,created_at,lat,lng,district')
         .eq('is_hidden', false)
         .order('created_at', { ascending: false })
       const allShops = shopsData ?? []
@@ -86,17 +94,25 @@ export default function ShopsPage() {
     load()
   }, [])
 
-  // Filter by search query (name or address).
+  // Build the list of districts available for the filter dropdown.
+  const districts: string[] = []
+  for (const s of shops) {
+    if (s.district && !districts.includes(s.district)) districts.push(s.district)
+  }
+  districts.sort()
+
+  // Filter by search query (name or address) and by district.
   const filtered: Shop[] = []
   const lowerQuery = query.trim().toLowerCase()
   for (const s of shops) {
-    if (!lowerQuery) {
-      filtered.push(s)
-      continue
+    if (districtFilter && s.district !== districtFilter) continue
+    if (lowerQuery) {
+      const nameMatch = s.name.toLowerCase().includes(lowerQuery)
+      const addressMatch = s.address.toLowerCase().includes(lowerQuery)
+      const districtMatch = (s.district ?? '').toLowerCase().includes(lowerQuery)
+      if (!nameMatch && !addressMatch && !districtMatch) continue
     }
-    const nameMatch = s.name.toLowerCase().includes(lowerQuery)
-    const addressMatch = s.address.toLowerCase().includes(lowerQuery)
-    if (nameMatch || addressMatch) filtered.push(s)
+    filtered.push(s)
   }
 
   // Sort the filtered list.
@@ -106,6 +122,11 @@ export default function ShopsPage() {
     filtered.sort((a, b) => a.name.localeCompare(b.name))
   }
   // 'newest' is already the order from Supabase.
+
+  // Shops that have coordinates, for the map view.
+  const mapShops = filtered
+    .filter(s => s.lat != null && s.lng != null)
+    .map(s => ({ id: s.id, name: s.name, lat: s.lat as number, lng: s.lng as number, district: s.district }))
 
   return (
     <div className="bg-white min-h-screen">
@@ -119,14 +140,24 @@ export default function ShopsPage() {
       <div className="border-t border-stone-200" />
 
       <section className="max-w-5xl mx-auto px-4 py-10 pb-20">
-        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <input
             type="text"
-            placeholder="Search by name or address"
+            placeholder="Search by name, address or district"
             value={query}
             onChange={e => setQuery(e.target.value)}
             className="flex-1 border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400"
           />
+          <select
+            value={districtFilter}
+            onChange={e => setDistrictFilter(e.target.value)}
+            className="border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400 bg-white"
+          >
+            <option value="">All districts</option>
+            {districts.map(d => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
           <select
             value={sort}
             onChange={e => setSort(e.target.value as SortOption)}
@@ -138,6 +169,22 @@ export default function ShopsPage() {
           </select>
         </div>
 
+        {/* List / Map toggle */}
+        <div className="inline-flex rounded-lg border border-stone-200 p-0.5 mb-8">
+          <button
+            onClick={() => setView('list')}
+            className={`px-4 py-1.5 text-sm rounded-md ${view === 'list' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+          >
+            List
+          </button>
+          <button
+            onClick={() => setView('map')}
+            className={`px-4 py-1.5 text-sm rounded-md ${view === 'map' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+          >
+            Map
+          </button>
+        </div>
+
         {fetching && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
             <SkeletonCard />
@@ -146,18 +193,26 @@ export default function ShopsPage() {
           </div>
         )}
 
-        {!fetching && filtered.length === 0 && (
-          <p className="text-stone-500">
-            {query ? `No shops match "${query}".` : 'No shops listed yet.'}
-          </p>
+        {!fetching && view === 'list' && (
+          filtered.length === 0 ? (
+            <p className="text-stone-500">
+              {query || districtFilter ? 'No shops match your search.' : 'No shops listed yet.'}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map(s => (
+                <ShopCard key={s.id} shop={s} />
+              ))}
+            </div>
+          )
         )}
 
-        {!fetching && filtered.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map(s => (
-              <ShopCard key={s.id} shop={s} />
-            ))}
-          </div>
+        {!fetching && view === 'map' && (
+          mapShops.length === 0 ? (
+            <p className="text-stone-500">No shops with a location to show on the map yet.</p>
+          ) : (
+            <ShopsMap shops={mapShops} />
+          )
         )}
       </section>
     </div>

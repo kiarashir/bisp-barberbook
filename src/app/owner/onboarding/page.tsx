@@ -1,8 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
+import { reverseGeocode } from '@/lib/geocode'
+
+const MapPicker = dynamic(() => import('@/components/Maps').then(m => m.MapPicker), { ssr: false })
 
 export default function Onboarding() {
   const supabase = createClient()
@@ -10,6 +14,10 @@ export default function Onboarding() {
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const [description, setDescription] = useState('')
+  const [point, setPoint] = useState<{ lat: number; lng: number } | null>(null)
+  const [country, setCountry] = useState('')
+  const [region, setRegion] = useState('')
+  const [district, setDistrict] = useState('')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -26,6 +34,17 @@ export default function Onboarding() {
     })()
   }, [])
 
+  // When the owner picks a point, fill in the place names from it.
+  async function pickLocation(lat: number, lng: number) {
+    setPoint({ lat, lng })
+    const place = await reverseGeocode(lat, lng)
+    if (place) {
+      setCountry(place.country ?? '')
+      setRegion(place.region ?? '')
+      setDistrict(place.district ?? '')
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!name || !address) { toast.error('Name and address required'); return }
@@ -37,6 +56,11 @@ export default function Onboarding() {
       name,
       address,
       description: description || null,
+      lat: point?.lat ?? null,
+      lng: point?.lng ?? null,
+      country: country || null,
+      region: region || null,
+      district: district || null,
     })
     setLoading(false)
     if (error) { toast.error(error.message); return }
@@ -82,6 +106,43 @@ export default function Onboarding() {
               onChange={e => setDescription(e.target.value)}
             />
           </div>
+
+          <div>
+            <label className="block text-sm text-stone-700 mb-1.5">Location — click on the map</label>
+            <MapPicker value={point} onPick={pickLocation} />
+            {point && (
+              <p className="text-xs text-stone-500 mt-1.5">
+                Selected: {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
+              </p>
+            )}
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-sm text-stone-700 mb-1.5">Country</label>
+              <input
+                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                value={country}
+                onChange={e => setCountry(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-stone-700 mb-1.5">Region</label>
+              <input
+                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                value={region}
+                onChange={e => setRegion(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-stone-700 mb-1.5">District</label>
+              <input
+                className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-stone-400"
+                value={district}
+                onChange={e => setDistrict(e.target.value)}
+              />
+            </div>
+          </div>
+
           <button
             disabled={loading}
             className="rounded-full bg-stone-900 text-white px-6 py-2.5 text-sm font-medium hover:bg-stone-800 transition disabled:opacity-40"
