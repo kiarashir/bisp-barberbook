@@ -8,5 +8,6 @@ build
 *.log
 .DS_Store
 *.pdf
-scripts/
+scripts/*
+!scripts/run-sql.mjs
 docs/
