@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import toast from 'react-hot-toast'
 import ShopCard from '@/components/ShopCard'
@@ -24,8 +25,10 @@ type SortOption = 'newest' | 'rating' | 'name' | 'nearest'
 
 export default function ShopsPage() {
   const supabase = createClient()
-  const [shops, setShops] = useState<Shop[]>([])
-  const [fetching, setFetching] = useState(true)
+  const { data: shops = [], isLoading: fetching } = useQuery({
+    queryKey: ['shops'],
+    queryFn: () => fetchShops(supabase),
+  })
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOption>('newest')
   const [districtFilter, setDistrictFilter] = useState('')
@@ -56,64 +59,6 @@ export default function ShopsPage() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search).get('q')
     if (q) setQuery(q)
-  }, [])
-
-  // Load shops and their average ratings.
-  useEffect(() => {
-    async function load() {
-      const { data: shopsData } = await supabase
-        .from('shops')
-        .select('id,name,address,description,photo_url,created_at,lat,lng,district')
-        .eq('is_hidden', false)
-        .order('created_at', { ascending: false })
-      const allShops = shopsData ?? []
-      const allIds = allShops.map(s => s.id)
-
-      // Only show shops that can actually be booked: at least one active barber and one service.
-      let raw = allShops
-      if (allIds.length > 0) {
-        const { data: staffRows } = await supabase
-          .from('staff')
-          .select('shop_id')
-          .eq('is_active', true)
-          .in('shop_id', allIds)
-        const { data: serviceRows } = await supabase
-          .from('services')
-          .select('shop_id')
-          .in('shop_id', allIds)
-        const withStaff = new Set((staffRows ?? []).map(r => r.shop_id))
-        const withServices = new Set((serviceRows ?? []).map(r => r.shop_id))
-        raw = allShops.filter(s => withStaff.has(s.id) && withServices.has(s.id))
-      }
-
-      const shopIds = raw.map(s => s.id)
-      let reviews: { shop_id: string; rating: number }[] = []
-      if (shopIds.length > 0) {
-        const { data } = await supabase
-          .from('reviews')
-          .select('shop_id,rating')
-          .in('shop_id', shopIds)
-        reviews = data ?? []
-      }
-
-      // Attach average rating to each shop.
-      const enriched: Shop[] = []
-      for (const s of raw) {
-        let total = 0
-        let count = 0
-        for (const r of reviews) {
-          if (r.shop_id === s.id) {
-            total = total + r.rating
-            count = count + 1
-          }
-        }
-        enriched.push({ ...s, avg_rating: count > 0 ? total / count : null })
-      }
-
-      setShops(enriched)
-      setFetching(false)
-    }
-    load()
   }, [])
 
   // Build the list of districts available for the filter dropdown.
@@ -241,6 +186,60 @@ export default function ShopsPage() {
       </section>
     </div>
   )
+}
+
+// Loads bookable shops with their average ratings. Used as the React Query fetcher.
+async function fetchShops(supabase: ReturnType<typeof createClient>): Promise<Shop[]> {
+  const { data: shopsData } = await supabase
+    .from('shops')
+    .select('id,name,address,description,photo_url,created_at,lat,lng,district')
+    .eq('is_hidden', false)
+    .order('created_at', { ascending: false })
+  const allShops = shopsData ?? []
+  const allIds = allShops.map(s => s.id)
+
+  // Only show shops that can actually be booked: at least one active barber and one service.
+  let raw = allShops
+  if (allIds.length > 0) {
+    const { data: staffRows } = await supabase
+      .from('staff')
+      .select('shop_id')
+      .eq('is_active', true)
+      .in('shop_id', allIds)
+    const { data: serviceRows } = await supabase
+      .from('services')
+      .select('shop_id')
+      .in('shop_id', allIds)
+    const withStaff = new Set((staffRows ?? []).map(r => r.shop_id))
+    const withServices = new Set((serviceRows ?? []).map(r => r.shop_id))
+    raw = allShops.filter(s => withStaff.has(s.id) && withServices.has(s.id))
+  }
+
+  const shopIds = raw.map(s => s.id)
+  let reviews: { shop_id: string; rating: number }[] = []
+  if (shopIds.length > 0) {
+    const { data } = await supabase
+      .from('reviews')
+      .select('shop_id,rating')
+      .in('shop_id', shopIds)
+    reviews = data ?? []
+  }
+
+  // Attach average rating to each shop.
+  const enriched: Shop[] = []
+  for (const s of raw) {
+    let total = 0
+    let count = 0
+    for (const r of reviews) {
+      if (r.shop_id === s.id) {
+        total = total + r.rating
+        count = count + 1
+      }
+    }
+    enriched.push({ ...s, avg_rating: count > 0 ? total / count : null })
+  }
+
+  return enriched
 }
 
 // Great-circle distance between two coordinates, in kilometres.

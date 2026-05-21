@@ -1,7 +1,9 @@
+'use client'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { useParams, notFound } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
+import { createClient } from '@/lib/supabase/client'
 import ShopMapView from '@/components/ShopMapView'
 import { DAYS, parseHours } from '@/lib/hours'
 import FavoriteButton from '@/components/FavoriteButton'
@@ -14,42 +16,61 @@ type Review = {
   profiles: { full_name: string } | null
 }
 
-export default async function ShopDetail({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const supabase = await createClient()
-
-  // Load the shop. Show 404 if missing or hidden.
+// Loads a shop and its staff, services and reviews. Used as the React Query fetcher.
+async function fetchShopDetail(supabase: ReturnType<typeof createClient>, id: string) {
   const { data: shop } = await supabase
     .from('shops')
     .select('*')
     .eq('id', id)
     .eq('is_hidden', false)
     .single()
-  if (!shop) notFound()
+  if (!shop) return null
 
-  const openingHours = parseHours(shop.opening_hours)
-  const today = (new Date().getDay() + 6) % 7
-
-  // Load related data.
   const { data: staffData } = await supabase
     .from('staff')
     .select('id,full_name,photo_url,bio')
     .eq('shop_id', id)
     .eq('is_active', true)
-  const staff = staffData ?? []
 
   const { data: serviceData } = await supabase
     .from('services')
     .select('id,name,duration_min,price_uzs')
     .eq('shop_id', id)
-  const services = serviceData ?? []
 
   const { data: reviewData } = await supabase
     .from('reviews')
     .select('id,rating,comment,created_at,profiles(full_name)')
     .eq('shop_id', id)
     .order('created_at', { ascending: false })
-  const reviews = (reviewData ?? []) as unknown as Review[]
+
+  return {
+    shop,
+    staff: staffData ?? [],
+    services: serviceData ?? [],
+    reviews: (reviewData ?? []) as unknown as Review[],
+  }
+}
+
+export default function ShopDetail() {
+  const supabase = createClient()
+  const { id } = useParams<{ id: string }>()
+  const { data, isLoading } = useQuery({
+    queryKey: ['shop', id],
+    queryFn: () => fetchShopDetail(supabase, id),
+  })
+
+  if (isLoading) {
+    return (
+      <div className="bg-white min-h-screen">
+        <p className="max-w-5xl mx-auto px-4 py-24 text-stone-500">Loading…</p>
+      </div>
+    )
+  }
+  if (!data) notFound()
+
+  const { shop, staff, services, reviews } = data
+  const openingHours = parseHours(shop.opening_hours)
+  const today = (new Date().getDay() + 6) % 7
 
   // Average rating across all reviews.
   let avg: string | null = null
