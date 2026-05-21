@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import ShopMapView from '@/components/ShopMapView'
+import { DAYS, parseHours } from '@/lib/hours'
 
 type Review = {
   id: string
@@ -24,6 +25,9 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
     .eq('is_hidden', false)
     .single()
   if (!shop) notFound()
+
+  const openingHours = parseHours(shop.opening_hours)
+  const today = (new Date().getDay() + 6) % 7
 
   // Load related data.
   const { data: staffData } = await supabase
@@ -114,6 +118,27 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
           <ShopMapView lat={shop.lat} lng={shop.lng} name={shop.name} />
         </section>
       )}
+
+      <div className="border-t border-stone-200" />
+
+      <section className="max-w-5xl mx-auto px-4 py-12">
+        <h2 className="text-xl font-semibold text-stone-900 mb-6">Opening hours</h2>
+        <ul className="rounded-xl border border-stone-200 bg-white overflow-hidden max-w-sm">
+          {openingHours.map((d, i) => (
+            <li
+              key={DAYS[i]}
+              className={`px-5 py-2.5 flex items-center justify-between text-sm border-b border-stone-100 last:border-b-0 ${
+                i === today ? 'bg-stone-50 font-medium' : ''
+              }`}
+            >
+              <span className="text-stone-700">{DAYS[i]}</span>
+              <span className={d.closed ? 'text-stone-400' : 'text-stone-900'}>
+                {d.closed ? 'Closed' : `${d.open} – ${d.close}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <div className="border-t border-stone-200" />
 

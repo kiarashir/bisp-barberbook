@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
 import { reverseGeocode } from '@/lib/geocode'
+import { DAYS, defaultHours, parseHours, type DayHours } from '@/lib/hours'
 import { ShopIcon } from '@/components/icons'
 
 const MapPicker = dynamic(() => import('@/components/Maps').then(m => m.MapPicker), { ssr: false })
@@ -22,6 +23,7 @@ export default function EditShop() {
   const [country, setCountry] = useState('')
   const [region, setRegion] = useState('')
   const [district, setDistrict] = useState('')
+  const [hours, setHours] = useState<DayHours[]>(defaultHours())
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [fetching, setFetching] = useState(true)
@@ -32,7 +34,7 @@ export default function EditShop() {
       if (!user) { router.push('/login'); return }
       const { data: shop } = await supabase
         .from('shops')
-        .select('id,name,address,description,photo_url,lat,lng,country,region,district')
+        .select('id,name,address,description,photo_url,lat,lng,country,region,district,opening_hours')
         .eq('owner_id', user.id)
         .limit(1)
         .maybeSingle()
@@ -46,6 +48,7 @@ export default function EditShop() {
       setCountry(shop.country ?? '')
       setRegion(shop.region ?? '')
       setDistrict(shop.district ?? '')
+      setHours(parseHours(shop.opening_hours))
       setFetching(false)
     }
     load()
@@ -60,6 +63,10 @@ export default function EditShop() {
       setRegion(place.region ?? '')
       setDistrict(place.district ?? '')
     }
+  }
+
+  function updateDay(i: number, patch: Partial<DayHours>) {
+    setHours(prev => prev.map((d, idx) => (idx === i ? { ...d, ...patch } : d)))
   }
 
   async function save(e: React.FormEvent) {
@@ -77,6 +84,7 @@ export default function EditShop() {
         country: country || null,
         region: region || null,
         district: district || null,
+        opening_hours: hours,
       })
       .eq('id', shopId)
     setLoading(false)
@@ -215,6 +223,42 @@ export default function EditShop() {
                   onChange={e => setDescription(e.target.value)}
                 />
               </Field>
+
+              <div>
+                <label className="block text-sm text-stone-700 mb-2">Opening hours</label>
+                <div className="space-y-2">
+                  {hours.map((d, i) => (
+                    <div key={DAYS[i]} className="flex items-center gap-3">
+                      <span className="w-24 text-sm text-stone-700 shrink-0">{DAYS[i]}</span>
+                      <label className="flex items-center gap-1.5 text-sm text-stone-500">
+                        <input
+                          type="checkbox"
+                          checked={d.closed}
+                          onChange={e => updateDay(i, { closed: e.target.checked })}
+                        />
+                        Closed
+                      </label>
+                      {!d.closed && (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="time"
+                            value={d.open}
+                            onChange={e => updateDay(i, { open: e.target.value })}
+                            className="border border-stone-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-stone-400"
+                          />
+                          <span className="text-stone-400">–</span>
+                          <input
+                            type="time"
+                            value={d.close}
+                            onChange={e => updateDay(i, { close: e.target.value })}
+                            className="border border-stone-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-stone-400"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <button
                 disabled={loading}
