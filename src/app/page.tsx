@@ -64,84 +64,28 @@ export default async function HomePage() {
   return (
     <div className="bg-white text-gray-900">
       {/* hero */}
-      <section className="max-w-6xl mx-auto px-6 pt-16 pb-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-sm font-medium text-orange-600 mb-3">
-              Barbershop booking in Tashkent
-            </p>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight">
-              Find your next haircut in Tashkent
-            </h1>
-            <p className="mt-5 text-lg text-gray-600 max-w-md">
-              Browse local barbershops, compare real reviews, and book your
-              appointment in seconds. No calls, no waiting.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href="/shops"
-                className="inline-block bg-gray-900 text-white text-sm font-medium rounded-lg px-6 py-3 hover:bg-gray-800"
-              >
-                Browse barbershops
-              </Link>
-              <Link
-                href="/signup"
-                className="inline-block border border-gray-300 text-gray-900 text-sm font-medium rounded-lg px-6 py-3 hover:bg-gray-50"
-              >
-                Create an account
-              </Link>
-            </div>
-            <div className="mt-9 flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {AVATARS.map((src) => (
-                  <img
-                    key={src}
-                    src={src}
-                    alt=""
-                    className="h-8 w-8 rounded-full border-2 border-white object-cover"
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-gray-500">
-                <span className="font-semibold text-gray-900">4.8 ★</span> from
-                1,200+ bookings
-              </p>
-            </div>
-          </div>
+      <section className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1600&q=80"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/65" />
 
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=80"
-              alt="Barber giving a haircut"
-              className="rounded-xl w-full aspect-[4/5] object-cover shadow-md"
-            />
-            <div className="absolute -bottom-5 -left-4 w-56 rounded-lg bg-white border border-gray-200 p-4 shadow-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500">Next available</span>
-                <span className="text-xs font-medium text-orange-600 bg-orange-50 rounded px-2 py-0.5">
-                  Today
-                </span>
-              </div>
-              <p className="font-semibold mt-1">Fade & Beard Trim</p>
-              <p className="text-sm text-gray-500">14:30 · Old City Cuts</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* search */}
-      <section className="max-w-5xl mx-auto px-6 pb-16">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8">
-          <h2 className="text-2xl font-bold">Search barbershops in Tashkent</h2>
-          <p className="text-sm text-gray-500 mt-1 mb-5">
-            Find a shop by name or by the area you are in.
+        <div className="relative max-w-3xl mx-auto px-6 py-28 sm:py-36 text-center text-white">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            Find your next haircut in Tashkent
+          </h1>
+          <p className="mt-4 text-lg text-gray-200">
+            Book a trusted barber near you in seconds - no calls, no waiting.
           </p>
-          <form action="/shops" method="get" className="flex flex-col sm:flex-row gap-3">
+
+          <form action="/shops" method="get" className="mt-8 max-w-xl mx-auto flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               name="q"
               placeholder="Search by name or address"
-              className="flex-1 border border-gray-300 rounded-md px-4 py-3 text-sm focus:outline-none focus:border-gray-500"
+              className="flex-1 rounded-md px-4 py-3 text-sm text-gray-900 focus:outline-none"
             />
             <button
               type="submit"
@@ -150,18 +94,23 @@ export default async function HomePage() {
               Search
             </button>
           </form>
-          <div className="flex flex-wrap gap-2 mt-4">
-            <span className="text-sm text-gray-400 mr-1">Popular areas:</span>
+
+          <div className="mt-5 flex flex-wrap justify-center items-center gap-2">
+            <span className="text-sm text-gray-300">Popular areas:</span>
             {AREAS.map((area) => (
               <Link
                 key={area}
                 href={`/shops?q=${encodeURIComponent(area)}`}
-                className="text-sm text-gray-600 border border-gray-300 rounded-full px-3 py-1 hover:bg-white"
+                className="text-sm border border-white/40 rounded-full px-3 py-1 hover:bg-white/10"
               >
                 {area}
               </Link>
             ))}
           </div>
+
+          <p className="mt-8 text-sm text-gray-300">
+            ★ 4.8 average rating from 1,200+ bookings
+          </p>
         </div>
       </section>
 
@@ -310,12 +259,6 @@ export default async function HomePage() {
     </div>
   )
 }
-
-const AVATARS = [
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80',
-]
 
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
