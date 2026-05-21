@@ -36,7 +36,11 @@ You need [Node.js](https://nodejs.org) installed.
    NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   PG_CONNECTION_STRING=your-database-connection-string
    ```
+
+   `PG_CONNECTION_STRING` is only needed for running database migrations —
+   see the "Database migrations" section below for how to get it.
 
 3. Start the development server:
 
