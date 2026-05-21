@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import toast from 'react-hot-toast'
 import ShopCard from '@/components/ShopCard'
 import { createClient } from '@/lib/supabase/client'
 
@@ -19,7 +20,7 @@ type Shop = {
   avg_rating: number | null
 }
 
-type SortOption = 'newest' | 'rating' | 'name'
+type SortOption = 'newest' | 'rating' | 'name' | 'nearest'
 
 export default function ShopsPage() {
   const supabase = createClient()
@@ -29,6 +30,27 @@ export default function ShopsPage() {
   const [sort, setSort] = useState<SortOption>('newest')
   const [districtFilter, setDistrictFilter] = useState('')
   const [view, setView] = useState<'list' | 'map'>('list')
+  const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null)
+  const [locating, setLocating] = useState(false)
+
+  // Ask the browser for the user's location to enable distance sorting.
+  function requestLocation() {
+    if (!navigator.geolocation) { toast.error('Location is not supported on this device'); return }
+    setLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setSort('nearest')
+        setLocating(false)
+      },
+      () => { toast.error('Could not get your location'); setLocating(false) },
+    )
+  }
+
+  function shopDistance(s: Shop): number | undefined {
+    if (!userPos || s.lat == null || s.lng == null) return undefined
+    return distanceKm(userPos, { lat: s.lat, lng: s.lng })
+  }
 
   // Pre-fill the search box if the landing page passed a ?q= query.
   useEffect(() => {
@@ -120,6 +142,8 @@ export default function ShopsPage() {
     filtered.sort((a, b) => (b.avg_rating ?? 0) - (a.avg_rating ?? 0))
   } else if (sort === 'name') {
     filtered.sort((a, b) => a.name.localeCompare(b.name))
+  } else if (sort === 'nearest') {
+    filtered.sort((a, b) => (shopDistance(a) ?? Infinity) - (shopDistance(b) ?? Infinity))
   }
   // 'newest' is already the order from Supabase.
 
@@ -140,14 +164,21 @@ export default function ShopsPage() {
       <div className="border-t border-stone-200" />
 
       <section className="max-w-5xl mx-auto px-4 py-10 pb-20">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 mb-8">
           <input
             type="text"
             placeholder="Search by name, address or district"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="flex-1 border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400"
+            className="flex-1 min-w-[200px] border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400"
           />
+          <button
+            type="button"
+            onClick={requestLocation}
+            className="shrink-0 inline-flex items-center gap-1.5 border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 hover:border-stone-400"
+          >
+            📍 {locating ? 'Locating…' : userPos ? 'Located' : 'Near me'}
+          </button>
           <Select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}>
             <option value="">All districts</option>
             {districts.map(d => (
@@ -158,6 +189,7 @@ export default function ShopsPage() {
             <option value="newest">Newest first</option>
             <option value="rating">Highest rated</option>
             <option value="name">Name (A–Z)</option>
+            {userPos && <option value="nearest">Nearest</option>}
           </Select>
 
           {/* List / Map toggle */}
@@ -193,7 +225,7 @@ export default function ShopsPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map(s => (
-                <ShopCard key={s.id} shop={s} />
+                <ShopCard key={s.id} shop={s} distanceKm={shopDistance(s)} />
               ))}
             </div>
           )
@@ -209,6 +241,18 @@ export default function ShopsPage() {
       </section>
     </div>
   )
+}
+
+// Great-circle distance between two coordinates, in kilometres.
+function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
+  const R = 6371
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180
+  const lat1 = (a.lat * Math.PI) / 180
+  const lat2 = (b.lat * Math.PI) / 180
+  const x =
+    Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(x))
 }
 
 function Select({ value, onChange, children }: {

@@ -42,6 +42,18 @@ export function MapPicker({ value, onPick, className }: {
   )
 }
 
+// Read-only map showing a single shop's location on its detail page.
+export function ShopMap({ lat, lng, name }: { lat: number; lng: number; name: string }) {
+  return (
+    <MapContainer center={[lat, lng]} zoom={15} className="h-80 w-full rounded-xl border border-stone-200">
+      <TileLayer attribution={ATTRIBUTION} url={TILE_URL} />
+      <Marker position={[lat, lng]}>
+        <Popup>{name}</Popup>
+      </Marker>
+    </MapContainer>
+  )
+}
+
 type ShopPoint = { id: string; name: string; lat: number; lng: number; district: string | null }
 
 // Map showing every shop that has a location, used on the /shops page.

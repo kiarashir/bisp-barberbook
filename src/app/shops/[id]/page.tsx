@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
+import ShopMapView from '@/components/ShopMapView'
 
 type Review = {
   id: string
@@ -101,6 +102,20 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
           )}
         </div>
       </section>
+
+      {shop.lat != null && shop.lng != null && (
+        <section className="max-w-5xl mx-auto px-4 py-12">
+          <h2 className="text-xl font-semibold text-stone-900 mb-6">Location</h2>
+          {(shop.district || shop.region) && (
+            <p className="text-stone-500 mb-4">
+              {[shop.district, shop.region, shop.country].filter(Boolean).join(', ')}
+            </p>
+          )}
+          <ShopMapView lat={shop.lat} lng={shop.lng} name={shop.name} />
+        </section>
+      )}
+
+      <div className="border-t border-stone-200" />
 
       <section className="max-w-5xl mx-auto px-4 py-12">
         <h2 className="text-xl font-semibold text-stone-900 mb-6">Staff</h2>

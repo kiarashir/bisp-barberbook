@@ -9,7 +9,7 @@ type Shop = {
   avg_rating: number | null
 }
 
-export default function ShopCard({ shop }: { shop: Shop }) {
+export default function ShopCard({ shop, distanceKm }: { shop: Shop; distanceKm?: number }) {
   return (
     <Link
       href={`/shops/${shop.id}`}
@@ -34,6 +34,11 @@ export default function ShopCard({ shop }: { shop: Shop }) {
           )}
         </div>
         <p className="text-sm text-stone-500 mt-1">{shop.address}</p>
+        {distanceKm !== undefined && (
+          <p className="text-sm text-orange-600 mt-1">
+            {distanceKm < 1 ? `${Math.round(distanceKm * 1000)} m away` : `${distanceKm.toFixed(1)} km away`}
+          </p>
+        )}
       </div>
     </Link>
   )
