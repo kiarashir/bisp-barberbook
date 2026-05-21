@@ -38,6 +38,7 @@ export default async function Nav() {
           {role === 'customer' && (
             <>
               <Link href="/shops" className={linkClass}>Shops</Link>
+              <Link href="/favorites" className={linkClass}>Saved</Link>
               <Link href="/bookings" className={linkClass}>My bookings</Link>
               <Link href="/account" className={linkClass}>Account</Link>
               <form action="/auth/signout" method="post">

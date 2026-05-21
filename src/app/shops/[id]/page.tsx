@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import ShopMapView from '@/components/ShopMapView'
 import { DAYS, parseHours } from '@/lib/hours'
+import FavoriteButton from '@/components/FavoriteButton'
 
 type Review = {
   id: string
@@ -93,12 +94,15 @@ export default async function ShopDetail({ params }: { params: Promise<{ id: str
               )}
             </div>
 
-            <Link
-              href={`/book/${shop.id}`}
-              className="shrink-0 inline-block text-sm font-medium rounded-full px-6 py-2.5 bg-stone-900 text-white hover:bg-stone-800 transition"
-            >
-              Book now
-            </Link>
+            <div className="shrink-0 flex items-center gap-2">
+              <FavoriteButton shopId={shop.id} />
+              <Link
+                href={`/book/${shop.id}`}
+                className="inline-block text-sm font-medium rounded-full px-6 py-2.5 bg-stone-900 text-white hover:bg-stone-800 transition"
+              >
+                Book now
+              </Link>
+            </div>
           </div>
 
           {shop.description && (
