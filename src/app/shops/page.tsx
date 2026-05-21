@@ -148,25 +148,17 @@ export default function ShopsPage() {
             onChange={e => setQuery(e.target.value)}
             className="flex-1 border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400"
           />
-          <select
-            value={districtFilter}
-            onChange={e => setDistrictFilter(e.target.value)}
-            className="border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400 bg-white"
-          >
+          <Select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}>
             <option value="">All districts</option>
             {districts.map(d => (
               <option key={d} value={d}>{d}</option>
             ))}
-          </select>
-          <select
-            value={sort}
-            onChange={e => setSort(e.target.value as SortOption)}
-            className="border border-stone-200 rounded-lg px-3 py-2 focus:outline-none focus:border-stone-400 bg-white"
-          >
+          </Select>
+          <Select value={sort} onChange={e => setSort(e.target.value as SortOption)}>
             <option value="newest">Newest first</option>
             <option value="rating">Highest rated</option>
             <option value="name">Name (A–Z)</option>
-          </select>
+          </Select>
 
           {/* List / Map toggle */}
           <div className="inline-flex rounded-lg border border-stone-200 p-0.5 shrink-0">
@@ -215,6 +207,35 @@ export default function ShopsPage() {
           )
         )}
       </section>
+    </div>
+  )
+}
+
+function Select({ value, onChange, children }: {
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  children: React.ReactNode
+}) {
+  return (
+    <div className="relative shrink-0">
+      <select
+        value={value}
+        onChange={onChange}
+        className="appearance-none cursor-pointer border border-stone-200 rounded-lg bg-white pl-3 pr-9 py-2 focus:outline-none focus:border-stone-400"
+      >
+        {children}
+      </select>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
     </div>
   )
 }
