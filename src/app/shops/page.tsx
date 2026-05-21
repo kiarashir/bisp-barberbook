@@ -164,13 +164,13 @@ export default function ShopsPage() {
           <div className="inline-flex rounded-lg border border-stone-200 p-0.5 shrink-0">
             <button
               onClick={() => setView('list')}
-              className={`px-4 py-1.5 text-sm rounded-md ${view === 'list' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+              className={`px-4 py-2 text-sm rounded-md ${view === 'list' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
             >
               List
             </button>
             <button
               onClick={() => setView('map')}
-              className={`px-4 py-1.5 text-sm rounded-md ${view === 'map' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
+              className={`px-4 py-2 text-sm rounded-md ${view === 'map' ? 'bg-stone-900 text-white' : 'text-stone-600'}`}
             >
               Map
             </button>
