@@ -41,6 +41,7 @@ export default function BookPage() {
   const [refreshTick, setRefreshTick] = useState(0)
 
   // Load shop info, staff list, services, and service-staff mapping.
+
   useEffect(() => {
     async function loadData() {
       const { data: shopData } = await supabase
@@ -49,20 +50,20 @@ export default function BookPage() {
         .eq('id', params.shopId)
         .single()
       setShop(shopData)
-
+      // Only load active staff members.
       const { data: staffData } = await supabase
         .from('staff')
         .select('id,full_name,photo_url')
         .eq('shop_id', params.shopId)
         .eq('is_active', true)
       setStaff(staffData ?? [])
-
+      // Load all services for the shop, regardless of staff. We’ll filter them later.
       const { data: serviceData } = await supabase
         .from('services')
         .select('id,name,duration_min,price_uzs')
         .eq('shop_id', params.shopId)
       setServices(serviceData ?? [])
-
+      // Load the service-staff mapping for the services we got. This tells us which staff can do which services, and any overrides.
       const serviceIds = (serviceData ?? []).map(s => s.id)
       if (serviceIds.length > 0) {
         const { data: mapping } = await supabase
@@ -92,6 +93,10 @@ export default function BookPage() {
       }
     }
     if (!service) return
+
+    // Load the staff member’s working hours, time off, 
+    // and existing bookings for the chosen day. 
+    // Then compute available slots.
 
     async function loadSlots(svc: Service) {
       const { data: workingHours } = await supabase
@@ -292,6 +297,8 @@ export default function BookPage() {
 
       <div className="border-t border-stone-200" />
 
+      // Step 1: Show staff. If a staff is selected,
+       show only services they can do. Otherwise show all services.
       <section className="max-w-5xl mx-auto px-4 py-10 min-h-[280px]">
         {step === 1 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -324,7 +331,8 @@ export default function BookPage() {
         {step === 2 && visibleServices.length === 0 && (
           <p className="text-stone-500">No services available for this staff member.</p>
         )}
-
+        // Show all services that 
+        the selected staff can perform. If no staff is selected, show all services.
         {step === 2 && visibleServices.length > 0 && (
           <div className="space-y-2">
             {visibleServices.map(sv => {
@@ -352,7 +360,8 @@ export default function BookPage() {
             })}
           </div>
         )}
-
+        // Step 3: Show the next 7 days. When a day is selected, 
+        show available slots for that day.   
         {step === 3 && (
           <div>
             <div className="grid grid-cols-7 gap-2 mb-6">
@@ -505,7 +514,8 @@ export default function BookPage() {
         >
           Back
         </button>
-
+        // Show "Next" on steps 1-3, "Confirm booking" on step 4.
+         Disable if they haven’t made a selection, or if loading.
         {step < 4 && (
           <button
             onClick={goNext}
@@ -515,7 +525,9 @@ export default function BookPage() {
             Next
           </button>
         )}
-
+        // Step 4: Show "Confirm booking". 
+        Disable if loading or if for some reason the picked slot
+         or service is missing (shouldn’t happen).
         {step === 4 && (
           <button
             onClick={confirm}
