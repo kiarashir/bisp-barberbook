@@ -44,9 +44,23 @@ export default function ShopsPage() {
       pos => {
         setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
         setSort('nearest')
+        setView('map') // jump to the map so the pulsing "you are here" marker is visible
+        setLocating(false)
+        toast.success('Showing nearest shops around you')
+      },
+      err => {
+        // Give a useful message instead of a generic one (e.g. a denied user
+        // needs to re-enable location, while a desktop without GPS just times out).
+        const msg =
+          err.code === err.PERMISSION_DENIED
+            ? 'Location permission denied. Enable it in your browser settings to sort by nearest.'
+            : err.code === err.TIMEOUT
+              ? 'Locating timed out. Please try again.'
+              : 'Could not get your location'
+        toast.error(msg)
         setLocating(false)
       },
-      () => { toast.error('Could not get your location'); setLocating(false) },
+      { enableHighAccuracy: true, timeout: 10000 },
     )
   }
 
@@ -120,9 +134,11 @@ export default function ShopsPage() {
           <button
             type="button"
             onClick={requestLocation}
-            className="shrink-0 inline-flex items-center gap-1.5 border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 hover:border-stone-400"
+            disabled={locating}
+            aria-busy={locating}
+            className="shrink-0 inline-flex items-center gap-1.5 border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 hover:border-stone-400 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            📍 {locating ? 'Locating…' : userPos ? 'Located' : 'Near me'}
+            <span aria-hidden="true">📍</span> {locating ? 'Locating…' : userPos ? 'Located' : 'Near me'}
           </button>
           <Select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}>
             <option value="">All districts</option>
@@ -177,10 +193,10 @@ export default function ShopsPage() {
         )}
 
         {!fetching && view === 'map' && (
-          mapShops.length === 0 ? (
+          mapShops.length === 0 && !userPos ? (
             <p className="text-stone-500">No shops with a location to show on the map yet.</p>
           ) : (
-            <ShopsMap shops={mapShops} />
+            <ShopsMap shops={mapShops} userPos={userPos} />
           )
         )}
       </section>

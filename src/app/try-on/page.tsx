@@ -5,16 +5,18 @@ import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase/client'
 import PhotoCropper from '@/components/PhotoCropper'
 
-// Example photos are from Wikimedia Commons.
+// Thumbnails are served from the public/styles/ folder — add a matching
+// <file>.jpg for each style below (e.g. public/styles/fade.jpg). The
+// `name` is also the hairstyle text sent to the AI.
 const STYLES = [
-  { name: 'Fade', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Fade_Hair_Cut.jpg/500px-Fade_Hair_Cut.jpg' },
-  { name: 'High top fade', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/High_top_fade.jpg/500px-High_top_fade.jpg' },
-  { name: 'Buzz cut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/SDCC_2015_-_James_McAvoy_%2819573358149%29_%28cropped%29.jpg/330px-SDCC_2015_-_James_McAvoy_%2819573358149%29_%28cropped%29.jpg' },
-  { name: 'Crew cut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Crew_Cut%2C_Semi_Short_Taper.jpg/500px-Crew_Cut%2C_Semi_Short_Taper.jpg' },
-  { name: 'High and tight', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Highandtight.jpg/500px-Highandtight.jpg' },
-  { name: 'Undercut', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Undercut_%2820048891914%29.jpg/500px-Undercut_%2820048891914%29.jpg' },
-  { name: 'Quiff', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Man_with_glasses_and_a_quiff_hairstyle_%281490854%29.jpg/500px-Man_with_glasses_and_a_quiff_hairstyle_%281490854%29.jpg' },
-  { name: 'Pompadour', photo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Pompadour_hairstyle.jpg' },
+  { name: 'Fade', photo: '/styles/fade.jpg' },
+  { name: 'High top fade', photo: '/styles/high-top-fade.jpg' },
+  { name: 'Buzz cut', photo: '/styles/buzz-cut.jpg' },
+  { name: 'Crew cut', photo: '/styles/crew-cut.jpg' },
+  { name: 'High and tight', photo: '/styles/high-and-tight.jpg' },
+  { name: 'Undercut', photo: '/styles/undercut.jpg' },
+  { name: 'Quiff', photo: '/styles/quiff.jpg' },
+  { name: 'Pompadour', photo: '/styles/pompadour.jpg' },
 ]
 
 type Photo = { file: File; preview: string }
@@ -209,7 +211,7 @@ export default function TryOnPage() {
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {loading
-                    ? [0, 1, 2].map(i => (
+                    ? [0, 1].map(i => (
                         <div
                           key={i}
                           className="aspect-square rounded-xl bg-stone-100 animate-pulse"

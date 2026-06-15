@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Pulsing "you are here" marker for the shops map. Leaflet renders the marker
+   HTML outside React, so the animation has to live in global CSS. */
+.user-location-icon {
+  background: transparent;
+  border: none;
+}
+.user-location-icon .user-pulse-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 9999px;
+  background: #2563eb;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.user-location-icon .user-pulse-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 9999px;
+  background: rgba(37, 99, 235, 0.35);
+  animation: user-location-pulse 1.8s ease-out infinite;
+}
+@keyframes user-location-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(4.5);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .user-location-icon .user-pulse-ring {
+    animation: none;
+  }
+}

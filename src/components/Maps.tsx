@@ -1,5 +1,6 @@
 'use client'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { useEffect } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import Link from 'next/link'
 import 'leaflet/dist/leaflet.css'
@@ -17,12 +18,30 @@ const ATTRIBUTION = '&copy; OpenStreetMap contributors'
 
 type Point = { lat: number; lng: number }
 
+// A pulsing blue dot marking the user's live location ("you are here").
+// Built as a divIcon so we can animate it with CSS (see globals.css).
+const userLocationIcon = L.divIcon({
+  className: 'user-location-icon',
+  html: '<span class="user-pulse-ring"></span><span class="user-pulse-dot"></span>',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+})
+
 function ClickHandler({ onPick }: { onPick: (lat: number, lng: number) => void }) {
   useMapEvents({
     click(e) {
       onPick(e.latlng.lat, e.latlng.lng)
     },
   })
+  return null
+}
+
+// Smoothly pans/zooms the map to the user once their location is known.
+function RecenterOnUser({ pos }: { pos: Point }) {
+  const map = useMap()
+  useEffect(() => {
+    map.flyTo([pos.lat, pos.lng], Math.max(map.getZoom(), 13), { duration: 1.2 })
+  }, [map, pos.lat, pos.lng])
   return null
 }
 
@@ -57,9 +76,12 @@ export function ShopMap({ lat, lng, name }: { lat: number; lng: number; name: st
 type ShopPoint = { id: string; name: string; lat: number; lng: number; district: string | null }
 
 // Map showing every shop that has a location, used on the /shops page.
-export function ShopsMap({ shops }: { shops: ShopPoint[] }) {
+// When userPos is set, the user's live location is shown as a pulsing dot
+// and the map recenters on them.
+export function ShopsMap({ shops, userPos }: { shops: ShopPoint[]; userPos?: Point | null }) {
+  const center: [number, number] = userPos ? [userPos.lat, userPos.lng] : TASHKENT
   return (
-    <MapContainer center={TASHKENT} zoom={11} className="h-[520px] w-full rounded-xl border border-gray-200">
+    <MapContainer center={center} zoom={userPos ? 13 : 11} className="h-[520px] w-full rounded-xl border border-gray-200">
       <TileLayer attribution={ATTRIBUTION} url={TILE_URL} />
       {shops.map((s) => (
         <Marker key={s.id} position={[s.lat, s.lng]}>
@@ -72,6 +94,14 @@ export function ShopsMap({ shops }: { shops: ShopPoint[] }) {
           </Popup>
         </Marker>
       ))}
+      {userPos && (
+        <>
+          <Marker position={[userPos.lat, userPos.lng]} icon={userLocationIcon} zIndexOffset={1000}>
+            <Popup>You are here</Popup>
+          </Marker>
+          <RecenterOnUser pos={userPos} />
+        </>
+      )}
     </MapContainer>
   )
 }

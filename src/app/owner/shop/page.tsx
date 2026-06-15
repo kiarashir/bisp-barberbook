@@ -104,7 +104,7 @@ export default function EditShop() {
     const ext = file.name.split('.').pop() ?? 'jpg'
     const path = `${shopId}/${Date.now()}.${ext}`
 
-    // Upload the file.
+    // Upload the file. // 3️⃣ send the FILE up to Supabase Storage (the "shop-photos" bucket)
     const { error: uploadError } = await supabase.storage
       .from('shop-photos')
       .upload(path, file)

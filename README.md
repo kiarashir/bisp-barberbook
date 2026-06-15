@@ -31,7 +31,7 @@ Tashkent.
 - **Supabase** — database, authentication, and storage
 - **React Query** (TanStack Query) — caching data on the client
 - **Leaflet** — interactive maps for shop locations
-- **OpenAI** — the AI hairstyle try-on
+- **Google Gemini** — the AI hairstyle try-on
 - **react-easy-crop** — cropping uploaded photos
 
 ## How to run
@@ -52,12 +52,14 @@ You need [Node.js](https://nodejs.org) installed.
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
    PG_CONNECTION_STRING=your-database-connection-string
-   OPENAI_API_KEY=your-openai-api-key
+   GEMINI_API_KEY=your-gemini-api-key
    ```
 
    `PG_CONNECTION_STRING` is only needed for database migrations (see the
-   "Database setup" section below). `OPENAI_API_KEY` is only needed for the
-   AI hairstyle try-on.
+   "Database setup" section below). `GEMINI_API_KEY` is only needed for the
+   AI hairstyle try-on. Get a key from Google AI Studio — note that image
+   generation requires billing to be enabled on the Google Cloud project
+   (the free tier does not include image generation).
 
 3. Start the development server:
 

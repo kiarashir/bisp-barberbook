@@ -36,6 +36,8 @@ export default function BookPage() {
   const [slots, setSlots] = useState<string[]>([])
   const [pickedSlot, setPickedSlot] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [waitTime, setWaitTime] = useState('')
+  const [joining, setJoining] = useState(false)
   const [refreshTick, setRefreshTick] = useState(0)
 
   // Load shop info, staff list, services, and service-staff mapping.
@@ -221,6 +223,44 @@ export default function BookPage() {
     router.push('/bookings')
   }
 
+  async function joinWaitlist() {
+    if (!staffId || !serviceId || !waitTime) {
+      toast.error('Pick a preferred time first.')
+      return
+    }
+    setJoining(true)
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      toast('Please log in to join the waitlist')
+      router.push('/login')
+      setJoining(false)
+      return
+    }
+    // Combine the chosen day + time into an exact instant (local time, like slots).
+    const preferredAt = new Date(`${date}T${waitTime}:00`)
+    const { error } = await supabase.from('waitlist').insert({
+      customer_id: user.id,
+      customer_email: user.email,
+      customer_name: user.user_metadata?.full_name ?? null,
+      shop_id: params.shopId,
+      staff_id: staffId,
+      service_id: serviceId,
+      preferred_date: date,
+      preferred_at: preferredAt.toISOString(),
+    })
+    setJoining(false)
+    if (error) {
+      if (error.code === '23505') {
+        toast('You’re already on the waitlist for that time.')
+      } else {
+        toast.error(error.message)
+      }
+      return
+    }
+    setWaitTime('')
+    toast.success('You’re on the waitlist! We’ll email you if a slot opens.')
+  }
+
   function goBack() {
     if (step > 1) setStep(step - 1)
   }
@@ -364,6 +404,29 @@ export default function BookPage() {
                 })}
               </div>
             )}
+
+            <div className="mt-8 rounded-xl border border-stone-200 bg-stone-50 p-5">
+              <p className="font-medium text-stone-900">Can’t find the time you want?</p>
+              <p className="text-sm text-stone-500 mt-1">
+                Join the waitlist and we’ll email you if a slot opens up on{' '}
+                {format(new Date(date + 'T00:00:00'), 'EEE, MMM d')}.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <input
+                  type="time"
+                  value={waitTime}
+                  onChange={e => setWaitTime(e.target.value)}
+                  className="rounded-lg border border-stone-200 px-3 py-2 text-sm text-stone-900 focus:border-stone-400 focus:outline-none"
+                />
+                <button
+                  onClick={joinWaitlist}
+                  disabled={!waitTime || joining}
+                  className="rounded-full border border-stone-300 hover:border-stone-400 text-stone-900 px-5 py-2 text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {joining ? 'Joining…' : 'Join the waitlist'}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
