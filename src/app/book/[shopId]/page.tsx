@@ -212,7 +212,10 @@ export default function BookPage() {
       status: 'confirmed',
     })
     setLoading(false)
-
+    
+    // If the insert fails due to a unique constraint 
+    // (someone else booked the same slot), 
+    // show an error and reset to step 3.
     if (error) {
       if (error.code === '23505') {
         toast.error('That slot was just taken — please pick another.')

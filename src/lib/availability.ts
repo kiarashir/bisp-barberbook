@@ -34,6 +34,7 @@ export function computeSlots(opts: Options): string[] {
   const dayStart = parse(hours.start_time, 'HH:mm:ss', startOfDay(date))
   const dayEnd = parse(hours.end_time, 'HH:mm:ss', startOfDay(date))
 
+  // Generate candidate slots every 30 minutes from dayStart to dayEnd - duration.
   const candidates: Date[] = []
   let cursor = dayStart
   while (addMinutes(cursor, durationMin) <= dayEnd) {
@@ -46,7 +47,7 @@ export function computeSlots(opts: Options): string[] {
   const result: string[] = []
   for (const slot of candidates) {
     if (slot <= now) continue
-
+    // Check for overlap with bookings.
     const slotEnd = addMinutes(slot, durationMin)
     let overlaps = false
     for (const b of bookings) {

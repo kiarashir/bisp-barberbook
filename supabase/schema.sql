@@ -72,7 +72,6 @@ create table service_staff (
 /* The bookings table represents a reservation made by a customer for a specific service at a shop, assigned to a staff member. 
    It includes the start and end times of the booking, the price, and the status (confirmed, cancelled, completed). 
    The unique constraint on (staff_id, start_time) ensures that a staff member cannot have overlapping bookings. */
-    
 
 create table bookings (
   id uuid primary key default gen_random_uuid(),
