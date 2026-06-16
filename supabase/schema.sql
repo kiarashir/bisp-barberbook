@@ -60,7 +60,7 @@ create table services (
   price_uzs integer not null check (price_uzs >= 0)
 );
 create index services_shop_id_idx on services(shop_id);
-
+/* The junction (bridge) table */
 create table service_staff (
   service_id uuid not null references services(id) on delete cascade,
   staff_id uuid not null references staff(id) on delete cascade,

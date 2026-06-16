@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
-
+  // refreshes the session so it never goes stale
   await supabase.auth.getUser()
   return response
 }

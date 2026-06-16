@@ -40,6 +40,7 @@ export default function ShopsPage() {
   function requestLocation() {
     if (!navigator.geolocation) { toast.error('Location is not supported on this device'); return }
     setLocating(true)
+    //asks the browser for your GPS location 📡
     navigator.geolocation.getCurrentPosition(
       pos => {
         setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
@@ -260,7 +261,7 @@ async function fetchShops(supabase: ReturnType<typeof createClient>): Promise<Sh
 
 // Great-circle distance between two coordinates, in kilometres.
 function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
-  const R = 6371
+  const R = 6371 // Earth's radius in km
   const dLat = ((b.lat - a.lat) * Math.PI) / 180
   const dLng = ((b.lng - a.lng) * Math.PI) / 180
   const lat1 = (a.lat * Math.PI) / 180

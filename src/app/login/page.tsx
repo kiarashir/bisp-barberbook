@@ -14,17 +14,18 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-
+    // Attempt to log in with Supabase.
     const supabase = createClient()
+    // sends email + password to Supabase to verify
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-
+    // If login fails, show an error.
     if (error) {
       setLoading(false)
       toast.error(error.message)
       return
     }
 
-    // Look up the role so we can send the user to the right page.
+    // looks up the user's role 
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')

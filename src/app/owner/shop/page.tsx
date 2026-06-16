@@ -95,6 +95,7 @@ export default function EditShop() {
   // Upload a new photo to Supabase Storage and save the URL to the shop.
   async function uploadPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     if (!shopId) return
+    // Grab the file  
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -102,11 +103,12 @@ export default function EditShop() {
 
     // Build a unique path inside the shop's folder.
     const ext = file.name.split('.').pop() ?? 'jpg'
+    // Make a unique name for the file.  
     const path = `${shopId}/${Date.now()}.${ext}`
 
     // Upload the file. // 3️⃣ send the FILE up to Supabase Storage (the "shop-photos" bucket)
     const { error: uploadError } = await supabase.storage
-      .from('shop-photos')
+      .from('shop-photos') //Upload the file
       .upload(path, file)
     if (uploadError) {
       setUploading(false)
@@ -120,7 +122,7 @@ export default function EditShop() {
     // Save it on the shop record.
     const { error: updateError } = await supabase
       .from('shops')
-      .update({ photo_url: pub.publicUrl })
+      .update({ photo_url: pub.publicUrl }) // Save the link to the DB
       .eq('id', shopId)
 
     setUploading(false)
