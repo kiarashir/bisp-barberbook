@@ -1,0 +1,825 @@
+<title>Oʻzbekcha</title>
+<meta name="description" content="Learn Uzbek the way Tashkent speaks it: alphabet, eleven lessons, flashcards and quizzes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#F1F4F6; --surface:#FFFFFF; --sunk:#E6EBF0; --ink:#141B2E; --muted:#5D6880; --line:#D2D9E3;
+  --lapis:#1F45A8; --lapis-ink:#FFFFFF; --lapis-tint:#E4EAF9;
+  --turq:#22A69C; --turq-tint:#DDF3F1; --turq-ink:#0E4D48;
+  --saffron:#E3A21A; --saffron-tint:#FBF0D4; --saffron-ink:#6B4A05;
+  --pome:#B8323A; --pome-tint:#F8E1E2; --pome-ink:#7A1F25;
+  --ok:#2E8B57; --ok-tint:#DFF2E6; --ok-ink:#1B5A38;
+  --shadow:0 10px 30px rgba(20,27,46,.08);
+  --display:'Unbounded','Noto Sans',system-ui,sans-serif;
+  --body:'Golos Text','Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono','Noto Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1322; --surface:#161D31; --sunk:#111828; --ink:#EAEEF5; --muted:#9BA6BF; --line:#2A3349;
+    --lapis:#8FAAF5; --lapis-ink:#0E1322; --lapis-tint:#1B2745;
+    --turq:#38CFC3; --turq-tint:#123D3A; --turq-ink:#B9F1EB;
+    --saffron:#F2BC46; --saffron-tint:#3A2C0C; --saffron-ink:#FBE3A6;
+    --pome:#E8666E; --pome-tint:#3F1A1E; --pome-ink:#FFC9CC;
+    --ok:#5CC48A; --ok-tint:#123A26; --ok-ink:#BFEFD3;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1322; --surface:#161D31; --sunk:#111828; --ink:#EAEEF5; --muted:#9BA6BF; --line:#2A3349;
+  --lapis:#8FAAF5; --lapis-ink:#0E1322; --lapis-tint:#1B2745;
+  --turq:#38CFC3; --turq-tint:#123D3A; --turq-ink:#B9F1EB;
+  --saffron:#F2BC46; --saffron-tint:#3A2C0C; --saffron-ink:#FBE3A6;
+  --pome:#E8666E; --pome-tint:#3F1A1E; --pome-ink:#FFC9CC;
+  --ok:#5CC48A; --ok-tint:#123A26; --ok-ink:#BFEFD3;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.55 var(--body);font-feature-settings:"kern";}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:26px} h3{font-size:18px} h4{font-size:15px}
+p{margin:0}
+a{color:var(--lapis)}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+.uz{font-family:var(--display)}
+.pron{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+
+/* App bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1060px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:18px;min-height:60px}
+.brand{font-family:var(--display);font-weight:700;font-size:18px;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.brand i{width:14px;height:14px;background:var(--lapis);display:inline-block;transform:rotate(45deg)}
+.tabs{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 12px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;border-bottom:3px solid transparent;color:var(--muted);white-space:nowrap}
+.tab b{font-weight:600;color:var(--ink);font-size:14px}
+.tab small{font-size:11px;letter-spacing:.04em}
+.tab[aria-selected="true"]{border-bottom-color:var(--lapis)}
+.tab[aria-selected="true"] b{color:var(--lapis)}
+
+/* Page */
+.page{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
+.view[hidden]{display:none}
+section+section{margin-top:44px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.sec-head .en{color:var(--muted)}
+
+/* Hero */
+.hero{position:relative;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-in{position:relative;padding:36px 32px 32px;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:end}
+.hero h1{font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.02em}
+.hero .tag{margin-top:14px;font-size:18px;max-width:34ch;color:var(--ink)}
+.hero .tag em{font-style:normal;color:var(--lapis);font-weight:600}
+.namebox{background:var(--ground);border:1px solid var(--line);padding:16px 18px}
+.namebox label{display:block;margin-bottom:8px}
+.namebox .uz{font-size:20px;display:block;margin-bottom:4px}
+.namebox input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.namebox .reply{margin-top:10px;min-height:22px}
+.reply b{font-family:var(--display);font-weight:500}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:20px}
+.stat{background:var(--surface);padding:14px 18px}
+.stat .v{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.1}
+.stat .k{margin-top:4px}
+
+/* Phrase of the day */
+.potd{margin-top:20px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;background:var(--lapis);color:var(--lapis-ink);padding:26px 28px}
+.potd .label{color:inherit;opacity:.8}
+.potd .big{font-family:var(--display);font-size:clamp(22px,3.6vw,34px);font-weight:700;margin-top:8px;line-height:1.15}
+.potd .pron{color:inherit;opacity:.85;margin-top:8px}
+.potd .en{margin-top:6px;font-size:17px}
+.potd .actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.step{background:var(--surface);padding:20px 22px}
+.step .n{font-family:var(--display);font-weight:700;color:var(--turq);font-size:13px;letter-spacing:.1em}
+.step h3{margin-top:8px}
+.step p{margin-top:8px;color:var(--muted);font-size:15px}
+.step button{margin-top:12px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--ink);background:var(--ink);color:var(--ground);font-weight:600;font-size:14px;transition:transform .12s ease,background .12s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.lapis{background:var(--lapis);border-color:var(--lapis);color:var(--lapis-ink)}
+.btn.onlapis{background:var(--lapis-ink);border-color:var(--lapis-ink);color:var(--lapis)}
+.btn.onlapis.ghost{background:transparent;color:var(--lapis-ink)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.link{color:var(--lapis);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* Alphabet */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.tile{aspect-ratio:1;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:10px;text-align:left;transition:border-color .12s,transform .12s}
+.tile:hover{border-color:var(--lapis);transform:translateY(-2px)}
+.tile[aria-pressed="true"]{background:var(--lapis);border-color:var(--lapis);color:var(--lapis-ink)}
+.tile .glyph{font-family:var(--display);font-weight:700;font-size:26px;line-height:1}
+.tile .ex{font-size:12px;color:var(--muted);line-height:1.2}
+.tile[aria-pressed="true"] .ex{color:inherit;opacity:.85}
+.tile.special{background:var(--saffron-tint);border-color:var(--saffron)}
+.tile.special[aria-pressed="true"]{background:var(--lapis);border-color:var(--lapis)}
+.letter-detail{margin-top:16px;background:var(--surface);border:1px solid var(--line);padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start}
+.letter-detail .glyph{font-family:var(--display);font-weight:700;font-size:72px;line-height:1;color:var(--lapis)}
+.letter-detail dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0}
+.letter-detail dt{color:var(--muted);font-size:13px;padding-top:2px}
+.letter-detail dd{margin:0}
+.cyr{font-family:'Noto Sans',var(--body)}
+.pairs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.pair{background:var(--surface);border:1px solid var(--line);padding:16px 18px}
+.pair .vs{display:flex;gap:10px;align-items:baseline;font-family:var(--display);font-weight:700;font-size:22px}
+.pair .vs span{color:var(--muted);font-size:14px;font-weight:500;font-family:var(--body)}
+.pair p{margin-top:8px;font-size:14px;color:var(--muted)}
+.pair .mp{margin-top:10px;display:flex;gap:14px;font-size:14px}
+.pair .mp b{font-family:var(--display);font-weight:500}
+.soundkey{background:var(--saffron-tint);color:var(--saffron-ink);padding:14px 18px;font-size:14px;margin-bottom:18px;line-height:1.6}
+.soundkey code{font-family:var(--mono);font-size:13px;background:rgba(0,0,0,.06);padding:1px 5px}
+
+/* Lessons */
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.lcard{background:var(--surface);border:1px solid var(--line);padding:18px 20px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:border-color .12s,transform .12s}
+.lcard:hover{border-color:var(--lapis);transform:translateY(-2px)}
+.lcard .top{display:flex;justify-content:space-between;align-items:center}
+.lcard .n{font-family:var(--display);font-weight:700;color:var(--turq);font-size:13px;letter-spacing:.06em}
+.lcard h3{font-size:19px}
+.lcard .en{color:var(--muted);font-size:14px}
+.lcard .meta{display:flex;justify-content:space-between;margin-top:6px;font-size:13px;color:var(--muted)}
+.prog{height:4px;background:var(--sunk);position:relative}
+.prog i{position:absolute;inset:0 auto 0 0;background:var(--turq)}
+.chip{font-size:12px;font-weight:600;padding:3px 8px;background:var(--sunk);color:var(--muted)}
+.chip.ok{background:var(--ok-tint);color:var(--ok-ink)}
+.chip.warn{background:var(--saffron-tint);color:var(--saffron-ink)}
+
+.lesson{background:var(--surface);border:1px solid var(--line)}
+.lesson-head{padding:26px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.lesson-head .n{font-family:var(--display);font-weight:700;color:var(--turq);font-size:13px;letter-spacing:.06em}
+.lesson-head h2{margin-top:6px}
+.lesson-head .en{color:var(--muted);margin-top:4px;font-size:17px}
+.lesson-head .intro{margin-top:12px;max-width:62ch}
+.lesson-body{padding:26px 28px;display:grid;gap:34px}
+.vocab{width:100%;border-collapse:collapse}
+.vocab th{text-align:left;padding:0 10px 8px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.vocab td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.vocab td.w{font-family:var(--display);font-weight:500;font-size:15px;width:38%}
+.vocab td.p{font-family:var(--mono);font-size:12.5px;color:var(--muted);width:26%}
+.vocab td.e{font-size:15px}
+.vocab td.e small{display:block;color:var(--muted);font-size:13px}
+.vocab .say{margin-left:6px;vertical-align:middle;opacity:.55}
+.vocab .say:hover{opacity:1}
+.rule{background:var(--lapis-tint);padding:22px 24px}
+.rule h3{font-size:16px;margin-bottom:10px}
+.rule p+p, .rule p+table, .rule table+p, .rule ul{margin-top:10px}
+.rule ul{padding-left:18px}
+.rule li+li{margin-top:4px}
+.rule .uz{font-weight:500}
+.rule table{border-collapse:collapse;font-size:15px}
+.rule td,.rule th{padding:4px 14px 4px 0;text-align:left;vertical-align:top}
+.rule th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.rule .end{color:var(--lapis);font-weight:600}
+.dialog{display:grid;gap:10px}
+.line{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline}
+.line .who{font-family:var(--display);font-size:12px;font-weight:700;color:var(--turq);padding-top:4px;width:20px}
+.line .uz{font-size:17px;font-weight:500}
+.line .en{color:var(--muted);font-size:14px;margin-top:2px}
+.tip{border-top:2px solid var(--saffron);padding-top:14px;display:grid;grid-template-columns:auto 1fr;gap:14px}
+.tip .label{color:var(--saffron-ink);padding-top:3px}
+.lesson-foot{padding:20px 28px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lesson-foot .spacer{flex:1}
+
+/* Practice */
+.practice-top{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-bottom:18px}
+.seg{display:inline-flex;border:1px solid var(--line);background:var(--surface)}
+.seg button{padding:8px 14px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+select{font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.field{display:flex;flex-direction:column;gap:6px}
+.card-wrap{perspective:1200px}
+.fc{position:relative;height:300px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1);width:100%;text-align:center}
+.fc.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:10px}
+.face.back{transform:rotateY(180deg);background:var(--lapis);color:var(--lapis-ink);border-color:var(--lapis)}
+.face .word{font-family:var(--display);font-weight:700;font-size:clamp(22px,4vw,36px);line-height:1.15;text-wrap:balance}
+.face .sub{opacity:.75}
+.face .hint{position:absolute;bottom:14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.face .box{position:absolute;top:14px;right:16px;font-size:12px;opacity:.6;font-family:var(--mono)}
+.fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.fc-actions .btn{justify-content:center;padding:14px}
+.btn.no{background:var(--pome-tint);border-color:var(--pome);color:var(--pome-ink)}
+.btn.yes{background:var(--ok-tint);border-color:var(--ok);color:var(--ok-ink)}
+.fc-meta{display:flex;justify-content:space-between;margin-top:10px;font-size:13px;color:var(--muted)}
+.empty{background:var(--surface);border:1px dashed var(--line);padding:40px;text-align:center;color:var(--muted)}
+
+.quiz{background:var(--surface);border:1px solid var(--line);padding:26px 28px}
+.quiz .qn{display:flex;justify-content:space-between;margin-bottom:14px}
+.quiz .q{font-size:20px;font-weight:500;line-height:1.35}
+.quiz .q .uz{font-weight:700}
+.opts{display:grid;gap:8px;margin-top:18px}
+.opt{text-align:left;padding:12px 14px;border:1px solid var(--line);background:var(--ground);font-size:16px;display:flex;gap:12px;align-items:baseline;transition:border-color .12s}
+.opt:hover{border-color:var(--lapis)}
+.opt .k{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:14px}
+.opt.right{background:var(--ok-tint);border-color:var(--ok);color:var(--ok-ink)}
+.opt.wrong{background:var(--pome-tint);border-color:var(--pome);color:var(--pome-ink)}
+.opt:disabled{cursor:default}
+.why{margin-top:14px;padding:12px 14px;background:var(--saffron-tint);color:var(--saffron-ink);font-size:14px;display:none}
+.why.show{display:block}
+.quiz-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+.score{text-align:center;padding:10px 0}
+.score .big{font-family:var(--display);font-weight:700;font-size:56px;line-height:1;color:var(--lapis)}
+.score p{margin-top:10px}
+.missed{margin-top:20px;text-align:left}
+.missed li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+.missed ul{list-style:none;padding:0;margin:8px 0 0}
+
+/* Reference */
+.ref{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.refbox{background:var(--surface);border:1px solid var(--line);padding:20px 22px}
+.refbox h3{margin-bottom:12px}
+.refbox table{border-collapse:collapse;width:100%;font-size:14.5px}
+.refbox th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 10px 6px 0;border-bottom:1px solid var(--line)}
+.refbox td{padding:6px 10px 6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.refbox td:first-child{color:var(--muted)}
+.refbox .end{color:var(--lapis);font-weight:600}
+.refbox p{font-size:14px;color:var(--muted);margin-top:10px}
+.scroll{overflow-x:auto}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;font-size:14px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.note{font-size:13px;color:var(--muted)}
+
+@media (max-width:760px){
+  .hero-in{grid-template-columns:1fr;padding:26px 20px 22px}
+  .stats{grid-template-columns:1fr 1fr}
+  .potd{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .practice-top{grid-template-columns:1fr}
+  .lesson-head,.lesson-body,.lesson-foot,.quiz{padding-left:18px;padding-right:18px}
+  .vocab td.w{width:auto}
+  .vocab{display:block}
+  .vocab thead{display:none}
+  .vocab tr{display:grid;grid-template-columns:1fr;padding:8px 0;border-bottom:1px solid var(--line)}
+  .vocab td{border:0;padding:2px 0}
+  .letter-detail{grid-template-columns:1fr}
+  .tabs{gap:0}
+  .tab{padding:10px 9px}
+  .tab small{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  .fc{transition:none}
+  .btn,.tile,.lcard,.opt{transition:none}
+  .btn:hover,.tile:hover,.lcard:hover{transform:none}
+}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><i></i>Oʻzbekcha</div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-view="home" aria-selected="true"><b>Boshlash</b><small>Start</small></button>
+      <button class="tab" role="tab" data-view="alphabet"><b>Alifbo</b><small>Alphabet</small></button>
+      <button class="tab" role="tab" data-view="lessons"><b>Darslar</b><small>Lessons</small></button>
+      <button class="tab" role="tab" data-view="practice"><b>Mashq</b><small>Practice</small></button>
+      <button class="tab" role="tab" data-view="reference"><b>Qoidalar</b><small>Reference</small></button>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+  <div class="view" id="view-home"></div>
+  <div class="view" id="view-alphabet" hidden></div>
+  <div class="view" id="view-lessons" hidden></div>
+  <div class="view" id="view-practice" hidden></div>
+  <div class="view" id="view-reference" hidden></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<style>.say,.voice-only{display:none}.say{align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--line);border-radius:50%;font-size:10px;color:var(--muted);margin-left:6px;vertical-align:middle}.say:hover{color:var(--lapis);border-color:var(--lapis)}.has-voice .say,.has-voice .voice-only{display:inline-flex}.has-voice #voice-note{display:none}</style>
+<script>
+(function(){
+const LESSONS=[
+{id:"salom",n:1,uz:"Salomlashish",en:"Greetings & politeness",
+intro:"The words you will use a hundred times a day. Uzbek greetings are warm and slightly formal; start with the Arabic-rooted assalomu alaykum and you will never be wrong.",
+words:[
+["Assalomu alaykum","as-sa-LO-mu a-LAY-koom","Hello","The everyday greeting; literally “peace be upon you”"],
+["Vaalaykum assalom","va-a-LAY-koom as-sa-LOM","Hello (reply)","The set answer to Assalomu alaykum"],
+["Salom","sa-LOM","Hi","Casual, between friends"],
+["Xayr","khayr","Goodbye"],
+["Xayr, koʻrishguncha","khayr koh-rish-GOON-cha","Bye, see you"],
+["Yaxshi qoling","yakh-SHI qo-LING","Goodbye","Said by the person leaving: “stay well”"],
+["Yaxshi boring","yakh-SHI bo-RING","Goodbye","Said by the person staying: “go well”"],
+["Xayrli tong","KHAYR-li tong","Good morning"],
+["Xayrli kun","KHAYR-li koon","Good day"],
+["Xayrli kech","KHAYR-li kech","Good evening"],
+["Xayrli tun","KHAYR-li toon","Good night"],
+["Rahmat","rah-MAT","Thank you"],
+["Katta rahmat","kat-TA rah-MAT","Thank you very much","katta = big"],
+["Arzimaydi","ar-zi-MAY-di","You’re welcome","Literally “it isn’t worth (thanks)”"],
+["Iltimos","il-ti-MOS","Please","When asking for something"],
+["Marhamat","mar-ha-MAT","Please; here you are; go ahead","When offering or handing something over"],
+["Kechirasiz","ke-chi-ra-SIZ","Excuse me; sorry"],
+["Ha","ha","Yes"],
+["Yoʻq","yohq","No"],
+["Mayli","MAY-li","OK, alright"],
+["Xush kelibsiz","khoosh ke-lib-SIZ","Welcome"],
+["Yaxshimisiz?","yakh-shi-mi-SIZ","How are you?","Literally “are you well?”; the usual way to ask"],
+["Yaxshi, rahmat","yakh-SHI rah-MAT","Fine, thanks"],
+["Oʻzingiz-chi?","oh-zin-GIZ-chi","And yourself?"]],
+grammar:`<h3>Qoida · Two words for “you”</h3>
+<p><span class="uz">Siz</span> is the polite “you” and also the plural. Use it with strangers, elders, shopkeepers, teachers and your barber. <span class="uz">Sen</span> is for close friends, family your age or younger, and children. When in doubt, <span class="uz">siz</span>.</p>
+<p>Stress almost always lands on the <b>last</b> syllable: rah-<b>MAT</b>, sa-<b>LOM</b>, yakh-<b>SHI</b>. The sound guides in this app write the stressed syllable in capitals.</p>`,
+dialog:[["A","Assalomu alaykum!","Hello!"],["B","Vaalaykum assalom! Yaxshimisiz?","Hello! How are you?"],["A","Rahmat, yaxshi. Oʻzingiz-chi?","Thanks, fine. And yourself?"],["B","Yaxshi, rahmat. Xush kelibsiz!","Fine, thanks. Welcome!"]],
+tip:"A handshake in Tashkent often comes with the other hand placed over the heart and a slight bow. Greeting elders first, and with assalomu alaykum rather than salom, is noticed and appreciated.",
+quiz:[
+{q:"You are the one leaving. Which goodbye do you say?",a:"Yaxshi qoling",o:["Yaxshi boring","Xush kelibsiz","Marhamat"],why:"Yaxshi qoling = “stay well”, said by the person leaving. The one staying says Yaxshi boring, “go well”."},
+{q:"Someone says “Assalomu alaykum”. The set reply is…",a:"Vaalaykum assalom",o:["Arzimaydi","Xayr","Mayli"],why:"Vaalaykum assalom is the fixed answer to Assalomu alaykum."},
+{q:"A shopkeeper hands you your change and says…",a:"Marhamat",o:["Iltimos","Kechirasiz","Yoʻq"],why:"Marhamat is the “please” of offering: here you are, go ahead. Iltimos is the “please” of asking."}]},
+
+{id:"tanishuv",n:2,uz:"Tanishuv",en:"Introductions",
+intro:"Say who you are, where you are from, and that you are learning. This lesson also gives you the single most important grammar fact in Uzbek: there is no verb “to be” in the present.",
+words:[
+["Ismingiz nima?","is-min-GIZ ni-MA","What is your name?","Polite form"],
+["Mening ismim …","me-NING is-MIM","My name is …"],
+["Ismim …","is-MIM","My name’s …","Shorter, just as common"],
+["Tanishganimdan xursandman","ta-nish-ga-nim-DAN khoor-sand-MAN","Nice to meet you","Literally “I’m glad from having met”"],
+["Qandaysiz?","qan-day-SIZ","How are you?"],
+["Qayerdansiz?","qa-yer-dan-SIZ","Where are you from?"],
+["Men Toshkentdanman","men tosh-kent-dan-MAN","I’m from Tashkent"],
+["Men Angliyadanman","men an-gli-ya-dan-MAN","I’m from England"],
+["Men Erondanman","men e-ron-dan-MAN","I’m from Iran"],
+["Men talabaman","men ta-la-ba-MAN","I am a student"],
+["Men Vestminster universitetida oʻqiyman","men vest-MIN-ster u-ni-ver-si-te-ti-DA oh-qi-MAN","I study at Westminster University"],
+["Men oʻzbek tilini oʻrganyapman","men oh-ZBEK ti-li-NI ohr-gan-yap-MAN","I am learning Uzbek"],
+["Siz inglizcha gapirasizmi?","siz in-gliz-CHA ga-pi-ra-siz-MI","Do you speak English?"],
+["Men oʻzbekcha ozgina bilaman","men oh-zbek-CHA oz-gi-NA bi-la-MAN","I know a little Uzbek"],
+["Tushundim","tu-shun-DIM","I understood; got it"],
+["Tushunmadim","tu-shun-ma-DIM","I didn’t understand"],
+["Sekinroq gapiring, iltimos","se-kin-ROQ ga-pi-RING il-ti-MOS","Please speak more slowly"],
+["Yana bir marta","ya-NA bir mar-TA","Once more"],
+["Bu nima?","bu ni-MA","What is this?"],
+["… oʻzbekcha nima?","oh-zbek-CHA ni-MA","What is … in Uzbek?","“Bread” oʻzbekcha nima? — Non."],
+["Siz-chi?","SIZ-chi","And you?"],
+["Men ham","men HAM","Me too"],
+["oʻqituvchi","oh-qi-toov-CHI","teacher"],
+["shifokor","shi-fo-KOR","doctor"],
+["talaba","ta-la-BA","student"]],
+grammar:`<h3>Qoida · There is no “am / is / are”</h3>
+<p>To say what someone is, attach a personal ending straight to the noun.</p>
+<table><tr><th>Pronoun</th><th>Ending</th><th>Example</th></tr>
+<tr><td>men (I)</td><td class="end">-man</td><td>Men talaba<b>man</b> — I am a student</td></tr>
+<tr><td>sen (you)</td><td class="end">-san</td><td>Sen talaba<b>san</b></td></tr>
+<tr><td>u (he, she)</td><td class="end">—</td><td>U talaba</td></tr>
+<tr><td>biz (we)</td><td class="end">-miz</td><td>Biz talaba<b>miz</b></td></tr>
+<tr><td>siz (you, polite)</td><td class="end">-siz</td><td>Siz talaba<b>siz</b></td></tr>
+<tr><td>ular (they)</td><td class="end">-(lar)</td><td>Ular talaba(lar)</td></tr></table>
+<p><b>Not:</b> put <span class="uz">emas</span> before the ending — Men talaba <b>emas</b>man (I am not a student).</p>
+<p><b>Question:</b> slip <span class="uz">-mi</span> in before the ending — Siz talaba<b>mi</b>siz? (Are you a student?)</p>`,
+dialog:[["A","Kechirasiz, ismingiz nima?","Excuse me, what is your name?"],["B","Ismim {name}. Siz-chi?","My name is {name}. And you?"],["A","Men Dilnoza. Tanishganimdan xursandman.","I’m Dilnoza. Nice to meet you."],["B","Men ham. Qayerdansiz?","Me too. Where are you from?"],["A","Toshkentdanman. Siz oʻzbekcha yaxshi gapirasiz!","I’m from Tashkent. You speak Uzbek well!"],["B","Rahmat, ozgina bilaman.","Thanks, I know a little."]],
+tip:"People will ask early where you are from and what you do; it is warmth, not nosiness. Saying “Men oʻzbek tilini oʻrganyapman” usually earns a delighted smile and a free lesson.",
+quiz:[
+{q:"“I am a student”",a:"Men talabaman",o:["Men talaba emasman","Men talabasiz","Men talabamisiz"],why:"men takes the ending -man: talaba + man."},
+{q:"“Are you (polite) a teacher?”",a:"Siz oʻqituvchimisiz?",o:["Siz oʻqituvchisiz.","Sen oʻqituvchisan.","Siz oʻqituvchi emassiz."],why:"The question particle -mi goes before the personal ending: oʻqituvchi + mi + siz."},
+{q:"“I am not a doctor”",a:"Men shifokor emasman",o:["Men shifokorman","Men shifokor yoʻq","Men shifokormasman"],why:"Negate the noun with emas, then add the ending: emas + man."}]},
+
+{id:"sonlar",n:3,uz:"Sonlar",en:"Numbers, prices & time",
+intro:"Numbers are regular and stack like English. Learn one to ten, the tens, yuz and ming, and you can count to a million and haggle at Chorsu.",
+words:[
+["nol","nol","0"],["bir","bir","1"],["ikki","ik-KI","2"],["uch","ooch","3"],["toʻrt","tohrt","4"],["besh","besh","5"],["olti","ol-TI","6"],["yetti","yet-TI","7"],["sakkiz","sak-KIZ","8"],["toʻqqiz","tohq-QIZ","9"],["oʻn","ohn","10"],["oʻn bir","ohn BIR","11"],["oʻn besh","ohn BESH","15"],["yigirma","yi-gir-MA","20"],["oʻttiz","oht-TIZ","30"],["qirq","qirq","40"],["ellik","el-LIK","50"],["oltmish","olt-MISH","60"],["yetmish","yet-MISH","70"],["sakson","sak-SON","80"],["toʻqson","tohq-SON","90"],["yuz","yooz","100"],["ming","ming","1,000"],["million","mil-li-ON","1,000,000"],
+["soʻm","sohm","soum (the currency)"],
+["Bu qancha?","bu qan-CHA","How much is this?"],
+["Nechta?","nech-TA","How many?"],
+["Soat nechi?","so-AT ne-CHI","What time is it?"],
+["Soat uch","so-AT ooch","It’s three o’clock"],
+["yarim","ya-RIM","half","soat toʻrt yarim = half past four"],
+["daqiqa","da-qi-QA","minute"],
+["Telefon raqamingiz nima?","te-le-FON ra-qa-min-GIZ ni-MA","What is your phone number?"]],
+grammar:`<h3>Qoida · Counting</h3>
+<p>Numbers stack biggest first: 25 = <span class="uz">yigirma besh</span>, 147 = <span class="uz">bir yuz qirq yetti</span>, 2026 = <span class="uz">ikki ming yigirma olti</span>.</p>
+<p>A noun after a number stays <b>singular</b>: <span class="uz">uch kitob</span> (three books), never “uch kitoblar”.</p>
+<p>When counting things, Uzbek likes the counter <span class="uz">-ta</span>: <span class="uz">ikkita choy</span> (two teas), <span class="uz">beshta non</span> (five loaves). <span class="uz">Nechta?</span> asks “how many?”; <span class="uz">qancha?</span> asks “how much?”.</p>
+<p>Prices: <span class="uz">oʻn ming soʻm</span> — 10,000 soum. <span class="uz">Bu qancha turadi?</span> — How much does this cost?</p>`,
+dialog:[["A","Bu qancha?","How much is this?"],["B","Oʻn besh ming soʻm.","Fifteen thousand soum."],["A","Ikkita bering, iltimos.","Two, please."],["B","Oʻttiz ming soʻm. Marhamat.","Thirty thousand soum. Here you are."]],
+tip:"Soum prices come in thousands, so people drop the word ming in casual speech: “oʻn besh” at a market stall means 15,000. Listen for whether ming is added.",
+quiz:[
+{q:"25",a:"yigirma besh",o:["besh yigirma","ikki besh","oʻttiz besh"],why:"Tens first, then units: yigirma (20) + besh (5)."},
+{q:"“three books”",a:"uch kitob",o:["uch kitoblar","uchta kitoblar","kitob uch"],why:"After a number the noun stays singular."},
+{q:"Which word asks “how many?”",a:"Nechta?",o:["Qancha?","Qachon?","Qaysi?"],why:"Nechta = how many (countable). Qancha = how much."}]},
+
+{id:"oila",n:4,uz:"Oila",en:"Family & people",
+intro:"Family words double as polite forms of address in Uzbekistan, so this lesson is also about how to talk to strangers. It introduces the possessive endings: my, your, his.",
+words:[
+["oila","o-i-LA","family"],["ota","o-TA","father"],["ona","o-NA","mother"],["ota-ona","o-ta-o-NA","parents"],["aka","a-KA","older brother","Also polite address for any older man"],["uka","u-KA","younger brother"],["opa","o-PA","older sister","Also polite address for any older woman"],["singil","sin-GIL","younger sister"],["bobo","bo-BO","grandfather"],["buvi","bu-VI","grandmother"],["oʻgʻil","oh-GHIL","son"],["qiz","qiz","daughter; girl"],["bola","bo-LA","child"],["farzand","far-ZAND","child (someone’s)"],["er","er","husband"],["xotin","kho-TIN","wife"],["doʻst","dohst","friend"],["odam","o-DAM","person"],["erkak","er-KAK","man"],["ayol","a-YOL","woman"],["yigit","yi-GIT","young man"],["amaki","a-ma-KI","uncle (father’s side)"],["togʻa","to-GHA","uncle (mother’s side)"],["xola","kho-LA","aunt (mother’s side)"],["amma","am-MA","aunt (father’s side)"],["Oilangiz qanday?","o-i-lan-GIZ qan-DAY","How is your family?"]],
+grammar:`<h3>Qoida · My, your, his: possessive endings</h3>
+<p>Possession is an ending on the noun. Its shape depends on whether the noun ends in a consonant or a vowel.</p>
+<div class="scroll"><table><tr><th></th><th>after consonant</th><th>after vowel</th><th>kitob (book)</th><th>ota (father)</th></tr>
+<tr><td>my</td><td class="end">-im</td><td class="end">-m</td><td>kitobim</td><td>otam</td></tr>
+<tr><td>your</td><td class="end">-ing</td><td class="end">-ng</td><td>kitobing</td><td>otang</td></tr>
+<tr><td>his, her</td><td class="end">-i</td><td class="end">-si</td><td>kitobi</td><td>otasi</td></tr>
+<tr><td>our</td><td class="end">-imiz</td><td class="end">-miz</td><td>kitobimiz</td><td>otamiz</td></tr>
+<tr><td>your (polite)</td><td class="end">-ingiz</td><td class="end">-ngiz</td><td>kitobingiz</td><td>otangiz</td></tr>
+<tr><td>their</td><td class="end">-lari</td><td class="end">-lari</td><td>kitoblari</td><td>otalari</td></tr></table></div>
+<p>The pronoun is optional because the ending already says who: <span class="uz">(mening) onam</span> — my mother.</p>
+<p>A few nouns drop their last vowel before the ending: <span class="uz">singil → singlim</span>, <span class="uz">oʻgʻil → oʻgʻlim</span>, <span class="uz">shahar → shahrim</span>.</p>`,
+dialog:[["A","Oilangiz katta?","Is your family big?"],["B","Ha, katta. Otam, onam, ikkita akam va singlim bor.","Yes, big. I have my father, mother, two older brothers and a younger sister."],["A","Akangiz qayerda ishlaydi?","Where does your brother work?"],["B","Akam sartaroshxonada ishlaydi.","My brother works at a barbershop."]],
+tip:"aka and opa are the all-purpose polite address in Tashkent: “Rahmat, aka!” to a taxi driver, “Opa, bu qancha?” at Chorsu. A skilled craftsman, your barber included, is usta.",
+quiz:[
+{q:"“my mother”",a:"onam",o:["onim","onasi","onang"],why:"ona ends in a vowel, so “my” is -m: onam."},
+{q:"“his / her father”",a:"otasi",o:["otai","otam","otangiz"],why:"After a vowel, his/her is -si: ota + si."},
+{q:"“your (polite) older brother”",a:"akangiz",o:["akang","akasi","akamiz"],why:"Polite “your” after a vowel is -ngiz: aka + ngiz."}]},
+
+{id:"savollar",n:5,uz:"Olmoshlar va savollar",en:"Pronouns & question words",
+intro:"Who, what, where, when. Uzbek question words are easy because nothing moves: the question word sits exactly where the answer will.",
+words:[
+["men","men","I"],["sen","sen","you (informal)"],["siz","siz","you (polite; plural)"],["u","u","he, she, it; that"],["biz","biz","we"],["ular","u-LAR","they"],["bu","bu","this"],["shu","shu","this, that (just mentioned)"],["oʻsha","oh-SHA","that (over there; the one we know)"],["nima","ni-MA","what"],["kim","kim","who"],["qayer","qa-YER","where (a place)"],["qayerda","qa-yer-DA","where (at)"],["qayerga","qa-yer-GA","where (to)"],["qachon","qa-CHON","when"],["nega","ne-GA","why"],["nima uchun","ni-MA u-CHOON","why, what for"],["qanday","qan-DAY","how; what kind of"],["qancha","qan-CHA","how much"],["nechta","nech-TA","how many"],["qaysi","qay-SI","which"],["kim bilan","kim bi-LAN","with whom"],["Bu kim?","bu KIM","Who is this?"],["Hojatxona qayerda?","ho-jat-kho-NA qa-yer-DA","Where is the toilet?"],["Bu qaysi koʻcha?","bu qay-SI koh-CHA","Which street is this?"],["Siz qayerda yashaysiz?","siz qa-yer-DA ya-shay-SIZ","Where do you live?"]],
+grammar:`<h3>Qoida · The verb goes last</h3>
+<p>Sentences run subject – object – verb. <span class="uz">Men choy ichaman</span> is literally “I tea drink”.</p>
+<p>A question word simply sits where the answer will sit; nothing moves: <span class="uz">Siz <b>qayerda</b> yashaysiz?</span> → <span class="uz">Men <b>Toshkentda</b> yashayman.</span></p>
+<p>Yes/no questions add <span class="uz">-mi</span> to the end of the verb: <span class="uz">Siz choy ichasiz<b>mi</b>?</span> — Do you drink tea? A rising tone alone also works in casual speech.</p>
+<p><span class="uz">-chi</span> tags a follow-up question: <span class="uz">Siz-chi?</span> (And you?), <span class="uz">Choy-chi?</span> (What about tea?).</p>`,
+dialog:[["A","Kechirasiz, bu qaysi bekat?","Excuse me, which stop is this?"],["B","Bu Chorsu. Siz qayerga borasiz?","This is Chorsu. Where are you going?"],["A","Amir Temur maydoniga. Qachon keladi?","To Amir Temur Square. When does it come?"],["B","Hozir keladi.","It’s coming now."]],
+tip:"The Tashkent metro announces stations in Uzbek: “Keyingi bekat — Chorsu” means “next stop — Chorsu”. It is one of the best free listening lessons in the city.",
+quiz:[
+{q:"“Where do you (polite) live?”",a:"Siz qayerda yashaysiz?",o:["Qayerda siz yashaysiz?","Siz yashaysiz qayerda?","Siz qayerga yashaysiz?"],why:"The question word takes the place of the answer, and the verb stays last. qayerda = where at."},
+{q:"“Do you drink tea?”",a:"Siz choy ichasizmi?",o:["Siz choy ichasiz?mi","Mi siz choy ichasiz?","Siz choymi ichasiz?"],why:"-mi attaches to the end of the verb."},
+{q:"Which word means “when”?",a:"qachon",o:["qancha","qayer","qanday"],why:"qachon = when. qancha = how much, qayer = where, qanday = how."}]},
+
+{id:"kelishik",n:6,uz:"Kelishiklar",en:"Cases: the six endings",
+intro:"Uzbek has no prepositions. Instead, six endings on the noun say of, to, at and from. Learn them once and every sign in the city starts to make sense.",
+words:[
+["uy","ooy","house; home"],["shahar","sha-HAR","city"],["bozor","bo-ZOR","bazaar, market"],["doʻkon","doh-KON","shop"],["maktab","mak-TAB","school"],["universitet","u-ni-ver-si-TET","university"],["kasalxona","ka-sal-kho-NA","hospital"],["mehmonxona","meh-mon-kho-NA","hotel"],["choyxona","choy-kho-NA","teahouse"],["sartaroshxona","sar-ta-rosh-kho-NA","barbershop"],["kutubxona","ku-tub-kho-NA","library"],["koʻcha","koh-CHA","street"],["bekat","be-KAT","bus or metro stop"],["metro","met-RO","metro"],["aeroport","a-e-ro-PORT","airport"],["ish","ish","work"],["dars","dars","lesson, class"],["masjid","mas-JID","mosque"],["qishloq","qish-LOQ","village"],["eshik","e-SHIK","door"],["bor","bor","there is; have"],["yoʻq","yohq","there isn’t; don’t have"],["Sizda … bormi?","siz-DA … bor-MI","Do you have …?"],["Menda pul bor","men-DA pool BOR","I have money"],["Menda vaqt yoʻq","men-DA vaqt YOHQ","I don’t have time"],["pul","pool","money"],["vaqt","vaqt","time"]],
+grammar:`<h3>Qoida · Six endings do the work of prepositions</h3>
+<div class="scroll"><table><tr><th>Case</th><th>Ending</th><th>uy (house)</th><th>Meaning</th></tr>
+<tr><td>Bosh (subject)</td><td class="end">—</td><td>uy</td><td>the house</td></tr>
+<tr><td>Qaratqich (of)</td><td class="end">-ning</td><td>uyning</td><td>of the house</td></tr>
+<tr><td>Tushum (object)</td><td class="end">-ni</td><td>uyni</td><td>the house (as object)</td></tr>
+<tr><td>Joʻnalish (to)</td><td class="end">-ga</td><td>uyga</td><td>to the house, home</td></tr>
+<tr><td>Oʻrin-payt (at, in)</td><td class="end">-da</td><td>uyda</td><td>at home</td></tr>
+<tr><td>Chiqish (from)</td><td class="end">-dan</td><td>uydan</td><td>from home</td></tr></table></div>
+<p>The “to” ending changes after k and q: <span class="uz">eshik → eshik<b>ka</b></span>, <span class="uz">qishloq → qishloq<b>qa</b></span>, otherwise <span class="uz">Toshkent → Toshkent<b>ga</b></span>.</p>
+<p>The object ending <span class="uz">-ni</span> marks a specific thing and is dropped for a general one: <span class="uz">Men non yeyman</span> (I eat bread) vs <span class="uz">Men nonni yedim</span> (I ate the bread).</p>
+<p><b>Having:</b> there is no verb “to have”. <span class="uz">Menda pul bor</span> = “at-me money exists”. <span class="uz">Sizda suv bormi?</span> — Do you have water? It is the most useful shop question you will learn.</p>`,
+dialog:[["A","Kechirasiz, sizda koʻk choy bormi?","Excuse me, do you have green tea?"],["B","Ha, bor. Qancha kerak?","Yes, there is. How much do you need?"],["A","Bir paket. Bozorga qanday boraman?","One packet. How do I get to the bazaar?"],["B","Metroda. Chorsu bekatida tushing.","By metro. Get off at Chorsu stop."]],
+tip:"Signs stack endings you now recognise: “Toshkentdan Samarqandga” (from Tashkent to Samarkand) on the train board, “uyga” (home) on a delivery bag, “bozorda” (at the bazaar) in a text from a friend.",
+quiz:[
+{q:"“to the village” (qishloq)",a:"qishloqqa",o:["qishloqga","qishloqda","qishloqdan"],why:"After q, the “to” ending is -qa."},
+{q:"“in Tashkent”",a:"Toshkentda",o:["Toshkentga","Toshkentdan","Toshkentni"],why:"-da = at, in."},
+{q:"“Do you have water?”",a:"Sizda suv bormi?",o:["Siz suv bor?","Sizga suv bormi?","Sizda suv yoʻqmi?"],why:"Having = at-you (sizda) + thing + bor + -mi."},
+{q:"“from home”",a:"uydan",o:["uyda","uyga","uyning"],why:"-dan = from."}]},
+{id:"fellar",n:7,uz:"Feʼllar: hozirgi zamon",en:"Verbs: the present tense",
+intro:"Verbs carry the person inside them, so a single word can be a whole sentence: boraman, “I go”. This lesson gives you the two present tenses and the negative.",
+words:[
+["bormoq","bor-MOQ","to go"],["kelmoq","kel-MOQ","to come"],["yemoq","ye-MOQ","to eat"],["ichmoq","ich-MOQ","to drink"],["koʻrmoq","kohr-MOQ","to see"],["bilmoq","bil-MOQ","to know"],["oʻqimoq","oh-qi-MOQ","to read; to study"],["yozmoq","yoz-MOQ","to write"],["gapirmoq","ga-pir-MOQ","to speak"],["ishlamoq","ish-la-MOQ","to work"],["yashamoq","ya-sha-MOQ","to live"],["xohlamoq","khoh-la-MOQ","to want"],["sevmoq","sev-MOQ","to love"],["tushunmoq","tu-shun-MOQ","to understand"],["olmoq","ol-MOQ","to take; to buy"],["sotib olmoq","so-TIB ol-MOQ","to buy"],["bermoq","ber-MOQ","to give"],["qilmoq","qil-MOQ","to do; to make"],["boʻlmoq","bohl-MOQ","to be; to become"],["uxlamoq","ookh-la-MOQ","to sleep"],["oʻrganmoq","ohr-gan-MOQ","to learn"],["kutmoq","koot-MOQ","to wait"],["yurmoq","yoor-MOQ","to walk; to go around"],["oʻtirmoq","oh-tir-MOQ","to sit"],["turmoq","toor-MOQ","to stand; to get up"],["Men Toshkentda yashayman","men tosh-kent-DA ya-shay-MAN","I live in Tashkent"],["U kitob oʻqiyapti","u ki-TOB oh-qi-yap-TI","She is reading a book"],["Men goʻsht yemayman","men gohsht ye-may-MAN","I don’t eat meat"],["Biz ertaga bozorga boramiz","biz er-ta-GA bo-zor-GA bo-ra-MIZ","We will go to the bazaar tomorrow"],["Men choy xohlayman","men choy khoh-lay-MAN","I want tea"],["Zoʻr!","zohr","Great! Awesome!"]],
+grammar:`<h3>Qoida · Present tense in two flavours</h3>
+<p>Dictionary forms end in <span class="uz">-moq</span>. Cut it off to get the stem: <span class="uz">bormoq → bor-</span>, <span class="uz">ishlamoq → ishla-</span>.</p>
+<div class="scroll"><table><tr><th></th><th>Present-future · habits &amp; plans</th><th>Present continuous · right now</th></tr>
+<tr><td>men</td><td>bor<span class="end">a</span>man · ishla<span class="end">y</span>man</td><td>bor<span class="end">yap</span>man · ishla<span class="end">yap</span>man</td></tr>
+<tr><td>sen</td><td>borasan · ishlaysan</td><td>boryapsan · ishlayapsan</td></tr>
+<tr><td>u</td><td>bora<span class="end">di</span> · ishlaydi</td><td>boryap<span class="end">ti</span> · ishlayapti</td></tr>
+<tr><td>biz</td><td>boramiz · ishlaymiz</td><td>boryapmiz · ishlayapmiz</td></tr>
+<tr><td>siz</td><td>borasiz · ishlaysiz</td><td>boryapsiz · ishlayapsiz</td></tr>
+<tr><td>ular</td><td>boradilar · ishlaydilar</td><td>boryaptilar · ishlayaptilar</td></tr></table></div>
+<p>Present-future uses <span class="uz">-a-</span> after a consonant and <span class="uz">-y-</span> after a vowel. It covers both “I go” and “I will go”; context decides.</p>
+<p><b>Not:</b> put <span class="uz">-ma-</span> right after the stem: <span class="uz">bor<b>ma</b>yman</span> (I don’t go), <span class="uz">bor<b>ma</b>yapman</span> (I’m not going).</p>
+<p><b>Question:</b> <span class="uz">-mi</span> at the very end: <span class="uz">Borasizmi?</span> <span class="uz">Boryapsizmi?</span></p>
+<p><b>Want to:</b> stem + <span class="uz">-moqchi</span> + ending: <span class="uz">Men bormoqchiman</span> — I want to (intend to) go.</p>`,
+dialog:[["A","Siz qayerda ishlaysiz?","Where do you work?"],["B","Men universitetda ishlayman. Siz-chi?","I work at the university. And you?"],["A","Men oʻqiyman. Hozir oʻzbek tilini oʻrganyapman.","I study. Right now I’m learning Uzbek."],["B","Zoʻr! Har kuni mashq qilasizmi?","Great! Do you practise every day?"],["A","Ha, har kuni oʻn daqiqa.","Yes, ten minutes every day."]],
+tip:"Zoʻr! is the everyday “great, awesome”. You will hear it constantly, and it is the safest one-word reaction to good news.",
+quiz:[
+{q:"“She is reading” (oʻqimoq)",a:"U oʻqiyapti",o:["U oʻqiydi","U oʻqiyapman","U oʻqiyaptilar"],why:"Right-now action = -yap-; third person takes -ti: oʻqi + yap + ti."},
+{q:"“I don’t eat meat”",a:"Men goʻsht yemayman",o:["Men goʻsht yeyman emas","Men goʻsht yoʻq yeyman","Men goʻsht yemasman"],why:"Verbs are negated with -ma- after the stem: ye + ma + y + man."},
+{q:"“Do you (polite) work?”",a:"Ishlaysizmi?",o:["Ishlaymisiz?","Ishlaysiz?mi","Mi ishlaysiz?"],why:"For verbs, -mi goes at the very end: ishla + y + siz + mi."}]},
+
+{id:"otgan",n:8,uz:"Oʻtgan zamon",en:"Past tense & time words",
+intro:"One ending, -di, gives you the whole past. Add the days of the week and the words for yesterday, today and tomorrow, and you can tell a story.",
+words:[
+["bugun","bu-GOON","today"],["kecha","ke-CHA","yesterday"],["ertaga","er-ta-GA","tomorrow"],["hozir","ho-ZIR","now"],["keyin","ke-YIN","later; then"],["oldin","ol-DIN","before; ago"],["ertalab","er-ta-LAB","in the morning"],["kunduzi","kun-du-ZI","in the daytime"],["kechqurun","kech-qu-ROON","in the evening"],["tunda","tun-DA","at night"],["kun","koon","day"],["hafta","haf-TA","week"],["oy","oy","month; moon"],["yil","yil","year"],["har kuni","har ku-NI","every day"],["doim","do-IM","always"],["baʼzan","BAH-zan","sometimes"],["hech qachon","hech qa-CHON","never"],["oʻtgan hafta","oht-GAN haf-TA","last week"],["kelasi hafta","ke-la-SI haf-TA","next week"],["dushanba","du-shan-BA","Monday"],["seshanba","se-shan-BA","Tuesday"],["chorshanba","chor-shan-BA","Wednesday"],["payshanba","pay-shan-BA","Thursday"],["juma","ju-MA","Friday"],["shanba","shan-BA","Saturday"],["yakshanba","yak-shan-BA","Sunday"],["Kecha men bozorga bordim","ke-CHA men bo-zor-GA bor-DIM","Yesterday I went to the bazaar"],["Siz osh yedingizmi?","siz osh ye-din-giz-MI","Did you eat plov?"],["Men Samarqandni koʻrmadim","men sa-mar-qand-NI kohr-ma-DIM","I haven’t seen Samarkand"],["Ertaga dars yoʻq","er-ta-GA dars YOHQ","There’s no class tomorrow"]],
+grammar:`<h3>Qoida · The past is -di</h3>
+<div class="scroll"><table><tr><th></th><th>bormoq (go)</th><th>kelmoq (come)</th><th>ishlamoq (work)</th></tr>
+<tr><td>men</td><td>bor<span class="end">dim</span></td><td>keldim</td><td>ishladim</td></tr>
+<tr><td>sen</td><td>bording</td><td>kelding</td><td>ishlading</td></tr>
+<tr><td>u</td><td>bordi</td><td>keldi</td><td>ishladi</td></tr>
+<tr><td>biz</td><td>bordik</td><td>keldik</td><td>ishladik</td></tr>
+<tr><td>siz</td><td>bordingiz</td><td>keldingiz</td><td>ishladingiz</td></tr>
+<tr><td>ular</td><td>bordilar</td><td>keldilar</td><td>ishladilar</td></tr></table></div>
+<p><b>Not:</b> <span class="uz">bor<b>ma</b>dim</span> (I didn’t go). <b>Question:</b> <span class="uz">Bordingiz<b>mi</b>?</span> (Did you go?)</p>
+<p>“Was, were” is the little word <span class="uz">edi</span> with the usual endings: <span class="uz">Men talaba edim</span> (I was a student), <span class="uz">U uyda edi</span> (She was at home), <span class="uz">Pul bor edi</span> (There was money).</p>
+<p>Time words come first or right after the subject: <span class="uz">Kecha men keldim</span> / <span class="uz">Men kecha keldim</span>.</p>`,
+dialog:[["A","Kecha nima qildingiz?","What did you do yesterday?"],["B","Ertalab ishladim, keyin doʻstlarim bilan osh yedim.","I worked in the morning, then ate plov with my friends."],["A","Mazali edimi?","Was it tasty?"],["B","Juda mazali edi! Siz-chi?","It was very tasty! And you?"],["A","Men uyda edim. Kitob oʻqidim.","I was at home. I read a book."]],
+tip:"Juma (Friday) is the big plov day: many oshxonas serve it only at lunchtime and sell out by one o’clock. “Osh bormi?” (Is there plov?) is a perfectly normal question to ask at the door.",
+quiz:[
+{q:"“I went” (bormoq)",a:"bordim",o:["boraman","bording","bordik"],why:"Past = stem + di + personal ending: bor + di + m."},
+{q:"“Did you (polite) see it?”",a:"Koʻrdingizmi?",o:["Koʻrmadingiz?","Koʻrasizmi?","Koʻrdingmi?"],why:"koʻr + di + ngiz + mi. Koʻrasizmi is present: will you see?"},
+{q:"Which word means “yesterday”?",a:"kecha",o:["kechqurun","ertaga","bugun"],why:"kecha = yesterday. Careful: kechqurun = in the evening, ertaga = tomorrow."}]},
+
+{id:"sifat",n:9,uz:"Sifatlar va ranglar",en:"Adjectives & colours",
+intro:"Adjectives are the easiest part of Uzbek: they never change. Add -roq for “more” and eng for “most” and you can compare anything.",
+words:[
+["katta","kat-TA","big"],["kichik","ki-CHIK","small"],["yaxshi","yakh-SHI","good"],["yomon","yo-MON","bad"],["yangi","yan-GI","new"],["eski","es-KI","old (things)"],["keksa","kek-SA","old (people)"],["yosh","yosh","young"],["issiq","is-SIQ","hot"],["sovuq","so-VUQ","cold"],["chiroyli","chi-roy-LI","beautiful"],["uzun","u-ZOON","long; tall"],["qisqa","qis-QA","short"],["baland","ba-LAND","high; tall; loud"],["tez","tez","fast"],["sekin","se-KIN","slow"],["arzon","ar-ZON","cheap"],["qimmat","qim-MAT","expensive"],["oson","o-SON","easy"],["qiyin","qi-YIN","difficult"],["toza","to-ZA","clean"],["yaqin","ya-QIN","near"],["uzoq","u-ZOQ","far"],["juda","ju-DA","very"],["koʻp","kohp","many; much; a lot"],["oz","oz","few; little"],["qizil","qi-ZIL","red"],["koʻk","kohk","blue; sky-blue"],["yashil","ya-SHIL","green"],["sariq","sa-RIQ","yellow"],["oq","oq","white"],["qora","qo-RA","black"],["jigarrang","ji-gar-RANG","brown"],["kulrang","kul-RANG","grey"],["pushti","push-TI","pink"],["toʻq sariq","tohq sa-RIQ","orange"],["moviy","mo-VIY","light blue, azure"]],
+grammar:`<h3>Qoida · Adjectives never change</h3>
+<p>They sit before the noun and take no endings: <span class="uz">katta uy</span>, <span class="uz">katta uylar</span>, <span class="uz">katta uyda</span>.</p>
+<p>As a whole sentence, the adjective just takes the “to be” ending from lesson 2: <span class="uz">Choy issiq.</span> (The tea is hot.) <span class="uz">Siz juda yaxshisiz.</span> (You are very kind.)</p>
+<ul><li><b>-er, more:</b> <span class="uz">-roq</span> — <span class="uz">kattaroq</span> (bigger), <span class="uz">arzonroq</span> (cheaper)</li>
+<li><b>than:</b> <span class="uz">-dan</span> on the thing compared — <span class="uz">Toshkent Samarqanddan kattaroq.</span></li>
+<li><b>the most:</b> <span class="uz">eng</span> — <span class="uz">eng chiroyli</span> (the most beautiful)</li>
+<li><b>very:</b> <span class="uz">juda</span> · <b>a bit:</b> <span class="uz">ozgina</span>, <span class="uz">sal</span></li></ul>`,
+dialog:[["A","Bu gilam juda chiroyli. Qancha?","This carpet is very beautiful. How much?"],["B","Ikki million soʻm.","Two million soum."],["A","Qimmat. Arzonrogʻi bormi?","Expensive. Is there a cheaper one?"],["B","Mana bu kichikroq va arzonroq.","This one is smaller and cheaper."]],
+tip:"Koʻk is sky-blue and also “green” in older speech: koʻk choy is green tea, and koʻk at the bazaar means fresh herbs. Yashil is the modern word for green.",
+quiz:[
+{q:"“bigger”",a:"kattaroq",o:["eng katta","katta-katta","kattadan"],why:"-roq makes the comparative."},
+{q:"“the most beautiful”",a:"eng chiroyli",o:["chiroyliroq","juda chiroyli","chiroyli eng"],why:"eng before the adjective = the most."},
+{q:"“Tashkent is bigger than Samarkand”",a:"Toshkent Samarqanddan kattaroq",o:["Toshkent Samarqandga kattaroq","Toshkent kattaroq Samarqand","Toshkentdan Samarqand kattaroq"],why:"“than” is -dan on the thing you compare against."}]},
+
+{id:"bozor",n:10,uz:"Bozor va ovqat",en:"Bazaar & food",
+intro:"Chorsu, a choyxona, a plov house at Friday lunch. This lesson is the food you will eat and the polite commands that get it to your table.",
+words:[
+["non","non","bread","Round Uzbek bread; never placed upside down"],["osh","osh","plov","Also palov"],["somsa","som-SA","samsa (baked pastry)"],["lagʻmon","lagh-MON","lagman (pulled noodles)"],["shashlik","shash-LIK","shashlik, kebab"],["manti","man-TI","steamed dumplings"],["choy","choy","tea"],["koʻk choy","kohk choy","green tea"],["qora choy","qo-RA choy","black tea"],["suv","soov","water"],["sut","soot","milk"],["qatiq","qa-TIQ","yogurt"],["goʻsht","gohsht","meat"],["mol goʻshti","mol gohsh-TI","beef"],["qoʻy goʻshti","qohy gohsh-TI","lamb, mutton"],["tovuq","to-VUQ","chicken"],["baliq","ba-LIQ","fish"],["guruch","gu-ROOCH","rice"],["sabzi","sab-ZI","carrot"],["piyoz","pi-YOZ","onion"],["kartoshka","kar-TOSH-ka","potato"],["pomidor","po-mi-DOR","tomato"],["bodring","bod-RING","cucumber"],["olma","ol-MA","apple"],["uzum","u-ZOOM","grapes"],["anor","a-NOR","pomegranate"],["qovun","qo-VOON","melon"],["tarvuz","tar-VOOZ","watermelon"],["oʻrik","oh-RIK","apricot"],["yongʻoq","yon-GHOQ","walnut"],["tuz","tooz","salt"],["shakar","sha-KAR","sugar"],["shirin","shi-RIN","sweet"],["achchiq","ach-CHIQ","spicy; bitter"],["mazali","ma-za-LI","delicious"],["kilo","ki-LO","kilogram"],["yarim kilo","ya-RIM ki-LO","half a kilo"],["Yoqimli ishtaha!","yo-qim-LI ish-ta-HA","Bon appétit!"],["Menga bir choy, iltimos","men-GA bir choy il-ti-MOS","One tea for me, please"],["Hisob, iltimos","hi-SOB il-ti-MOS","The bill, please"],["Bir kilo olma bering","bir ki-LO ol-MA be-RING","Give me a kilo of apples"],["Tatib koʻrsam boʻladimi?","ta-TIB kohr-SAM boh-la-di-MI","May I taste it?"],["Arzonroq boʻladimi?","ar-zon-ROQ boh-la-di-MI","Can it be cheaper?"],["Toʻydim, rahmat","tohy-DIM rah-MAT","I’m full, thanks"]],
+grammar:`<h3>Qoida · Polite requests</h3>
+<p>The polite command is stem + <span class="uz">-ing</span> (after a vowel, <span class="uz">-ng</span>): <span class="uz">bering</span> (give), <span class="uz">keling</span> (come), <span class="uz">oling</span> (take), <span class="uz">oʻtiring</span> (sit down), <span class="uz">ayting</span> (say). Add <span class="uz">iltimos</span> and you cannot be rude.</p>
+<p>“For me” is <span class="uz">menga</span> (men + -ga): <span class="uz">Menga bir osh, iltimos.</span></p>
+<p>“May I …?” is <span class="uz">-sam boʻladimi?</span>: <span class="uz">Kirsam boʻladimi?</span> (May I come in?) <span class="uz">Tatib koʻrsam boʻladimi?</span> (May I taste?)</p>
+<p>The friendly informal command is the bare stem: <span class="uz">Kel!</span> (Come!) <span class="uz">Ol!</span> (Take it!) — friends and children only.</p>`,
+dialog:[["A","Assalomu alaykum, opa. Bu olma qancha?","Hello. How much are these apples?"],["B","Kilosi oʻn ikki ming.","Twelve thousand a kilo."],["A","Tatib koʻrsam boʻladimi?","May I taste one?"],["B","Marhamat, marhamat. Shirin!","Please, go ahead. Sweet!"],["A","Ikki kilo bering. Arzonroq boʻladimi?","Give me two kilos. Any cheaper?"],["B","Mayli, yigirma ming.","Alright, twenty thousand."]],
+tip:"Tea etiquette: the host pours tea back into the pot three times (qaytarish) before filling your cup, and fills it only partway. A full cup is a hint that you are not welcome to linger.",
+quiz:[
+{q:"“One tea for me, please”",a:"Menga bir choy, iltimos",o:["Men bir choy, iltimos","Menda bir choy, iltimos","Mening bir choy, iltimos"],why:"For me = menga (men + -ga)."},
+{q:"“Bon appétit!”",a:"Yoqimli ishtaha!",o:["Mazali!","Toʻydim!","Xush kelibsiz!"],why:"Yoqimli ishtaha is said to someone about to eat. Mazali = delicious."},
+{q:"The polite way to say “give (me)”",a:"bering",o:["ber","bermoq","berdim"],why:"stem + -ing is the polite command."}]},
+
+{id:"sartarosh",n:11,uz:"Sartaroshxonada",en:"At the barbershop",
+intro:"The vocabulary behind BarberBook. Everything you need to sit down, describe the cut you want, book the next one and pay.",
+words:[
+["sartarosh","sar-ta-ROSH","barber"],["sartaroshxona","sar-ta-rosh-kho-NA","barbershop"],["usta","us-TA","master","How you address a barber or any craftsman"],["soch","soch","hair"],["soqol","so-QOL","beard"],["moʻylov","mohy-LOV","moustache"],["soch olish","soch o-LISH","haircut"],["soch oldirmoq","soch ol-dir-MOQ","to get a haircut"],["qaychi","qay-CHI","scissors"],["mashinka","ma-SHIN-ka","clippers"],["ustara","us-ta-RA","razor"],["taroq","ta-ROQ","comb"],["koʻzgu","kohz-GU","mirror"],["kalta","kal-TA","short (hair)"],["uzun","u-ZOON","long"],["yon","yon","side"],["old","old","front"],["orqa","or-QA","back"],["tepa","te-PA","top"],["ozgina","oz-gi-NA","a little"],["koʻproq","kohp-ROQ","more"],["shunday","shun-DAY","like this, so"],["navbat","nav-BAT","turn, queue"],["band","band","busy, booked"],["boʻsh","bohsh","free, available"],["narx","narkh","price"],["yozilmoq","yo-zil-MOQ","to book, to get on the list"],["Soch oldirmoqchiman","soch ol-dir-moq-chi-MAN","I’d like a haircut"],["Kalta qiling, iltimos","kal-TA qi-LING il-ti-MOS","Make it short, please"],["Yon tomonlarini kaltaroq","yon to-mon-la-ri-NI kal-ta-ROQ","The sides shorter"],["Tepasini uzunroq qoldiring","te-pa-si-NI u-zun-ROQ qol-di-RING","Leave the top longer"],["Ozgina oling","oz-gi-NA o-LING","Take a little off"],["Soqolimni ham oling","so-qo-lim-NI ham o-LING","Trim my beard too"],["Mana bunday","ma-NA bun-DAY","Like this (showing a photo)"],["Necha pul?","ne-CHA pool","How much?"],["Juda yaxshi, rahmat!","ju-DA yakh-SHI rah-MAT","Very good, thanks!"],["Navbat bormi?","nav-BAT bor-MI","Is there a queue?"],["Ertaga soat oʻnga yozilsam boʻladimi?","er-ta-GA so-AT ohn-GA yo-zil-SAM boh-la-di-MI","Can I book for ten tomorrow?"],["Usta band","us-TA band","The barber is busy"]],
+grammar:`<h3>Qoida · Giving instructions in the chair</h3>
+<p>Everything you need is <span class="uz">-roq</span> (lesson 9) plus a polite command (lesson 10):</p>
+<ul><li><span class="uz">kalta<b>roq</b></span> shorter · <span class="uz">uzun<b>roq</b></span> longer · <span class="uz">oz<b>roq</b></span> less · <span class="uz">koʻp<b>roq</b></span> more</li>
+<li><span class="uz">qil<b>ing</b></span> make · <span class="uz">ol<b>ing</b></span> take off · <span class="uz">qoldir<b>ing</b></span> leave · <span class="uz">tekisla<b>ng</b></span> even it out</li></ul>
+<p>Body-part words take “my” and the object ending together: <span class="uz">soch<b>im</b><b>ni</b></span> (my hair, as object), <span class="uz">soqol<b>im</b><b>ni</b></span>. Parts of the head take “its”: <span class="uz">tepa<b>si</b>ni</span> (its top), <span class="uz">yon<b>i</b>ni</span> (its side).</p>
+<p>Booking a time: hour + <span class="uz">-ga</span>: <span class="uz">soat oʻnga</span> (for ten o’clock), <span class="uz">soat ikki yarimga</span> (for half past two).</p>`,
+dialog:[["A","Assalomu alaykum, usta. Navbat bormi?","Hello, master. Is there a queue?"],["B","Yoʻq, oʻtiring. Qanday olamiz?","No, sit down. How shall we cut it?"],["A","Yon tomonlarini kaltaroq, tepasini uzunroq qoldiring.","Sides shorter, leave the top longer."],["B","Soqol-chi?","And the beard?"],["A","Ozgina tekislang. Mana bunday.","Just even it out a little. Like this."],["B","Boʻldi. Koʻzguga qarang.","Done. Look in the mirror."],["A","Juda yaxshi! Necha pul?","Very good! How much?"]],
+tip:"Barbers are usta, and a good one is booked for weeks. “Ertaga boʻsh vaqt bormi?” (Is there a free slot tomorrow?) is worth memorising, whether you say it in person or type it into BarberBook.",
+quiz:[
+{q:"“Make it short, please”",a:"Kalta qiling, iltimos",o:["Kalta qil, iltimos","Kaltaroq bering, iltimos","Kalta oling, iltimos"],why:"qiling = polite “make”; qil alone is the bare command for friends."},
+{q:"“shorter”",a:"kaltaroq",o:["eng kalta","kalta-kalta","kaltadan"],why:"-roq = more, -er."},
+{q:"“Leave the top longer”",a:"Tepasini uzunroq qoldiring",o:["Tepasini kaltaroq oling","Tepani uzun qoldir","Tepasi uzunroq qoldiring"],why:"tepa + si (its) + ni (object), then uzunroq + qoldiring."}]}
+];
+
+const ALPHABET=[
+["A","a","a","“a” in father, often lighter, toward “cat”","olma","apple","А а"],
+["B","b","b","“b” in bed","bola","child","Б б"],
+["D","d","d","“d” in dog","dars","lesson","Д д"],
+["E","e","e","“e” in bed","eshik","door","Е е · Э э"],
+["F","f","f","“f” in fan","fasl","season","Ф ф"],
+["G","g","g","hard “g” in go","gul","flower","Г г"],
+["H","h","h","light “h” in hat","hafta","week","Ҳ ҳ"],
+["I","i","i","“i” in bit","ish","work","И и"],
+["J","j","dʒ","“j” in jump; in Russian loanwords, “s” in measure","juma","Friday","Ж ж"],
+["K","k","k","“k” in kite","kitob","book","К к"],
+["L","l","l","“l” in lamp","lagʻmon","lagman noodles","Л л"],
+["M","m","m","“m” in man","mashina","car","М м"],
+["N","n","n","“n” in noon","non","bread","Н н"],
+["O","o","ɒ","“o” in hot, “a” in call","osh","plov","О о"],
+["P","p","p","“p” in pan","piyoz","onion","П п"],
+["Q","q","q","a “k” made deep in the throat","qiz","girl","Қ қ"],
+["R","r","r","tapped or rolled “r”","rahmat","thank you","Р р"],
+["S","s","s","“s” in sun","suv","water","С с"],
+["T","t","t","“t” in top","tosh","stone","Т т"],
+["U","u","u","“oo” in book","uy","house","У у"],
+["V","v","v","“v” in van, often close to “w”","vaqt","time","В в"],
+["X","x","χ","“ch” in Scottish loch","xayr","goodbye","Х х"],
+["Y","y","j","“y” in yes","yoʻl","road","Й й"],
+["Z","z","z","“z” in zoo","zar","gold","З з"],
+["Oʻ","oʻ","o","“o” in go, lips rounded, no “w” glide","oʻn","ten","Ў ў",1],
+["Gʻ","gʻ","ʁ","soft gargled “g”, like a French “r”","togʻ","mountain","Ғ ғ",1],
+["Sh","sh","ʃ","“sh” in ship","shahar","city","Ш ш",1],
+["Ch","ch","tʃ","“ch” in chip","choy","tea","Ч ч",1],
+["Ng","ng","ŋ","“ng” in sing, never with a hard g","ming","thousand","Нг нг",1],
+["ʼ","ʼ","ʔ","a catch in the throat, or a longer vowel; called tutuq belgisi","sanʼat","art","Ъ ъ",1]];
+
+const PAIRS=[
+{a:"o",b:"oʻ",aS:"o in hot",bS:"o in go",note:"The most common beginner mix-up, and it changes words.",pairs:[["ot","horse"],["oʻt","grass; fire"],["tor","narrow"],["toʻr","net"],["bor","there is"],["boʻr","chalk"]]},
+{a:"k",b:"q",aS:"front of the mouth",bS:"back of the throat",note:"Say q with the tongue pulled back, like clearing your throat gently.",pairs:[["kir","dirt"],["qir","ridge, hill"],["kirmoq","to enter"],["qirmoq","to scrape"]]},
+{a:"h",b:"x",aS:"soft breath",bS:"friction, as in loch",note:"Uzbek keeps these apart, though many Tashkent speakers blur them.",pairs:[["hol","state, condition"],["xol","beauty spot"],["hazil","joke"],["xazina","treasure"]]},
+{a:"g",b:"gʻ",aS:"hard g",bS:"gargled",note:"gʻ is voiced and lives in the throat; g is plain.",pairs:[["gul","flower"],["gʻisht","brick"],["gap","word, talk"],["gʻam","sorrow"]]}];
+
+const POTD=[
+["Assalomu alaykum","as-sa-LO-mu a-LAY-koom","Hello","salom"],
+["Yaxshimisiz?","yakh-shi-mi-SIZ","How are you?","salom"],
+["Katta rahmat","kat-TA rah-MAT","Thank you very much","salom"],
+["Tanishganimdan xursandman","ta-nish-ga-nim-DAN khoor-sand-MAN","Nice to meet you","tanishuv"],
+["Men oʻzbek tilini oʻrganyapman","men oh-ZBEK ti-li-NI ohr-gan-yap-MAN","I am learning Uzbek","tanishuv"],
+["Sizda suv bormi?","siz-DA soov bor-MI","Do you have water?","kelishik"],
+["Bu qancha?","bu qan-CHA","How much is this?","sonlar"],
+["Yoqimli ishtaha!","yo-qim-LI ish-ta-HA","Bon appétit!","bozor"],
+["Zoʻr!","zohr","Great!","fellar"],
+["Kalta qiling, iltimos","kal-TA qi-LING il-ti-MOS","Make it short, please","sartarosh"],
+["Hojatxona qayerda?","ho-jat-kho-NA qa-yer-DA","Where is the toilet?","savollar"],
+["Xayr, koʻrishguncha","khayr koh-rish-GOON-cha","Bye, see you","salom"],
+["Tushunmadim","tu-shun-ma-DIM","I didn’t understand","tanishuv"],
+["Arzonroq boʻladimi?","ar-zon-ROQ boh-la-di-MI","Can it be cheaper?","bozor"]];
+const LETTER_NOTES={"Oʻ":"Written with a turned comma (ʻ), not an apostrophe, and it is its own letter. On phones most people type o' and everyone understands.","Gʻ":"Same turned comma as oʻ. A separate letter from g: gʻisht (brick) starts in the throat.","Sh":"Two letters, one sound. Counts as a single letter of the alphabet.","Ch":"Two letters, one sound. Counts as a single letter of the alphabet.","Ng":"One sound, as in English sing; there is no separate hard g after it: ming, tong, keng.","ʼ":"The tutuq belgisi. In Arabic loanwords it marks a glottal catch or lengthens the vowel before it: maʼno (meaning), baʼzan (sometimes), sanʼat (art)."};
+
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KEY="ozbekcha.v1";
+let S={name:"Kiarash",boxes:{},quiz:{},days:[],read:[],view:"home"};
+function load(){try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function touchDay(){const d=today();if(!S.days.includes(d)){S.days.push(d);save()}}
+const NAME=()=>(S.name||"").trim()||"Alisher";
+const WORDS=[];LESSONS.forEach(L=>L.words.forEach((w,i)=>WORDS.push({id:L.id+":"+i,uz:w[0],pron:w[1],en:w[2],note:w[3]||"",lesson:L.id,n:L.n})));
+const byLesson=id=>WORDS.filter(w=>w.lesson===id);
+const box=id=>(S.boxes[id]&&S.boxes[id].b)||0;
+function setBox(id,b){S.boxes[id]={b:b,t:Date.now()};save()}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+
+let uzVoice=null;
+function findVoice(){try{const vs=speechSynthesis.getVoices();uzVoice=vs.find(v=>/^uz/i.test(v.lang))||null;document.documentElement.classList.toggle("has-voice",!!uzVoice)}catch(e){}}
+if("speechSynthesis" in window){findVoice();speechSynthesis.addEventListener("voiceschanged",findVoice)}
+function say(t){if(!uzVoice)return;try{const u=new SpeechSynthesisUtterance(t);u.voice=uzVoice;u.lang=uzVoice.lang;u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+const sayBtn=t=>'<button class="say" type="button" data-say="'+esc(t)+'" aria-label="Listen" title="Listen">▶</button>';
+
+let toastT;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1800)}
+
+const VIEWS=["home","alphabet","lessons","practice","reference"];
+function show(v,opts){S.view=v;save();VIEWS.forEach(x=>{$("#view-"+x).hidden=x!==v});$$(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===v)));render(v,opts||{});window.scrollTo(0,0)}
+function render(v,o){({home:renderHome,alphabet:renderAlphabet,lessons:renderLessons,practice:renderPractice,reference:renderReference})[v](o)}
+
+function stats(){const seen=WORDS.filter(w=>box(w.id)>0).length;const mastered=WORDS.filter(w=>box(w.id)>=4).length;return{seen,mastered,days:S.days.length,read:S.read.length}}
+
+/* ---------- Home ---------- */
+function renderHome(){
+ const st=stats();const p=POTD[Math.floor(Date.now()/864e5)%POTD.length];
+ const next=LESSONS.find(L=>!S.read.includes(L.id))||LESSONS[0];
+ $("#view-home").innerHTML=`
+ <section class="hero"><canvas id="ikat" aria-hidden="true"></canvas><div class="hero-in">
+  <div><div class="label">Oʻzbek tili · Uzbek for Tashkent</div><h1>Oʻzbekcha</h1>
+  <p class="tag">Eleven short lessons, the alphabet with its sounds, flashcards that remember what you miss, and quizzes on the words and the rules. Written for <em>Tashkent</em>: the bazaar, the metro, the barbershop.</p></div>
+  <div class="namebox"><label for="name"><span class="uz">Ismingiz nima?</span><span class="note">What is your name? The dialogues will use it.</span></label><input id="name" value="${esc(S.name)}" placeholder="Ismingiz" maxlength="40" autocomplete="given-name"><div class="reply" id="name-reply"></div></div>
+ </div></section>
+ <div class="stats">
+  <div class="stat"><div class="v num">${st.seen}<span class="note"> / ${WORDS.length}</span></div><div class="k label">Soʻzlar · words seen</div></div>
+  <div class="stat"><div class="v num">${st.mastered}</div><div class="k label">Oʻzlashtirildi · mastered</div></div>
+  <div class="stat"><div class="v num">${st.read}<span class="note"> / ${LESSONS.length}</span></div><div class="k label">Darslar · lessons read</div></div>
+  <div class="stat"><div class="v num">${st.days}</div><div class="k label">Kunlar · days practised</div></div>
+ </div>
+ <section class="potd"><div><div class="label">Bugungi ibora · phrase of the day</div><div class="big">${esc(p[0])}</div><div class="pron">${esc(p[1])}</div><div class="en">${esc(p[2])}</div></div>
+  <div class="actions"><button class="btn onlapis ghost voice-only" data-say="${esc(p[0])}">▶ Tinglash · listen</button><button class="btn onlapis" data-go-lesson="${p[3]}">Darsni ochish · open lesson</button></div></section>
+ <section><div class="sec-head"><h2>Qanday oʻrganish</h2><span class="en">How to use this</span></div>
+  <div class="steps">
+   <div class="step"><div class="n">1 · ALIFBO</div><h3>Learn the 30 sounds first</h3><p>Uzbek is spelled exactly as it sounds. Twenty minutes with the alphabet, especially oʻ, gʻ, q and x, makes every later word readable.</p><button class="btn ghost sm" data-go="alphabet">Alifboga oʻtish</button></div>
+   <div class="step"><div class="n">2 · DARSLAR</div><h3>One lesson at a time</h3><p>Each lesson is a word list, one grammar rule, a dialogue you can actually have, and a cultural note. Read it, then mark it as read.</p><button class="btn ghost sm" data-go-lesson="${next.id}">${S.read.length?"Davom etish":"Boshlash"} · dars ${next.n}</button></div>
+   <div class="step"><div class="n">3 · MASHQ</div><h3>Flashcards, then the quiz</h3><p>Cards you miss come back first; cards you know climb through five boxes. Ten-question quizzes check the words and the rules.</p><button class="btn ghost sm" data-go="practice">Mashq qilish</button></div>
+  </div></section>`;
+ const inp=$("#name"),rep=$("#name-reply");
+ const upd=()=>{rep.innerHTML=S.name.trim()?`Salom, <b>${esc(S.name.trim())}</b>! Xush kelibsiz.`:'<span class="note">Salom! Type your name above.</span>'};
+ upd();inp.addEventListener("input",()=>{S.name=inp.value.slice(0,40);save();upd()});
+ drawIkat();
+}
+function drawIkat(){const cv=$("#ikat");if(!cv)return;const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;
+ const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);const c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);
+ const cs=getComputedStyle(document.documentElement);const cols=["--lapis","--turq","--saffron","--pome"].map(k=>cs.getPropertyValue(k).trim());
+ c.clearRect(0,0,w,h);let seed=20260903;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+ const band=36,period=150,amp=28,rowH=3;
+ for(let y=0;y<h;y+=rowH){const t=(y%period)/period;const tri=t<.5?t*2:2-t*2;const off=amp*tri;
+  for(let k=-2;k<w/band+2;k++){const x=k*band+off+(rnd()-.5)*7;c.fillStyle=cols[((k%4)+4)%4];c.fillRect(x,y,band*.5+(rnd()-.5)*5,rowH)}}
+ c.globalCompositeOperation="destination-in";const g=c.createLinearGradient(0,0,w,0);g.addColorStop(0,"rgba(0,0,0,.03)");g.addColorStop(.5,"rgba(0,0,0,.06)");g.addColorStop(1,"rgba(0,0,0,.55)");c.fillStyle=g;c.fillRect(0,0,w,h);c.globalCompositeOperation="source-over"}
+let rz;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(drawIkat,120)});
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawIkat)}catch(e){}
+new MutationObserver(drawIkat).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+
+/* ---------- Alphabet ---------- */
+let curLetter=24;
+function renderAlphabet(){
+ $("#view-alphabet").innerHTML=`<section><div class="sec-head"><h2>Alifbo</h2><span class="en">29 letters and one mark. Latin has been official since 1995; Cyrillic is still on half the signs, so both are shown.</span></div>
+ <div class="soundkey">Sound guides in this app: <code>oh</code> = oʻ (o in <i>go</i>) · <code>o</code> = o (o in <i>hot</i>) · <code>oo</code> = u · <code>kh</code> = x · <code>gh</code> = gʻ · <code>q</code> = deep-throat k · CAPITALS mark the stressed syllable, almost always the last.</div>
+ <p class="note" id="voice-note" style="margin-bottom:14px">Your browser has no Uzbek voice, so the ▶ listen buttons are hidden. Microsoft Edge, and Chrome on Android with Uzbek text-to-speech installed, show them.</p>
+ <div class="tiles" id="tiles">${ALPHABET.map((L,i)=>`<button class="tile${L[7]?" special":""}" aria-pressed="${i===curLetter}" data-i="${i}"><span class="glyph">${esc(L[0])}</span><span class="ex">${esc(L[4])}<br>${esc(L[5])}</span></button>`).join("")}</div>
+ <div class="letter-detail" id="letter-detail"></div></section>
+ <section><div class="sec-head"><h2>Qiyin juftliklar</h2><span class="en">Tricky pairs: the four contrasts English ears miss</span></div>
+ <div class="pairs">${PAIRS.map(p=>`<div class="pair"><div class="vs">${esc(p.a)} <span>${esc(p.aS)}</span> &nbsp;/&nbsp; ${esc(p.b)} <span>${esc(p.bS)}</span></div><p>${esc(p.note)}</p><div class="mp">${p.pairs.map(x=>`<span><b>${esc(x[0])}</b> ${esc(x[1])}</span>`).join("")}</div></div>`).join("")}</div></section>`;
+ $$("#tiles .tile").forEach(t=>t.addEventListener("click",()=>showLetter(+t.dataset.i)));
+ showLetter(curLetter);
+}
+function showLetter(i){curLetter=i;const L=ALPHABET[i];$$("#tiles .tile").forEach((t,j)=>t.setAttribute("aria-pressed",String(j===i)));
+ $("#letter-detail").innerHTML=`<div class="glyph">${esc(L[0])}${L[0]===L[1]?"":" "+esc(L[1])}</div><dl>
+ <dt>Sounds like</dt><dd>${esc(L[3])} <span class="pron">[${esc(L[2])}]</span></dd>
+ <dt>Example</dt><dd><span class="uz" style="font-weight:500">${esc(L[4])}</span> · ${esc(L[5])} ${sayBtn(L[4])}</dd>
+ <dt>Cyrillic</dt><dd class="cyr">${esc(L[6])}</dd>
+ ${LETTER_NOTES[L[0]]?"<dt>Note</dt><dd>"+esc(LETTER_NOTES[L[0]])+"</dd>":""}</dl>`}
+
+/* ---------- Lessons ---------- */
+function renderLessons(o){if(o&&o.lesson)return renderLesson(o.lesson);
+ $("#view-lessons").innerHTML=`<section><div class="sec-head"><h2>Darslar</h2><span class="en">Eleven lessons, in order. Each one leans on the last.</span></div>
+ <div class="lesson-grid">${LESSONS.map(L=>{const ws=byLesson(L.id);const m=ws.filter(w=>box(w.id)>=4).length;const q=S.quiz[L.id];const read=S.read.includes(L.id);
+ return `<button class="lcard" data-lesson="${L.id}"><div class="top"><span class="n">DARS ${L.n}</span>${read?'<span class="chip ok">Oʻqildi</span>':""}</div><h3>${esc(L.uz)}</h3><div class="en">${esc(L.en)}</div><div class="prog"><i style="width:${Math.round(100*m/ws.length)}%"></i></div><div class="meta"><span>${ws.length} soʻz · ${m} mastered</span><span>${q!=null?"Test: "+q+"%":"Test: —"}</span></div></button>`}).join("")}</div></section>`}
+function renderLesson(id){const L=LESSONS.find(x=>x.id===id)||LESSONS[0];const i=LESSONS.indexOf(L);const prev=LESSONS[i-1],next=LESSONS[i+1];const read=S.read.includes(L.id);const nm=NAME();
+ $("#view-lessons").innerHTML=`<p style="margin-bottom:14px"><button class="link" data-go="lessons">← Barcha darslar · all lessons</button></p>
+ <article class="lesson">
+  <div class="lesson-head"><div><div class="n">DARS ${L.n} / ${LESSONS.length}</div><h2>${esc(L.uz)}</h2><div class="en">${esc(L.en)}</div><p class="intro">${esc(L.intro)}</p></div>${read?'<span class="chip ok">Oʻqildi · read</span>':""}</div>
+  <div class="lesson-body">
+   <div><div class="sec-head"><h3>Soʻzlar</h3><span class="note">${L.words.length} words</span></div>
+   <table class="vocab"><thead><tr><th>Oʻzbekcha</th><th>Sounds like</th><th>English</th></tr></thead><tbody>
+   ${L.words.map(w=>`<tr><td class="w">${esc(w[0])}${sayBtn(w[0])}</td><td class="p">${esc(w[1])}</td><td class="e">${esc(w[2])}${w[3]?"<small>"+esc(w[3])+"</small>":""}</td></tr>`).join("")}</tbody></table></div>
+   <div class="rule">${L.grammar}</div>
+   <div><div class="sec-head"><h3>Suhbat</h3><span class="note">Dialogue</span></div><div class="dialog">${L.dialog.map(d=>{const u=d[1].split("{name}").join(nm),e=d[2].split("{name}").join(nm);return `<div class="line"><span class="who">${d[0]}</span><div><div class="uz">${esc(u)}${sayBtn(u)}</div><div class="en">${esc(e)}</div></div></div>`}).join("")}</div></div>
+   <div class="tip"><span class="label">Maslahat</span><p>${esc(L.tip)}</p></div>
+  </div>
+  <div class="lesson-foot">
+   <button class="btn ${read?"ghost":""}" data-read="${L.id}">${read?"✓ Oʻqildi":"Oʻqidim · mark as read"}</button>
+   <button class="btn ghost" data-practice="cards" data-deck="${L.id}">Kartochkalar · flashcards</button>
+   <button class="btn ghost" data-practice="quiz" data-deck="${L.id}">Test · quiz</button>
+   <span class="spacer"></span>
+   ${prev?`<button class="btn ghost sm" data-lesson="${prev.id}">← Dars ${prev.n}</button>`:""}${next?`<button class="btn sm" data-lesson="${next.id}">Dars ${next.n} →</button>`:""}
+  </div></article>`}
+
+/* ---------- Practice ---------- */
+const P={mode:"cards",deck:"salom",dir:"uz",session:null};
+function deckWords(d){if(d==="all")return WORDS;if(d==="hard")return WORDS.filter(w=>{const b=box(w.id);return b>0&&b<=2});return byLesson(d)}
+function deckName(d){if(d==="all")return "Hammasi · all words";if(d==="hard")return "Qiyin soʻzlar · words you missed";const L=LESSONS.find(x=>x.id===d);return L?"Dars "+L.n+" · "+L.uz:d}
+function renderPractice(){const v=$("#view-practice");const hard=deckWords("hard").length;
+ v.innerHTML=`<div class="practice-top"><div class="field"><span class="label">Toʻplam · deck</span><select id="deck">${LESSONS.map(L=>`<option value="${L.id}"${P.deck===L.id?" selected":""}>Dars ${L.n} · ${esc(L.uz)} (${L.words.length})</option>`).join("")}<option value="hard"${P.deck==="hard"?" selected":""}>Qiyin soʻzlar · words you missed (${hard})</option><option value="all"${P.deck==="all"?" selected":""}>Hammasi · all words (${WORDS.length})</option></select></div>
+ <div class="field"><span class="label">Rejim · mode</span><div class="seg"><button data-mode="cards" aria-pressed="${P.mode==="cards"}">Kartochkalar</button><button data-mode="quiz" aria-pressed="${P.mode==="quiz"}">Test</button></div></div></div>
+ <div id="practice-body"></div>`;
+ $("#deck").addEventListener("change",e=>{P.deck=e.target.value;P.session=null;renderBody()});
+ $$("[data-mode]",v).forEach(b=>b.addEventListener("click",()=>{P.mode=b.dataset.mode;P.session=null;renderPractice()}));
+ renderBody()}
+function renderBody(){P.mode==="cards"?renderCards():renderQuiz()}
+
+function startCards(){const ws=deckWords(P.deck);const order=shuffle(ws).sort((a,b)=>box(a.id)-box(b.id)).slice(0,20);P.session={type:"cards",cards:order,i:0,flipped:false,known:0,done:false}}
+function renderCards(){const b=$("#practice-body");const ws=deckWords(P.deck);
+ if(!ws.length){b.innerHTML='<div class="empty">Hozircha qiyin soʻzlar yoʻq. No missed words yet: cards you mark “Bilmayman” collect here.</div>';return}
+ if(!P.session||P.session.type!=="cards")startCards();const s=P.session;
+ if(s.done){b.innerHTML=`<div class="quiz"><div class="score"><div class="big num">${s.known}<span class="note" style="font-size:20px"> / ${s.cards.length}</span></div><p>${s.known===s.cards.length?"Zoʻr! Every card known.":"Yaxshi. The cards you missed come back first next time."}</p></div><div class="quiz-foot"><span class="note">${esc(deckName(P.deck))}</span><button class="btn" id="again">Yana · again</button></div></div>`;$("#again").addEventListener("click",()=>{startCards();renderCards()});return}
+ const c=s.cards[s.i];const uzFirst=P.dir==="uz";
+ b.innerHTML=`<div class="fc-meta"><span>${esc(deckName(P.deck))}</span><span class="num">${s.i+1} / ${s.cards.length}</span></div>
+ <div class="card-wrap" style="margin-top:8px"><button class="fc${s.flipped?" flipped":""}" id="fc" aria-label="Flip card">
+  <div class="face front"><span class="box">box ${box(c.id)} / 5</span><div class="word">${esc(uzFirst?c.uz:c.en)}</div><div class="sub pron">${uzFirst?esc(c.pron):""}</div><span class="hint">Tap to flip</span></div>
+  <div class="face back"><div class="word">${esc(uzFirst?c.en:c.uz)}</div><div class="sub">${uzFirst?esc(c.note):esc(c.pron)}</div><span class="hint">Dars ${c.n}</span></div>
+ </button></div>
+ <div class="fc-actions"><button class="btn no" id="no"${s.flipped?"":" disabled"}>Bilmayman · don’t know</button><button class="btn yes" id="yes"${s.flipped?"":" disabled"}>Bilaman · I know it</button></div>
+ <div class="fc-meta"><span><button class="link" id="dir">${uzFirst?"Oʻzbekcha → English":"English → Oʻzbekcha"} · switch</button></span><span>${sayBtn(c.uz)}</span></div>`;
+ $("#fc").addEventListener("click",()=>{s.flipped=!s.flipped;$("#fc").classList.toggle("flipped",s.flipped);$("#no").disabled=$("#yes").disabled=!s.flipped});
+ $("#no").addEventListener("click",()=>answerCard(false));$("#yes").addEventListener("click",()=>answerCard(true));
+ $("#dir").addEventListener("click",()=>{P.dir=uzFirst?"en":"uz";s.flipped=false;renderCards()})}
+function answerCard(known){const s=P.session;const c=s.cards[s.i];const b=box(c.id);setBox(c.id,known?Math.min(5,b+1):1);if(known)s.known++;touchDay();s.i++;s.flipped=false;if(s.i>=s.cards.length)s.done=true;renderCards()}
+
+function startQuiz(){const ws=deckWords(P.deck);const pool=ws.length>=8?ws:WORDS;
+ const vq=shuffle(ws).slice(0,7).map(w=>{const dir=Math.random()<.6?"uz":"en";const d=shuffle(pool.filter(x=>x.id!==w.id&&x.en!==w.en&&x.uz!==w.uz)).slice(0,3);
+  return dir==="uz"?{q:'What does <span class="uz">'+esc(w.uz)+"</span> mean?",a:w.en,o:d.map(x=>x.en),why:esc(w.note),word:w,say:w.uz}:{q:"How do you say “"+esc(w.en)+"”?",a:w.uz,o:d.map(x=>x.uz),why:esc(w.note),word:w,say:w.uz}});
+ let gq;if(P.deck==="all"||P.deck==="hard")gq=shuffle(LESSONS.flatMap(L=>L.quiz)).slice(0,3);else{const L=LESSONS.find(x=>x.id===P.deck);gq=L?L.quiz.slice():[]}
+ const qs=shuffle(vq.concat(gq.map(g=>({q:esc(g.q),a:g.a,o:g.o,why:esc(g.why),grammar:true})))).map(q=>Object.assign({},q,{opts:shuffle([q.a].concat(q.o))}));
+ P.session={type:"quiz",qs,i:0,score:0,answered:null,missed:[],done:false}}
+function renderQuiz(){const b=$("#practice-body");const ws=deckWords(P.deck);
+ if(ws.length<4){b.innerHTML='<div class="empty">A quiz needs at least four words in the deck. Run through a few flashcards first.</div>';return}
+ if(!P.session||P.session.type!=="quiz")startQuiz();const s=P.session;
+ if(s.done){const pct=Math.round(100*s.score/s.qs.length);const prev=S.quiz[P.deck];const best=prev==null||pct>prev;if(best){S.quiz[P.deck]=pct;save()}
+  b.innerHTML=`<div class="quiz"><div class="score"><div class="big num">${pct}%</div><p>${s.score} / ${s.qs.length} toʻgʻri · ${pct===100?"Zoʻr! Perfect.":pct>=70?"Yaxshi! Good work.":"Davom eting. Keep going."}${best&&prev!=null?" New best.":""}</p></div>
+  ${s.missed.length?`<div class="missed"><span class="label">Xatolar · review these</span><ul>${s.missed.map(m=>`<li><span class="uz" style="font-weight:500">${esc(m.a)}</span><span class="note">${m.word?esc(m.word.uz===m.a?m.word.en:m.word.uz):"qoida · rule"}</span></li>`).join("")}</ul></div>`:""}
+  <div class="quiz-foot"><span class="note">${esc(deckName(P.deck))}</span><button class="btn" id="again">Yana · again</button></div></div>`;
+  $("#again").addEventListener("click",()=>{startQuiz();renderQuiz()});return}
+ const q=s.qs[s.i];const done=s.answered!=null;const wrong=done&&s.answered!==q.a;
+ b.innerHTML=`<div class="quiz"><div class="qn"><span class="label">${esc(deckName(P.deck))}</span><span class="num note">${s.i+1} / ${s.qs.length} · ${s.score} toʻgʻri</span></div>
+  <div class="q">${q.q}${q.grammar?' <span class="chip warn">qoida</span>':""}</div>
+  <div class="opts">${q.opts.map((o,k)=>{let cls="opt";if(done){if(o===q.a)cls+=" right";else if(o===s.answered)cls+=" wrong"}return `<button class="${cls}" data-opt="${esc(o)}"${done?" disabled":""}><span class="k">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`}).join("")}</div>
+  <div class="why${done&&(wrong||q.why)?" show":""}">${wrong?"<b>Toʻgʻri javob: "+esc(q.a)+".</b> ":""}${q.why}</div>
+  <div class="quiz-foot"><span>${q.say?sayBtn(q.say):""}</span><button class="btn" id="next"${done?"":" disabled"}>${s.i+1<s.qs.length?"Keyingi · next →":"Natija · results"}</button></div></div>`;
+ $$(".opt",b).forEach(o=>o.addEventListener("click",()=>{if(s.answered!=null)return;s.answered=o.dataset.opt;const ok=s.answered===q.a;if(ok)s.score++;else s.missed.push(q);if(q.word){const bx=box(q.word.id);setBox(q.word.id,ok?Math.min(5,Math.max(1,bx+1)):1)}touchDay();renderQuiz()}));
+ $("#next").addEventListener("click",()=>{s.i++;s.answered=null;if(s.i>=s.qs.length)s.done=true;renderQuiz()})}
+
+/* ---------- Reference ---------- */
+function renderReference(){
+ const row=(a,b,c,d)=>`<tr><td>${a}</td><td class="end">${b}</td><td>${c}</td>${d!=null?"<td>"+d+"</td>":""}</tr>`;
+ $("#view-reference").innerHTML=`<section><div class="sec-head"><h2>Qoidalar</h2><span class="en">Every ending in this app, on one page</span></div><div class="ref">
+ <div class="refbox"><h3>“To be” endings</h3><table><tr><th>Pronoun</th><th>Ending</th><th>talaba · student</th></tr>${row("men","-man","talabaman")}${row("sen","-san","talabasan")}${row("u","—","talaba")}${row("biz","-miz","talabamiz")}${row("siz","-siz","talabasiz")}${row("ular","-(lar)","talaba(lar)")}</table><p>Not: talaba <b>emas</b>man · Question: talaba<b>mi</b>siz? · Was: talaba <b>edi</b>m</p></div>
+ <div class="refbox"><h3>Kelishiklar · cases</h3><table><tr><th>Case</th><th>Ending</th><th>uy · house</th><th>Meaning</th></tr>${row("subject","—","uy","the house")}${row("of","-ning","uyning","of the house")}${row("object","-ni","uyni","the house")}${row("to","-ga / -ka / -qa","uyga","to the house")}${row("at, in","-da","uyda","at home")}${row("from","-dan","uydan","from home")}</table><p>-ka after k (eshikka), -qa after q (qishloqqa). Having: <b>menda</b> pul <b>bor</b> / <b>yoʻq</b>.</p></div>
+ <div class="refbox"><h3>Olmoshlar · pronouns in every case</h3><div class="scroll"><table><tr><th></th><th>of</th><th>object</th><th>to</th><th>at</th><th>from</th></tr>
+ ${[["men","mening","meni","menga","menda","mendan"],["sen","sening","seni","senga","senda","sendan"],["u","uning","uni","unga","unda","undan"],["biz","bizning","bizni","bizga","bizda","bizdan"],["siz","sizning","sizni","sizga","sizda","sizdan"],["ular","ularning","ularni","ularga","ularda","ulardan"]].map(r=>"<tr>"+r.map((c,i)=>"<td>"+c+"</td>").join("")+"</tr>").join("")}</table></div></div>
+ <div class="refbox"><h3>Egalik · possessives</h3><table><tr><th></th><th>after consonant</th><th>after vowel</th><th>example</th></tr>${row("my","-im","-m","kitobim · otam")}${row("your","-ing","-ng","kitobing · otang")}${row("his, her","-i","-si","kitobi · otasi")}${row("our","-imiz","-miz","kitobimiz · otamiz")}${row("your (polite)","-ingiz","-ngiz","kitobingiz · otangiz")}${row("their","-lari","-lari","kitoblari · otalari")}</table></div>
+ <div class="refbox"><h3>Zamonlar · bormoq (to go) in three tenses</h3><div class="scroll"><table><tr><th></th><th>habit, future</th><th>right now</th><th>past</th></tr>
+ ${[["men","boraman","boryapman","bordim"],["sen","borasan","boryapsan","bording"],["u","boradi","boryapti","bordi"],["biz","boramiz","boryapmiz","bordik"],["siz","borasiz","boryapsiz","bordingiz"],["ular","boradilar","boryaptilar","bordilar"],["not","bormayman","bormayapman","bormadim"],["question","borasizmi?","boryapsizmi?","bordingizmi?"]].map(r=>"<tr>"+r.map(c=>"<td>"+c+"</td>").join("")+"</tr>").join("")}</table></div><p>Vowel stems take -y-: ishla<b>y</b>man, oʻqi<b>y</b>man. Want to: bor<b>moqchi</b>man.</p></div>
+ <div class="refbox"><h3>Koʻmakchilar · postpositions</h3><table><tr><th>Uzbek</th><th></th><th>Example</th></tr>${[["bilan","with","doʻstim bilan"],["uchun","for","siz uchun"],["haqida","about","Toshkent haqida"],["kabi","like","sen kabi"],["-dan keyin","after","darsdan keyin"],["-dan oldin","before","ovqatdan oldin"],["-gacha","until","soat beshgacha"],["yonida","next to","bozor yonida"],["ichida","inside","uy ichida"],["ustida","on top of","stol ustida"],["ostida","under","stol ostida"],["oldida","in front of","metro oldida"],["orqasida","behind","maktab orqasida"]].map(r=>`<tr><td class="end" style="color:var(--ink)">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table></div>
+ <div class="refbox"><h3>Zarrachalar · little words that do a lot</h3><table>${[["-mi","yes/no question","Borasizmi?"],["-chi","and …?","Siz-chi?"],["ham","also, too","Men ham"],["emas","not (nouns, adjectives)","talaba emas"],["-ma-","not (verbs)","bormayman"],["-roq","more, -er","kattaroq"],["eng","the most","eng katta"],["juda","very","juda mazali"],["-ta","counting things","ikkita choy"],["-ing","polite command","bering, keling"],["-sam boʻladimi?","may I …?","kirsam boʻladimi?"],["-moqchi","want to, intend to","ketmoqchiman"]].map(r=>`<tr><td class="end" style="color:var(--ink)">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table></div>
+ <div class="refbox"><h3>Sonlar · numbers</h3><table>${[["1–5","bir, ikki, uch, toʻrt, besh"],["6–10","olti, yetti, sakkiz, toʻqqiz, oʻn"],["tens","yigirma, oʻttiz, qirq, ellik, oltmish, yetmish, sakson, toʻqson"],["100 · 1 000","yuz · ming"],["2026","ikki ming yigirma olti"],["ordinal","-(i)nchi: birinchi, ikkinchi, uchinchi"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table></div>
+ <div class="refbox"><h3>Kunlar va oylar · days and months</h3><table>${[["Mon–Sun","dushanba, seshanba, chorshanba, payshanba, juma, shanba, yakshanba"],["months","yanvar, fevral, mart, aprel, may, iyun, iyul, avgust, sentabr, oktabr, noyabr, dekabr"],["seasons","bahor (spring), yoz (summer), kuz (autumn), qish (winter)"],["parts of the day","ertalab, kunduzi, kechqurun, tunda"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table></div>
+ </div></section>`}
+
+/* ---------- Wiring ---------- */
+document.addEventListener("click",e=>{
+ const sb=e.target.closest("[data-say]");if(sb){say(sb.getAttribute("data-say"));return}
+ const t=e.target.closest("[data-go],[data-go-lesson],[data-lesson],[data-read],[data-practice]");if(!t)return;
+ if(t.dataset.go)show(t.dataset.go);
+ else if(t.dataset.goLesson)show("lessons",{lesson:t.dataset.goLesson});
+ else if(t.dataset.lesson)show("lessons",{lesson:t.dataset.lesson});
+ else if(t.dataset.read){const id=t.dataset.read;if(!S.read.includes(id)){S.read.push(id);touchDay();save();toast("Barakalla! Lesson marked as read.")}renderLesson(id)}
+ else if(t.dataset.practice){P.mode=t.dataset.practice;P.deck=t.dataset.deck;P.session=null;show("practice")}
+});
+$$(".tab").forEach(t=>t.addEventListener("click",()=>show(t.dataset.view)));
+load();show(VIEWS.includes(S.view)?S.view:"home");
+})();
+</script>
